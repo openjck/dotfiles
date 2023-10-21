@@ -8,6 +8,9 @@ now beginning to make them public. This will be a gradual process. If something
 doesn't seem to work correctly, it may be due to the fact that I'm not done
 publishing all of the relevant files.
 
+Please use the [Discussions](https://github.com/openjck/dotfiles/discussions)
+page if you'd like to ask any questions or otherwise discuss these dotfiles.
+
 ### Installation
 
 ### Bootstrap
