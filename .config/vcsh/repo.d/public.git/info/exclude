@@ -1,0 +1,8 @@
+.gnupg/
+
+# Ignore everything in the .ssh folder, except for the "config" file.
+.ssh/*
+!.ssh/config
+
+# Ignore all local configuration files.
+*local*
