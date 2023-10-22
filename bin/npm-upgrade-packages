@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Update package.json and package-lock.json to use the latest versions of all
+packages, then run "npm install".
+
+Usage:
+  $(basename "$0")
+  $(basename "$0") -h | --help
+
+Options:
+  -h --help       Show this documentation
+  --from-scratch  Start by blowing away node_modules and package-lock.json
+EOF
+)"
+
+if [[ "${ARGS[--from-scratch]}" ]]; then
+  rm -rf node_modules package-lock.json
+fi
+
+# Set "npm_config_yes=true" to prevent npx from prompting for confirmation
+# before installing npm-check-updates. Ostensibly, the "--yes" flag can be
+# passed to npx to achieve the same effect, but for some odd reason, I find that
+# it causes npm-check-updates to act as if the "--upgrade" flag has not been
+# passed to it.
+npm_config_yes=true npx npm-check-updates --upgrade && npm install
