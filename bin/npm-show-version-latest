@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Show the latest released version of an NPM package.
+
+Usage:
+  $(basename "$0") PACKAGE
+  $(basename "$0") -h | --help
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
+npm show "${ARGS[PACKAGE]}" version
