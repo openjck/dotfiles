@@ -28,7 +28,8 @@ documentation](https://github.com/docopt/docopts#install) for more information.
 #### Running shell scripts
 
 Make sure docopts is installed (see above), then invoke the script by name.
-Usage instructions and other documentation for the script will be printed.
+Basic instructions will be printed. For more detailed documentation, pass the
+`-h` or `--help` option.
 
 If you download a script directly without cloning this whole repo (as I imagine
 most people will), you'll need to first make the script executable, then invoke
