@@ -22,3 +22,19 @@ Run the _bin/bootstrap_ script to set up some prerequisites.
 Some shell scripts require docopts to be installed and available on the $PATH.
 See the [docopts installation
 documentation](https://github.com/docopt/docopts#install) for more information.
+
+### Usage
+
+#### Running shell scripts
+
+Make sure docopts is installed (see above), then invoke the script by name.
+Usage instructions and other documentation for the script will be printed.
+
+If you download a script directly without cloning this whole repo (as I imagine
+most people will), you'll need to first make the script executable, then invoke
+it by providing its full path. For example:
+
+```shell
+$ chmod u+x /path/to/the/script
+$ /path/to/the/script
+```
