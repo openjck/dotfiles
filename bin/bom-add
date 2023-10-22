@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Add a byte order mark (BOM) to the beginning of a file. If one is already
 present, a second will not be added.

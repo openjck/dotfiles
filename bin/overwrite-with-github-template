@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Overwrite files in the current directory with files from a GitHub template. This
 can be useful when changes have been made to the template and you'd like to use

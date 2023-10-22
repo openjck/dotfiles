@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Set the default system permissions on a file or directory.
 

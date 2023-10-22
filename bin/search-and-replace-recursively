@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Recursively replace a string or pattern with a given string, modifying all files
 in the current directory and all subdirectories.

@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Update package.json and package-lock.json to use the latest versions of all
 packages, then run "npm install".
