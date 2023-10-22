@@ -13,7 +13,7 @@ page if you'd like to ask any questions or otherwise discuss these dotfiles.
 
 ### Installation
 
-### Bootstrap
+#### Bootstrap
 
 Run the _bin/bootstrap_ script to set up some prerequisites.
 
