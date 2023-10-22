@@ -1,12 +1,5 @@
 # shellcheck shell=bash
 
-# Use "strict mode."
-#
-# This applies to this file as well as any file that is sourced by this file.
-#
-# http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
-
 # Bash behaves differently based on whether it is being used as an interactive
 # login shell or an interactive non-login shell. Virtual terminals use Bash as
 # an interactive login shell. Terminal emulators like gnome-terminal use Bash as

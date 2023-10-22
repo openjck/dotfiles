@@ -1,12 +1,5 @@
 # shellcheck shell=bash
 
-# Use "strict mode."
-#
-# This applies to this file as well as any file that is sourced by this file.
-#
-# http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
-
 # Source all Bash and POSIX sh utilities so that they can be used in this file
 # and files that are sourced from this file.
 source "$XDG_CONFIG_HOME/bash/bootstrap/source_utils.bash"
