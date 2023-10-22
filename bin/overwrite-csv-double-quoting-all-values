@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Overwrite a CSV file, adding double quotes around all values.
+
+Usage:
+  $(basename "$0") FILE
+  $(basename "$0") -h | --help
+
+Options:
+  -h --help  Show this documentation
+fi
+EOF
+)"
+
+NEW_FILE=$(mktemp)
+
+# Use Ruby to correctly handle CSV files that already double-quote values, CSV
+# files that do not double quote values, and CSV files that double-quote some
+# values but not others.
+#
+# https://stackoverflow.com/a/17158450/715866
+#
+# Disable SC2016. We _want_ to use single quotes because we do not want $_ to be
+# expanded.
+#
+# shellcheck disable=SC2016
+if ruby -rcsv -ne \
+    'puts CSV.generate_line(CSV.parse_line($_), :force_quotes=>true)' \
+    "${ARGS[FILE]}" > "$NEW_FILE"; then
+  mv "$NEW_FILE" "${ARGS[FILE]}"
+fi
