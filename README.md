@@ -38,3 +38,6 @@ it by providing its full path. For example:
 $ chmod u+x /path/to/the/script
 $ /path/to/the/script
 ```
+
+If you'd rather not have to provide the full path to the script every time, you
+can save the script somewhere along your `$PATH`.
