@@ -1,0 +1,31 @@
+# Based on this example configuration file:
+#
+# https://github.com/r-darwish/topgrade/blob/master/config.example.toml
+
+assume_yes = true
+cleanup = true
+
+disable = [
+  # Updating RubyGems often fails for reasons that I find hard to understand. I
+  # also don't know why the step is necessary, as, in most cases, I have not
+  # installed any RubyGems manually.
+  "gem",
+
+  # I don't understand why updating containers is necessary or wise, given that
+  # it seems that it could impact development environments.
+  "containers"
+]
+
+[composer]
+self_update = true
+
+[firmware]
+upgrade = true
+
+[npm]
+use_sudo = true
+
+# Run custom commands.
+[commands]
+"pull all vcsh repos" = "vcsh pull"
+"run local topgrade command" = "if command -v local-topgrade-command > /dev/null; then local-topgrade-command; else echo 'No local topgrade command exists on this system.'; fi"
