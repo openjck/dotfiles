@@ -27,5 +27,5 @@ use_sudo = true
 
 # Run custom commands.
 [commands]
-"pull all vcsh repos" = "vcsh pull"
+"pull vcsh \"public\" repo" = "vcsh public pull"
 "run local topgrade command" = "if command -v local-topgrade-command > /dev/null; then local-topgrade-command; else echo 'No local topgrade command exists on this system.'; fi"
