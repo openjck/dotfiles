@@ -1,0 +1,3 @@
+function rehist() {
+  history -r
+}
