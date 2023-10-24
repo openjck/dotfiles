@@ -1,0 +1,4 @@
+# Include hidden files when searching with FZF.
+#
+# https://github.com/junegunn/fzf/issues/337#issuecomment-136383876
+export FZF_DEFAULT_COMMAND="find ."
