@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Trim whitespace from every line of the given file or stdin. Leading
+# whitespace, trailing whitespace, and successive whitespace characters are
+# trimmed.
+#
+# For example:
+#
+# $ echo -e "    one  two    three   \n   four   five   " | trim
+# one two three
+# four five
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+FILENAME_OR_STDIN=${1:-/dev/stdin}
+
+awk '{$1=$1;print}' "$FILENAME_OR_STDIN"
