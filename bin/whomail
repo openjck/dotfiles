@@ -5,6 +5,22 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
-DOMAIN=$1
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Show all email addresses associated with a domain, according to its whois record.
 
-whois "$DOMAIN" | grep --color=never @ | trim | sort | uniq
+The whois record of the provided domain is filtered by the "@" character, with
+matching lines trimmed and sorted and with duplicate lines removed.
+
+Usage:
+  $(basename "$0") DOMAIN
+  $(basename "$0") -h | --help
+
+Example:
+  $(basename "$0") johnkarahalis.com
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
+whois "${ARGS[DOMAIN]}" | grep --color=never @ | trim | sort | uniq
