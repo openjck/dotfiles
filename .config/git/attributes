@@ -1,0 +1,5 @@
+# Automatically merge package-lock.json and npm-shrinkwrap.json.
+#
+# https://www.npmjs.com/package/npm-merge-driver
+npm-shrinkwrap.json merge=npm-merge-driver
+package-lock.json merge=npm-merge-driver
