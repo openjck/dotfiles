@@ -6,6 +6,7 @@
 set -euo pipefail
 
 COMMAND_NAME=$(basename "$0")
+GIT_SUBCOMMAND_NAME=${COMMAND_NAME/git-/}
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Print the name of the upstream Git branch or print nothing and return with an
@@ -14,10 +15,10 @@ exit code if there is no upstream Git branch.
 If this script exists somewhere along the \$PATH, it can be used as a Git
 subcommand, like so:
 
-  git upstream
+  git $GIT_SUBCOMMAND_NAME
 
 Usage:
-  git upstream
+  git $GIT_SUBCOMMAND_NAME
   $COMMAND_NAME
   $COMMAND_NAME -h | --help
 
