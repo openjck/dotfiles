@@ -1,20 +1,32 @@
 #!/usr/bin/env bash
 
-# Trim whitespace from every line of the given file or stdin. Leading
-# whitespace, trailing whitespace, and successive whitespace characters are
-# trimmed.
-#
-# For example:
-#
-# $ echo -e "    one  two    three   \n   four   five   " | trim
-# one two three
-# four five
-
 # Use "strict mode."
 #
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
-FILENAME_OR_STDIN=${1:-/dev/stdin}
+COMMAND_NAME=$(basename "$0")
 
-awk '{$1=$1;print}' "$FILENAME_OR_STDIN"
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Trim whitespace from every line of the given file or from stdin.
+
+Leading whitespace and trailing whitespace is removed, but not successive
+whitespace characters between words.
+
+Usage:
+  $COMMAND_NAME [FILE]
+  $COMMAND_NAME -h | --help
+
+Example:
+  $COMMAND_NAME .bashrc
+  echo '    John Karahalis    ' | $COMMAND_NAME
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
+FILE_OR_STDIN=${ARGS[FILE]:-/dev/stdin}
+
+# https://stackoverflow.com/a/3232433
+sed -e 's/^\s*//' -e 's/\s*$//' "$FILE_OR_STDIN"
