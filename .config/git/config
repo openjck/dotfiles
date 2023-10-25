@@ -1,0 +1,91 @@
+[user]
+  name = John Karahalis
+  email = john@johnkarahalis.com
+  signingkey = 357D0C1B6454146A
+
+[core]
+  # Take case into consideration even on systems that do not normally take case
+  # into consideration.
+  #
+  # https://stackoverflow.com/a/3011719/4297741
+  ignorecase = false
+
+[init]
+  # Use "main" as the name of the default branch and suppress a warning which
+  # urges setting this option.
+  defaultBranch = main
+
+[commit]
+  gpgsign = true
+
+[tag]
+  gpgsign = true
+
+# Use Neovim as the difftool and mergetool.
+#
+# https://gist.github.com/openjck/93b335dfe5e33955d7dec3c9aec9d609
+[diff]
+  tool = vimdiff
+[merge]
+  tool = vimdiff
+[mergetool "vimdiff"]
+  path = nvim
+
+[mergetool]
+  # Remove backup files after a successful merge.
+  #
+  # https://stackoverflow.com/a/37472341/715866
+  keepBackup = false
+
+[help]
+  # When a command is believed to be misspelled, prompt to ask whether the
+  # command that is believed to be the correct command should be used instead.
+  autocorrect = "prompt"
+
+[pager]
+  # Do not use pagers with certain commands that use pagers by default.
+  branch = false
+  tag = false
+
+[alias]
+  # Set up some shorthand aliases.
+  br = branch
+  ca = commit --amend
+  ci = commit
+  co = checkout
+  cp = cherry-pick
+  df = diff
+    dfs = diff --staged
+  dt = difftool
+    dts = difftool --staged
+  mt = mergetool
+  st = status
+  sw = switch
+  up = upstream
+
+  # Set up some shorthand aliases for interactive commands provided by git-fzf.
+  #
+  # https://github.com/openjck/git-fzf
+  ici = icommit
+  idt = idifftool
+    idts = idifftool --staged
+  isw = iswitch
+    iswr = iswitch --remotes
+
+  # Set up some aliases for new functionality.
+  #
+  # The "dangerous-remove-ignored" alias exists because I find the "git clean"
+  # options to be confusing. With these options, "git clean" removes all files
+  # and directories that are listed in .gitignore, but it does not remove
+  # untracked files that are sitting around in the working directory.
+  #
+  # Note that some ignored directories and paths are useful and important
+  # (editor configurations, environment variables, etc.), so this should not be
+  # used carelessly.
+  dangerous-remove-ignored = clean --force -dX
+  delete-branches-merged-into-named-branch = "!f() { git branch --merged \"$1\" --format='%(refname:short)' | grep --invert-match \"^$1$\" | xargs --no-run-if-empty git branch --delete; }; f"
+  vlog = log --graph --pretty=short
+
+[include]
+  # Include local configurations, if any.
+  path = config.local
