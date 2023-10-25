@@ -5,18 +5,27 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
-# git-upstream:
-# A small Git extension that prints the name of the upstream branch or prints
-# nothing and returns with an error code if there is no upstream branch.
-#
-# Installation:
-# Save this script to a file named "git-upstream" somewhere along your $PATH.
-# Run `chmod u+x git-upstream` to make it executable. Now, when you run "git
-# upstream", Git will run this script as if it were a built-in command. Neat!
-#
-# Usage:
-# git upstream
-#
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Print the name of the upstream Git branch or print nothing and return with an
+exit code if there is no upstream Git branch.
+
+If this script exists somewhere along the \$PATH, it can be used as a Git
+subcommand, like so:
+
+  git upstream
+
+Usage:
+  git upstream
+  $COMMAND_NAME
+  $COMMAND_NAME -h | --help
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
 # This script is based on the following Stack Overflow answer:
 # https://stackoverflow.com/a/9753364/715866
 
