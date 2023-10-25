@@ -5,13 +5,15 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
+COMMAND_NAME=$(basename "$0")
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Remove a byte order mark (BOM) from the beginning of a file. If one is not
 present, nothing will be done.
 
 Usage:
-  $(basename "$0") FILE
-  $(basename "$0") -h | --help
+  $COMMAND_NAME FILE
+  $COMMAND_NAME -h | --help
 
 Options:
   -h --help  Show this documentation

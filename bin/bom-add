@@ -5,13 +5,15 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
+COMMAND_NAME=$(basename "$0")
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Add a byte order mark (BOM) to the beginning of a file. If one is already
 present, a second will not be added.
 
 Usage:
-  $(basename "$0") FILE
-  $(basename "$0") -h | --help
+  $COMMAND_NAME FILE
+  $COMMAND_NAME -h | --help
 
 Options:
   -h --help  Show this documentation

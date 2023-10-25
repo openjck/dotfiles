@@ -5,16 +5,18 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
+COMMAND_NAME=$(basename "$0")
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Recursively replace a string or pattern with a given string, modifying all files
 in the current directory and all subdirectories.
 
 Usage:
-  $(basename "$0") SEARCH REPLACE
-  $(basename "$0") -h | --help
+  $COMMAND_NAME SEARCH REPLACE
+  $COMMAND_NAME -h | --help
 
 Example:
-  $(basename "$0") "John.*?Karahalis" "JK"
+  $COMMAND_NAME "John.*?Karahalis" "JK"
 
 Options:
   -h --help  Show this documentation

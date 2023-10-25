@@ -5,6 +5,8 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
+COMMAND_NAME=$(basename "$0")
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Overwrite files in the current directory with files from a GitHub template. This
 can be useful when changes have been made to the template and you'd like to use
@@ -14,11 +16,11 @@ rsync will make backups of all overwritten files in case you had made edits to
 them which you'd like to merge back in.
 
 Usage:
-  $(basename "$0") IDENTIFIER
-  $(basename "$0") -h | --help
+  $COMMAND_NAME IDENTIFIER
+  $COMMAND_NAME -h | --help
 
 Example:
-  $(basename "$0") sveltejs/template
+  $COMMAND_NAME sveltejs/template
 
 Options:
   -h --help  Show this documentation

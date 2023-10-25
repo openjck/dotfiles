@@ -5,13 +5,15 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
+COMMAND_NAME=$(basename "$0")
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Update package.json and package-lock.json to use the latest versions of all
 packages, then run "npm install".
 
 Usage:
-  $(basename "$0")
-  $(basename "$0") -h | --help
+  $COMMAND_NAME
+  $COMMAND_NAME -h | --help
 
 Options:
   -h --help       Show this documentation

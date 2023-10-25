@@ -5,12 +5,14 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
+COMMAND_NAME=$(basename "$0")
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Show all released versions of an NPM package.
 
 Usage:
-  $(basename "$0") PACKAGE
-  $(basename "$0") -h | --help
+  $COMMAND_NAME PACKAGE
+  $COMMAND_NAME -h | --help
 
 Options:
   -h --help  Show this documentation
