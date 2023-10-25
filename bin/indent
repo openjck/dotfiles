@@ -5,18 +5,25 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
-# Indent piped output with four spaces.
-#
-# For example
-# $ cal | indent
-#         April 2023
-#    Su Mo Tu We Th Fr Sa
-#                       1
-#     2  3  4  5  6  7  8
-#     9 10 11 12 13 14 15
-#    16 17 18 19 20 21 22
-#    23 24 25 26 27 28 29
-#    30
-#
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Indent text with four spaces.
+
+Usage:
+  $COMMAND_NAME [FILE]
+  $COMMAND_NAME -h | --help
+
+Example:
+  $COMMAND_NAME .bashrc
+  cal | $COMMAND_NAME
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
+FILE_OR_STDIN=${ARGS[FILE]:-/dev/stdin}
+
 # https://unix.stackexchange.com/a/148111
-sed 's/^/    /'
+sed 's/^/    /' "$FILE_OR_STDIN"
