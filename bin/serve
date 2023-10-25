@@ -5,4 +5,16 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Start a static server, with the current directory as the server root.
+
+Usage:
+  $(basename "$0")
+  $(basename "$0") -h | --help
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
 python3 -m http.server
