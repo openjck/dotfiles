@@ -10,8 +10,8 @@ COMMAND_NAME=$(basename "$0")
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Trim whitespace from every line of the given file or from stdin.
 
-Leading whitespace and trailing whitespace is removed, but not successive
-whitespace characters between words.
+Leading whitespace and trailing whitespace is removed, but not whitespace
+between words.
 
 Usage:
   $COMMAND_NAME [FILE]
@@ -19,7 +19,7 @@ Usage:
 
 Example:
   $COMMAND_NAME .bashrc
-  echo '    John Karahalis    ' | $COMMAND_NAME
+  echo '    John      Karahalis    ' | $COMMAND_NAME
 
 Options:
   -h --help  Show this documentation
