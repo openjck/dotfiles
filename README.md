@@ -19,9 +19,12 @@ Run the _bin/bootstrap_ script to set up some prerequisites.
 
 #### docopts
 
-Some shell scripts require docopts to be installed and available on the $PATH.
-See the [docopts installation
-documentation](https://github.com/docopt/docopts#install) for more information.
+Follow the [docopts installation
+documentation](https://github.com/docopt/docopts#install) to install docopts.
+
+Many shell scripts require docopts to be installed and available somewhere along
+the $PATH. If this is note done, a strange error will appear when the script is
+run.
 
 ### Usage
 
@@ -40,10 +43,11 @@ If you'd rather not provide the full path to the script every time, you could
 save the script somewhere along your `$PATH`. This [Ask Ubuntu
 answer](https://askubuntu.com/a/998464) explains one way of doing that.
 
-For scripts that offer detailed documentation, make sure docopts is installed
-(see above), then pass the `-h` or `--help` option to the script to learn more.
-For example:
+#### Reading shell script documentation
+
+For scripts that support it, the `-h` or `--help` option can be passed to access
+detailed documentation. For example:
 
 ```shell
-$ chmod-default --help
+$ indent --help
 ```
