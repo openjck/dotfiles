@@ -27,18 +27,23 @@ documentation](https://github.com/docopt/docopts#install) for more information.
 
 #### Running shell scripts
 
-Make sure docopts is installed (see above), then invoke the script by name. If
-the script provides documentation, basic instructions will be printed, and the
-`-h` or `--help` option can be passed for more detailed documentation.
-
-If you download a script directly without cloning this whole repo (as I imagine
-most people will), you'll need to first make the script executable, then invoke
-it by providing its full path. For example:
+If you choose to download a shell script from this repo without cloning the
+whole repo, you'll need to first make the script executable, then invoke it by
+providing its full path. For example:
 
 ```shell
 $ chmod u+x /path/to/the/script
 $ /path/to/the/script
 ```
 
-If you'd rather not have to provide the full path to the script every time, you
-can save the script somewhere along your `$PATH`.
+If you'd rather not provide the full path to the script every time, you could
+save the script somewhere along your `$PATH`. This [Ask Ubuntu
+answer](https://askubuntu.com/a/998464) explains one way of doing that.
+
+For scripts that offer detailed documentation, make sure docopts is installed
+(see above), then pass the `-h` or `--help` option to the script to learn more.
+For example:
+
+```shell
+$ chmod-default --help
+```
