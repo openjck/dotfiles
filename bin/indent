@@ -20,6 +20,14 @@ Example:
 
 Options:
   -h --help  Show this documentation
+
+This command may appear to strip color from stdin, but it doesn't. Rather, many
+programs disable color output when stdout is not a tty, like when stdout is
+piped. This can be confirmed by indenting text from a command that is forced to
+use color, as in the following example:
+
+  grep --color=always source "\$HOME/.bashrc" | indent
+
 EOF
 )"
 
