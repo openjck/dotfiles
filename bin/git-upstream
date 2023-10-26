@@ -17,8 +17,10 @@ subcommand, like so:
 
   git $GIT_SUBCOMMAND_NAME
 
+When used as a Git subcommand, the command accepts the same arguments and
+behaves in the same way.
+
 Usage:
-  git $GIT_SUBCOMMAND_NAME
   $COMMAND_NAME
   $COMMAND_NAME -h | --help
 
