@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Create a new shell script.
+
+Create a new, empty file with the given name, make it executable, and open it
+with the default editor.
+
+Usage:
+  $COMMAND_NAME FILE
+  $COMMAND_NAME -h | --help
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
+touch "${ARGS[FILE]}"
+chmod u+x "${ARGS[FILE]}"
+$EDITOR "${ARGS[FILE]}"
