@@ -21,9 +21,9 @@ EOF
 
 # https://unix.stackexchange.com/a/249850
 if [[ -f "${ARGS[FILE]}" ]]; then
-  chmod "=rw" "${ARGS[FILE]}"
+  chmod '=rw' "${ARGS[FILE]}"
 elif [[ -d "${ARGS[FILE]}" ]]; then
-  chmod "=rwx" "${ARGS[FILE]}"
+  chmod '=rwx' "${ARGS[FILE]}"
 else
   >&2 echo "Error: Unsupported node type"
   exit 1
