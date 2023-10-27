@@ -17,22 +17,21 @@ page if you'd like to ask any questions or otherwise discuss these files.
 
 Follow these steps to set up _all_ of these files:
 
-1. Install [vcsh](https://github.com/RichiH/vcsh).
-2. Run `vcsh clone git@github.com:openjck/dotfiles.git openjck-dotfiles`.
-3. Run `vcsh openjck-dotfiles switch main`.
-4. Run the _bin/bootstrap_ script to set up some prerequisites. (I haven't
-   published this script yet, but I will soon. Sorry!)
-5. Install [docopts](https://github.com/docopt/docopts) somewhere along your
+1. Install [docopts](https://github.com/docopt/docopts) somewhere along your
    `$PATH`. Many shell scripts require docopts and will not function without it.
+2. Install [vcsh](https://github.com/RichiH/vcsh).
+3. Run `vcsh clone git@github.com:openjck/dotfiles.git openjck-dotfiles`.
+4. Run `vcsh openjck-dotfiles switch main`.
+5. Run `~/bin/dotfiles-setup`.
 
 #### Single shell script
 
 Follow these steps to set up a single shell script:
 
-1. Save the shell script somewhere along your `$PATH`.
-2. Make the script executable (e.g., `chmod u+x /path/to/script`).
-3. Install [docopts](https://github.com/docopt/docopts) somewhere along your
+1. Install [docopts](https://github.com/docopt/docopts) somewhere along your
    `$PATH`. Many shell scripts require docopts and will not function without it.
+2. Save the shell script somewhere along your `$PATH`.
+3. Make the script executable (e.g., `chmod u+x /path/to/script`).
 
 ### Usage
 

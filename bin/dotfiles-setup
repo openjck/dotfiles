@@ -1,0 +1,130 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Set up the dotfiles, packages, directories, and other standard configurations
+used across machines.
+
+This command is idempotent and can therefore be run multiple times without
+affecting the result, assuming the command's implementation does not change
+between invocations. The command should be rerun occasionally or whenever
+important details change, like configured packages or configured directories.
+
+Usage:
+  $COMMAND_NAME
+  $COMMAND_NAME -h | --help
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
+# Manually source the ".profile" file, since we need to use some of the
+# environment variables that it sets and this script might be running before the
+# ".profile" file is applied.
+source "$HOME/.profile"
+
+function install_packages() {
+  local PACKAGES=(
+    'bat'
+    'fd-find'
+    'fzf'
+    'git'
+    'gnome-shell-pomodoro'
+    'moreutils'
+    'neovim'
+    'ripgrep'
+    'toilet'
+    'vcsh'
+  )
+
+  if [[ $DISTRO == Ubuntu ]]; then
+    # Ignore SC2068 because we want each package name to be a separate argument.
+    # (Quoting the list of package names would be fine, too, but we don't _need_
+    # to do that.)
+    #
+    # shellcheck disable=SC2068
+    sudo apt install ${PACKAGES[@]}
+  fi
+}
+
+function setup_directories() {
+  CREATED_ANY=false
+
+  local DIRECTORIES=(
+    "$HOME/GTD/inboxes/main"
+    "$HOME/GTD/project-support/main"
+    "$HOME/apps/repos/git"
+    "$HOME/bin/local"
+    "$HOME/bin/local/downloaded"
+    "$HOME/bin/local/temporary"
+    "$HOME/devel"
+    "$HOME/devel/repos"
+    "$XDG_CONFIG_HOME/bash/init/functions/local"
+  )
+
+  for DIRECTORY in "${DIRECTORIES[@]}"; do
+    if [[ ! -d "$DIRECTORY" ]]; then
+      mkdir --parents "$DIRECTORY"
+      CREATED_ANY=true
+    fi
+  done
+
+  if [[ $CREATED_ANY == true ]]; then
+    echo 'done.'
+  else
+    echo 'already done.'
+  fi
+}
+
+# Set up Neovim.
+#
+# Note that a separate file is used for plugin configuration. If plugins were
+# configured in the main configuration file and we tried to load that
+# configuration file during the initial setup, Neovim would complain about
+# things like missing colorschemes.
+function setup_nvim() {
+  local PLUGIN_MANAGER_FILENAME=$XDG_DATA_HOME/nvim/site/autoload/plug.vim
+
+  if [[ ! -f "$PLUGIN_MANAGER_FILENAME" ]]; then
+    # Install vim-plug.
+    curl --silent --fail --location --create-dirs --output \
+      "$PLUGIN_MANAGER_FILENAME" \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+    # Install plugins.
+    nvim -u "$XDG_CONFIG_HOME/nvim/init/plugins/index.vim" -c PlugInstall -c quitall
+
+    echo 'done.'
+  else
+    echo 'already done.'
+  fi
+}
+
+function setup_tmux() {
+  local PLUGIN_MANAGER_DIR=$HOME/.tmux/plugins/tpm
+
+  if [[ ! -d "$PLUGIN_MANAGER_DIR" ]]; then
+    # Install tpm.
+    git clone --quiet https://github.com/tmux-plugins/tpm "$PLUGIN_MANAGER_DIR"
+
+    # Install plugins.
+    "$HOME/.tmux/plugins/tpm/bin/install_plugins" > /dev/null
+
+    echo 'done.'
+  else
+    echo 'already done.'
+  fi
+}
+
+echo 'Install packages... ' && install_packages
+echo
+echo -n 'Set up directories... ' && setup_directories
+echo -n 'Set up nvim... ' && setup_nvim
+echo -n 'Set up tmux... ' && setup_tmux
