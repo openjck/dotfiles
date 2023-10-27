@@ -1,51 +1,44 @@
-These are my configuration files, my shell scripts, and more. Readers may be
-interested in my Neovim configuration, my tmux configuration, my shell scripts,
-my Bash functions, and my methods of organization. I must admit that my
-configuration files are very well-organized.
+These are my public configuration files, shell scripts, and more. My shell
+scripts are documented, and readers may also be interested in my methods of
+organization, my Bash functions, my Neovim configuration, my tmux configuration,
+and my Git configuration.
 
-I've been managing my dotfiles in private source control for years, but I'm only
-now beginning to make them public. This will be a gradual process. If something
-doesn't seem to work correctly, it may be due to the fact that I'm not done
-publishing all of the relevant files.
+I'm especially pleased with my Bash function setup. I've tried many methods of
+organizing aliases and functions, but this method, inspired by
+[fish](https://github.com/fish-shell/fish-shell), feels the most natural. No
+aliases are used. Everything is a function, and every function has its own file.
 
 Please use the [Discussions](https://github.com/openjck/dotfiles/discussions)
-page if you'd like to ask any questions or otherwise discuss these dotfiles.
+page if you'd like to ask any questions or otherwise discuss these files.
 
 ### Installation
 
-#### Bootstrap
+#### Everything
 
-Run the _bin/bootstrap_ script to set up some prerequisites.
+Follow these steps to set up _all_ of these files:
 
-#### docopts
+1. Install [vcsh](https://github.com/RichiH/vcsh).
+2. Run `vcsh clone git@github.com:openjck/dotfiles.git openjck-dotfiles`.
+3. Run `vcsh openjck-dotfiles switch main`.
+4. Run the _bin/bootstrap_ script to set up some prerequisites. (I haven't
+   published this script yet, but I will soon. Sorry!)
+5. Install [docopts](https://github.com/docopt/docopts) somewhere along your
+   `$PATH`. Many shell scripts require docopts and will not function without it.
 
-Follow the [docopts installation
-documentation](https://github.com/docopt/docopts#install) to install docopts.
+#### Single shell script
 
-Many shell scripts require docopts to be installed and available somewhere along
-the $PATH. If this is note done, a strange error will appear when the script is
-run.
+Follow these steps to set up a single shell script:
+
+1. Save the shell script somewhere along your `$PATH`.
+2. Make the script executable (e.g., `chmod u+x /path/to/script`).
+3. Install [docopts](https://github.com/docopt/docopts) somewhere along your
+   `$PATH`. Many shell scripts require docopts and will not function without it.
 
 ### Usage
 
-#### Running shell scripts
+#### Shell script documentation
 
-If you choose to download a shell script from this repo without cloning the
-whole repo, you'll need to first make the script executable, then invoke it by
-providing its full path. For example:
-
-```shell
-$ chmod u+x /path/to/the/script
-$ /path/to/the/script
-```
-
-If you'd rather not provide the full path to the script every time, you could
-save the script somewhere along your `$PATH`. This [Ask Ubuntu
-answer](https://askubuntu.com/a/998464) explains one way of doing that.
-
-#### Reading shell script documentation
-
-For scripts that support it, the `-h` or `--help` option can be passed to access
+For shell scripts that support it, pass the `-h` or `--help` option to read
 detailed documentation. For example:
 
 ```shell
