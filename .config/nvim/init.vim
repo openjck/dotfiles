@@ -7,6 +7,12 @@ augroup init
   autocmd!
 augroup end
 
+" Source all utilities so that they can be used in this file and files that are
+" sourced from this file.
+for file in globpath(expand('<sfile>:h'), 'utils/*.vim', 0, 1)
+  execute 'source' file
+endfor
+
 " Enable and configure plugins. This must be done before some things, like the
 " colorscheme, are set.
 source <sfile>:h/init/plugins.vim
