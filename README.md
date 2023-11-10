@@ -20,7 +20,7 @@ page if you'd like to ask any questions or otherwise discuss these files.
 
 #### Everything
 
-Follow these steps to set up _all_ of these files:
+Follow these steps to install _all_ of these files:
 
 1. Install [docopts](https://github.com/docopt/docopts) somewhere along your
    `$PATH`. Many shell scripts require docopts and will not function without it.
@@ -31,7 +31,7 @@ Follow these steps to set up _all_ of these files:
 
 #### Single shell script
 
-Follow these steps to set up a single shell script:
+Follow these steps to install a single shell script:
 
 1. Install [docopts](https://github.com/docopt/docopts) somewhere along your
    `$PATH`. Many shell scripts require docopts and will not function without it.
