@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+# cd to $HOME so that "vcsh list-tracked" lists all files, not just tracked
+# files in the current directory and its subdirectories.
+cd "$HOME" || exit 1
+
+# Use vcsh to list all tracked dotfiles and use mapfile to convert the lines of
+# output into an array.
+#
+# https://stackoverflow.com/a/13825568/715866
+mapfile -t ALL_DOTFILES < <(vcsh list-tracked)
+
+function is-shellcheck-file() {
+  local FILENAME=$1
+  local FIRST_LINE
+
+  FIRST_LINE=$(head --lines 1 "$FILENAME")
+
+  [[ $FILENAME =~ ^\.profile ]] ||
+  [[ $FILENAME =~ ^\.bash ]] ||
+  [[ $FILENAME =~ \.sh$ ]] ||
+  [[ $FILENAME =~ \.bash$ ]] ||
+  [[ $FIRST_LINE == '#!/usr/bin/env sh' ]] ||
+  [[ $FIRST_LINE == '#!/usr/bin/env bash' ]]
+}
+
+function is-vint-file() {
+  local FILENAME=$1
+  local BASENAME
+
+  BASENAME=$(basename "$FILENAME")
+
+  [[ $FILENAME =~ \.vim$ ]] ||
+  [[ $BASENAME == ideavimrc ]]
+}
+
+function run-shellcheck() {
+  SHELLCHECK_FILES=()
+
+  for DOTFILE in "${ALL_DOTFILES[@]}"; do
+    if is-shellcheck-file "$DOTFILE"; then
+      SHELLCHECK_FILES+=("$DOTFILE")
+    fi
+  done
+
+  # If the --external-sources flag is not provided, ShellCheck will not follow
+  # even literal paths, like that paths to Bash completions in .bashrc, and will
+  # complain about error SC1091.
+  #
+  # I'd rather enable --external-sources in shellcheckrc, but at the time of
+  # this writing, doing so is not possible.
+  #
+  # https://github.com/koalaman/shellcheck/issues/1818
+  shellcheck --external-sources "${SHELLCHECK_FILES[@]}"
+}
+
+function run-vint() {
+  VINT_FILES=()
+
+  for DOTFILE in "${ALL_DOTFILES[@]}"; do
+    if is-vint-file "$DOTFILE"; then
+      VINT_FILES+=("$DOTFILE")
+    fi
+  done
+
+  # The "2>&1" (redirecting stderr to stdout in xargs output) and the
+  # inverse-grep are used to work around the following bug:
+  #
+  # https://github.com/Vimjas/vint/issues/329#issuecomment-1029628054
+  #
+  # Disable SC2016 because we don't _indent_ to expand `line`.
+  #
+  # shellcheck disable=SC2016
+  vint "${VINT_FILES[@]}" 2>&1 | grep --invert-match 'vint WARNING: Policy `line` is not defined'
+}
+
+run-shellcheck
+run-vint
