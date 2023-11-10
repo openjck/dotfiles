@@ -58,6 +58,7 @@
     dfs = diff --staged
   dt = difftool
     dts = difftool --staged
+  lsf = ls-files
   mt = mergetool
   st = status
   sw = switch
