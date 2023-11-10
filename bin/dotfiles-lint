@@ -5,6 +5,20 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Lint tracked dotfiles.
+
+Usage:
+  $COMMAND_NAME
+  $COMMAND_NAME -h | --help
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
 # cd to $HOME so that "vcsh list-tracked" lists all files, not just tracked
 # files in the current directory and its subdirectories.
 cd "$HOME" || exit 1
