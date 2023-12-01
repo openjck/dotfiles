@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Print the block device file path (e.g., /dev/sda1) of a given mountpoint.
+
+Usage:
+  $COMMAND_NAME MOUNTPOINT
+  $COMMAND_NAME -h | --help
+
+Example:
+  $COMMAND_NAME /media/john/backup
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
+if OUTPUT=$(findmnt --noheadings --output SOURCE --mountpoint "${ARGS[MOUNTPOINT]}"); then
+  echo "$OUTPUT"
+else
+  >&2 echo "Error: ${ARGS[MOUNTPOINT]} is not a mountpoint."
+  exit 1
+fi
