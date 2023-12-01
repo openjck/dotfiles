@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Print the given line number.
+
+Usage:
+  $COMMAND_NAME LINE [FILE]
+  $COMMAND_NAME -h | --help
+
+Example:
+  $COMMAND_NAME 4 /etc/hosts
+  cal | $COMMAND_NAME 1
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
+FILE_OR_STDIN=${ARGS[FILE]:-/dev/stdin}
+
+awk "NR==${ARGS[LINE]}" "$FILE_OR_STDIN"
