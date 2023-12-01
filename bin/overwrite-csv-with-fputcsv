@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Overwrite a CSV with its own data, but as written by PHP's fputcsv function.
+This can be helpful when compatibility with fputcsv's formatting is required.
+For example, fputcsv surrounds all values containing spaces with double quotes,
+whereas some other tools, like PhpStorm's CSV editor, do not appear to be able
+to do this.
+
+NOTE: The provided file will be overwritten.
+
+Usage:
+  $COMMAND_NAME FILE
+  $COMMAND_NAME -h | --help
+
+Example:
+  $COMMAND_NAME example.csv
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
+php <<EOF
+<?php
+
+function exitWithError(string \$errorMessage): void {
+  \$filePointer = fopen('php://stderr', 'w');
+  fwrite(\$filePointer, \$errorMessage . PHP_EOL);
+  fcclose(\$filePointer);
+  exit(1);
+}
+
+\$inputFilename = '${ARGS[FILE]}';
+
+if (!file_exists(\$inputFilename)) {
+  exitWithError("Error: File \"\$inputFilename\" does not exist.");
+}
+
+\$inputHandle = fopen(\$inputFilename, 'r');
+\$outputHandle = tmpfile();
+
+if (\$inputHandle === FALSE) {
+  exitWithError("Error: Cannot open file \"\$inputFilename\".");
+}
+
+if (\$outputHandle === FALSE) {
+  exitWithError('Error: Cannot open tmpfile.');
+}
+
+while ((\$data = fgetcsv(\$inputHandle)) !== FALSE) {
+  fputcsv(\$outputHandle, \$data);
+}
+
+\$outputFilename = stream_get_meta_data(\$outputHandle)['uri'];
+
+rename(\$outputFilename, \$inputFilename);
+
+fclose(\$inputHandle);
+fclose(\$outputHandle);
+EOF
