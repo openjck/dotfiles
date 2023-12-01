@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Use fzf to choose one or more files to watch and run a command when any of them
+changes. Use the tab key to select multiple files.
+
+Usage:
+  $COMMAND_NAME COMMAND
+  $COMMAND_NAME -h | --help
+
+Example:
+  $COMMAND_NAME 'npm run build'
+  $COMMAND_NAME 'yarn build'
+
+Options:
+  -h --help  Show this documentation
+EOF
+)"
+
+if ! command -v entr > /dev/null; then
+  >&2 echo 'Error: entr is not installed.'
+  exit 1
+fi
+
+if ! command -v fzf > /dev/null; then
+  >&2 echo 'Error: fzf is not installed.'
+  exit 1
+fi
+
+# Disable SC2086 because we don't need to worry about word splitting here. entr
+# will work as expected if each word of COMMAND is a separate argument to entr.
+#
+# shellcheck disable=SC2086
+fzf --multi | entr ${ARGS[COMMAND]}
