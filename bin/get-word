@@ -14,7 +14,7 @@ Usage:
   $COMMAND_NAME WORD [FILE]
   $COMMAND_NAME -h | --help
 
-Example:
+Examples:
   $COMMAND_NAME 1 data/full-names   # Print first names.
   cal | head -n 1 | $COMMAND_NAME 1 # Print current month (if using US locale).
 
