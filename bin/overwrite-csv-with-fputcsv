@@ -24,7 +24,7 @@ Examples:
   $COMMAND_NAME example.csv
 
 Options:
-  -h --help  Show this documentation
+  -h, --help  Show this documentation
 EOF
 )"
 

@@ -20,7 +20,7 @@ Examples:
   $COMMAND_NAME 'yarn build'
 
 Options:
-  -h --help  Show this documentation
+  -h, --help  Show this documentation
 EOF
 )"
 

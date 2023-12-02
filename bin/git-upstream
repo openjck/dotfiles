@@ -25,7 +25,7 @@ Usage:
   $COMMAND_NAME -h | --help
 
 Options:
-  -h --help  Show this documentation
+  -h, --help  Show this documentation
 EOF
 )"
 

@@ -22,7 +22,7 @@ Example:
   echo '    John      Karahalis    ' | $COMMAND_NAME
 
 Options:
-  -h --help  Show this documentation
+  -h, --help  Show this documentation
 EOF
 )"
 

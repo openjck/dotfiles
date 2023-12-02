@@ -19,7 +19,7 @@ Examples:
   cal | head -n 1 | $COMMAND_NAME 1 # Print current month (if using US locale).
 
 Options:
-  -h --help  Show this documentation
+  -h, --help  Show this documentation
 EOF
 )"
 

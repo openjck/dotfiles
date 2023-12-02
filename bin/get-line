@@ -19,7 +19,7 @@ Examples:
   cal | $COMMAND_NAME 1
 
 Options:
-  -h --help  Show this documentation
+  -h, --help  Show this documentation
 EOF
 )"
 

@@ -16,7 +16,7 @@ Usage:
   $COMMAND_NAME -h | --help
 
 Options:
-  -h --help       Show this documentation
+  -h, --help      Show this documentation
   --from-scratch  Start by blowing away node_modules and package-lock.json
 EOF
 )"
