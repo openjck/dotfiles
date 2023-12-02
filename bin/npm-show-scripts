@@ -21,7 +21,7 @@ EOF
 )"
 
 if [[ ! -f package.json ]]; then
-  >&2 echo 'Error: package.json not found'
+  >&2 echo 'Error: Cannot find file "package.json".'
   exit 1
 fi
 

@@ -25,6 +25,6 @@ if [[ -f "${ARGS[FILE]}" ]]; then
 elif [[ -d "${ARGS[FILE]}" ]]; then
   chmod '=rwx' "${ARGS[FILE]}"
 else
-  >&2 echo "Error: Unsupported node type"
+  >&2 echo "Error: Node type is not supported."
   exit 1
 fi
