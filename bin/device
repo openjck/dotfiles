@@ -18,7 +18,8 @@ Examples:
   $COMMAND_NAME /media/john/backup
 
 Options:
-  -h, --help  Show this documentation
+  -h, --help
+      Show this documentation
 EOF
 )"
 

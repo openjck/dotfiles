@@ -19,7 +19,8 @@ Examples:
   cal | $COMMAND_NAME
 
 Options:
-  -h, --help  Show this documentation
+  -h, --help
+      Show this documentation
 
 This command may appear to strip color from stdin, but it doesn't. Rather, many
 programs disable color output when stdout is not a tty, like when stdout is

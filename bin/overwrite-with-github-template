@@ -23,7 +23,8 @@ Examples:
   $COMMAND_NAME sveltejs/template
 
 Options:
-  -h, --help  Show this documentation
+  -h, --help
+      Show this documentation
 EOF
 )"
 

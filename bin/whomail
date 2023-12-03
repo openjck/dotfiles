@@ -21,7 +21,8 @@ Example:
   $COMMAND_NAME johnkarahalis.com
 
 Options:
-  -h, --help  Show this documentation
+  -h, --help
+      Show this documentation
 EOF
 )"
 
