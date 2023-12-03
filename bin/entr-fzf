@@ -39,10 +39,9 @@ fi
 #
 # See the last example of the following page:
 # https://github.com/docopt/docopts#examples
-I=0
-while [[ $I -lt ${ARGS[COMMAND,#]} ]]; do
+LAST_VARIADIC_INDEX=$((${ARGS[COMMAND,#]} - 1))
+for I in $(seq 0 $LAST_VARIADIC_INDEX); do
   ENTR_ARGS+=("${ARGS[COMMAND,$I]}")
-  I=$((I + 1))
 done
 
 # Disable SC2086. We don't need to worry about word splitting here because entr
