@@ -4,7 +4,7 @@
 # and files that are sourced from this file.
 source "$XDG_CONFIG_HOME/bash/bootstrap/source_utils.bash"
 
-# Load configurations.
+# Source configurations.
 source "$XDG_CONFIG_HOME/bash/init/asdf.bash"
 source "$XDG_CONFIG_HOME/bash/init/bash-completion.bash"
 source "$XDG_CONFIG_HOME/bash/init/bat.bash"
@@ -19,12 +19,12 @@ source "$XDG_CONFIG_HOME/bash/init/options.bash"
 source "$XDG_CONFIG_HOME/bash/init/prompt.bash"
 source "$XDG_CONFIG_HOME/bash/init/tmux.bash"
 
-# Load functions.
+# Source functions.
 #
-# This must be done after Bash completion configuration is loaded because some
+# This must be done after Bash completion configuration is sourced because some
 # functions reuse completions from other commands.
 #
-# This must also be done after shell option configuration is loaded because the
+# This must also be done after shell option configuration is sourced because the
 # "c" function reuses "cd" completion, which is altered when "cdable_vars" is
 # enabled.
 source "$XDG_CONFIG_HOME/bash/init/functions.bash"
