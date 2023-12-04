@@ -28,7 +28,6 @@ piped. This can be confirmed by indenting text from a command that is forced to
 use color, as in the following example:
 
   grep --color=always source "\$HOME/.bashrc" | $COMMAND_NAME
-
 EOF
 )"
 
