@@ -24,4 +24,12 @@ Options:
 EOF
 )"
 
-grep --recursive --files-with-matches --perl-regexp "${ARGS[SEARCH]}" | xargs sed --in-place --regexp-extended "s/${ARGS[SEARCH]}/${ARGS[REPLACE]}/g"
+grep \
+  --recursive \
+  --files-with-matches \
+  --perl-regexp \
+  "${ARGS[SEARCH]}" \
+  | xargs sed \
+    --in-place \
+    --regexp-extended \
+    "s/${ARGS[SEARCH]}/${ARGS[REPLACE]}/g"
