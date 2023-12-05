@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Update TARGET directory to perfectly match SOURCE directory, deleting files if
+necessary.
+
+SOURCE and TARGET must be local directories. They may be specified with or
+without trailing slashes without affecting the result.
+
+Usage:
+  $COMMAND_NAME SOURCE TARGET
+  $COMMAND_NAME -h | --help
+
+Examples:
+  $COMMAND_NAME /media/john/drive/ /media/john/some-other-drive/
+
+Options:
+  -h, --help
+      Show this documentation
+EOF
+)"
+
+SOURCE_WITH_NO_TRAILING_SLASH=${ARGS[SOURCE]%/}
+TARGET_WITH_NO_TRAILING_SLASH=${ARGS[TARGET]%/}
+
+SOURCE_WITH_TRAILING_SLASH="$SOURCE_WITH_NO_TRAILING_SLASH/"
+TARGET_WITH_TRAILING_SLASH="$TARGET_WITH_NO_TRAILING_SLASH/"
+
+if [[ ! -d "$SOURCE_WITH_TRAILING_SLASH" ]]; then
+    >&2 echo "Error: \"$SOURCE_WITH_TRAILING_SLASH\" does not exist."
+    exit 1
+fi
+
+# rsync will create the destination directory if it does not already exist.
+# That's often fine, but it's not what I'd like this script to do. Rather, I'd
+# like this script to exit with an error message if the destination directory
+# cannot be found, as it does here. I often use this script to synchronize two
+# backup drives, and I don't want a new copy of a backup to be made on the local
+# disk if the destination disk cannot be found.
+#
+# Perhaps this behavior, checking whether the destination directory exists, can
+# be made an option in the future, disabled by default.
+if [[ ! -d "$TARGET_WITH_TRAILING_SLASH" ]]; then
+    >&2 echo "Error: \"$TARGET_WITH_TRAILING_SLASH\" does not exist."
+    exit 1
+fi
+
+# When both the source and the destination have a trailing slash, rsync updates
+# the destination to have the same _contents_ as the source, rather than
+# updating the destination to have a directory with the same name and same
+# contents as the source directory.
+rsync \
+  --archive \
+  --delete \
+  --hard-links \
+  --acls \
+  --xattrs \
+  --verbose \
+  "$SOURCE_WITH_TRAILING_SLASH" \
+  "$TARGET_WITH_TRAILING_SLASH"
