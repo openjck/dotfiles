@@ -9,7 +9,7 @@ COMMAND_NAME=$(basename "$0")
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Remove a byte order mark (BOM) from the beginning of a file. If one is not
-present, nothing will be done.
+present, file contents will not be modified.
 
 Usage:
   $COMMAND_NAME FILE
