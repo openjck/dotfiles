@@ -21,4 +21,5 @@ Options:
 EOF
 )"
 
+# https://stackoverflow.com/a/35807131/715866
 sed -i '1s/^\(\xef\xbb\xbf\)\?/\xef\xbb\xbf/' "${ARGS[FILE]}"

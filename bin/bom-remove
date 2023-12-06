@@ -21,4 +21,5 @@ Options:
 EOF
 )"
 
+# https://unix.stackexchange.com/a/381263/410447
 sed -i '1s/^\xef\xbb\xbf//' "${ARGS[FILE]}"
