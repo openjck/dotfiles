@@ -14,11 +14,6 @@ organizing aliases and functions, but this method, inspired by
 [fish](https://github.com/fish-shell/fish-shell), feels the most natural. No
 aliases are used. Everything is a function, and every function has its own file.
 
-I've been managing my dotfiles in private source control for years, but I'm only
-now beginning to make them public. This will be a gradual process. If something
-doesn't seem to work correctly, it may be due to the fact that I'm not done
-publishing all of the relevant files.
-
 Please use the [Discussions](https://github.com/openjck/dotfiles/discussions)
 page if you'd like to ask any questions or otherwise discuss these files.
 
