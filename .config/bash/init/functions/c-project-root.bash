@@ -5,6 +5,7 @@ function c-project-root() {
   if [[ -n "$PROJECT_ROOT" ]]; then
     cdv "$PROJECT_ROOT"
   else
-    >&2 echo "Error: Not a project"
+    >&2 echo "Error: Current directory is not a project."
+    return 1
   fi
 }
