@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Make a full backup of this computer. That is, make a backup that includes every
+file from the root directory on down.
+
+The backup will be stored in DIRECTORY with a filename that includes the
+hostname and the date and time the backup began.
+
+Usage:
+  $COMMAND_NAME DIRECTORY
+  $COMMAND_NAME -h | --help
+
+Options:
+  -h, --help
+      Show this documentation
+EOF
+)"
+
+if [[ ! -d "${ARGS[DIRECTORY]}" ]]; then
+  >&2 echo "Error: Directory \"${ARGS[DIRECTORY]}\" does not exist."
+  exit 1
+fi
+
+BASENAME="$(hostname)-$(date --iso-8601=seconds).tar.gz"
+
+# `tar` may be preferable for creating archives due to the way it handles file
+# permissions. `zip` does store file permissions, but in order to restore them,
+# the `-X` flag needs to be passed to `unzip`. I can imagine forgetting to do
+# that. On the other hand, tar will restore file permissions as long as the
+# files are extracted as root, which seems more obvious and may be easier to
+# remember, since only root can modify all file permissions.
+#
+# https://unix.stackexchange.com/a/509337/410447
+# https://superuser.com/a/1083144
+#
+# Besides, tar is probably more commonly used on Linux.
+tar --verbose \
+    --create \
+    --gzip \
+    --preserve-permissions \
+    --file="${ARGS[DIRECTORY]}/$BASENAME" \
+    --exclude='./media' \
+    --exclude='./mnt' \
+    --exclude='./proc' \
+    --exclude='./sys' \
+    --exclude='lost+found' \
+    --directory=/ \
+    .
