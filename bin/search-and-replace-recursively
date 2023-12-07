@@ -24,6 +24,11 @@ Options:
 EOF
 )"
 
+# This works, but if it becomes unwieldy in the future, it could potentially be
+# made simpler (and support a more common regex style) by using sd and fd
+# instead.
+#
+# https://github.com/chmln/sd#quick-guide
 grep \
   --recursive \
   --files-with-matches \
