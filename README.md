@@ -1,5 +1,5 @@
 These are my public configuration files, shell scripts, and more. My shell
-scripts are documented, and readers may also be interested in my methods of
+scripts are well-documented, and readers may also be interested in my methods of
 organization, my Bash functions, my Neovim configuration, my tmux configuration,
 and my Git configuration.
 
@@ -52,9 +52,9 @@ $ rename-files-sequentially
 
 #### Shell script documentation
 
-For shell scripts that support it, pass the `-h` or `--help` option to read
-detailed documentation. For example:
+Pass the `-h` or `--help` option to any shell script to read its detailed
+documentation. For example:
 
 ```shell
-$ indent --help
+$ entr-fzf --help
 ```
