@@ -98,8 +98,8 @@ nnoremap <Leader>hh <Cmd>nohlsearch<CR>
 
 " Mnemonic: Modify inline
 "
-" This is supported in IdeaVim, but not in Neovim. In IntelliJ, it inlines a
-" variable or function (i.e., replaces the variable/function with its
+" This is supported in JetBrains IDEs, but not in Neovim. In JetBrains IDEs, it
+" inlines a variable or function (i.e., replaces the variable/function with its
 " value/implementation), but as far as I know, there is no analogue for this in
 " ale.
 nmap <Leader>mi <Cmd>echo "Not supported."<CR>
@@ -115,9 +115,9 @@ nnoremap <Leader>mr <Cmd>ALERename<CR>
 
 " Mnemonic: Modify suggest
 "
-" This is supported in IdeaVim, but not in Neovim. In IntelliJ, it opens up a
-" menu of suggested changes, but as far as I know, there is no analogue for this
-" in ale.
+" This is supported in JetBrains IDEs, but not in Neovim. In JetBrains IDEs, it
+" opens up a menu of suggested changes, but as far as I know, there is no
+" analogue for this in ale.
 nnoremap <Leader>ms <Cmd>echo "Not supported."<CR>
 
 """"""""""
@@ -179,10 +179,11 @@ nnoremap <Leader>su <Plug>(ale_find_references)
 
 " Mnemonic: Test
 "
-" This is supported in IdeaVim, but not in Neovim. In IntelliJ, if the cursor is
-" located in a test method, it turns that method. If the cursor is located
-" elsewhere, it runs all tests in the file. There does not appear to be a way to
-" run all tests in a file if the cursor is located in a test method in IntelliJ.
+" This is supported in JetBrains IDEs, but not in Neovim. In JetBrains IDEs, if
+" the cursor is located in a test method, it runs that test method. If the
+" cursor is located elsewhere, it runs all tests in the file. In JetBrains IDEs,
+" there does not appear to be a way to run all tests in a file if the cursor is
+" located in a test method.
 nnoremap <Leader>t <Cmd>echo "Not supported."<CR>
 
 """""""""

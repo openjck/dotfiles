@@ -86,10 +86,10 @@ set visualbell
 
 " Set up leader commands that are also supported in my Neovim configuration.
 "
-" For these leader commands, use features that are built into IntelliJ rather
-" than features that are provided by Neovim or Neovim plugins. IdeaVim doesn't
-" support any Neovim plugins except for those that are emulated and manually
-" enabled.
+" For these leader commands, use features that are built into JetBrains IDEs
+" rather than features that are provided by Neovim or Neovim plugins. IdeaVim
+" doesn't support any Neovim plugins except for those that are emulated and
+" manually enabled.
 "
 " See leader.vim for the corresponding leader commands in Neovim.
 nnoremap <Space> <Nop>
@@ -123,14 +123,13 @@ nnoremap <Leader>nr :<C-U>Reconfigure<CR>
 " Set up leader commands that are not yet supported in my Neovim configuration.
 "
 " These are additional leader commands that use features that built into
-" IntelliJ, but that are not yet supported in my Neovim configuration.
+" JetBrains IDEs, but that are not yet supported in my Neovim configuration.
 "
 " There should be one corresponding leader command in leader.vim for each leader
 " command added here, even if it doesn't do anything useful. In other words, I
 " should keep leader.vim as the single source of truth. That will help me keep
 " things in order, so that I don't accidentally create a leader command in my
-" Neovim configuration that conflicts with the configuration of IntelliJ or some
-" other editor.
+" Neovim configuration that conflicts with the IdeaVim configuration.
 nmap <Leader>mi <Action>(Inline)
 nmap <Leader>ms <Action>(ShowIntentionActions)
 nmap <Leader>t <Action>(RunClass)
