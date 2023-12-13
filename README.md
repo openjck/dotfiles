@@ -28,7 +28,7 @@ Follow these steps to install _all_ of these files:
 2. Install [vcsh](https://github.com/RichiH/vcsh).
 3. Run `vcsh clone git@github.com:openjck/dotfiles.git openjck-dotfiles`.
 4. Run `vcsh openjck-dotfiles switch main`.
-5. Run `~/bin/dotfiles-setup`.
+5. Run `vcsh upgrade openjck-dotfiles`.
 
 #### Single shell script
 
