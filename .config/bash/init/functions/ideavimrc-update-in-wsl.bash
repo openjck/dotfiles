@@ -6,7 +6,7 @@
 function ideavimrc-update-in-wsl() {
   local TARGET=$XDG_CONFIG_HOME/ideavim/ideavimrc
 
-  if vcsh public diff --quiet "$TARGET"; then
+  if vcsh dotfiles-openjck diff --quiet "$TARGET"; then
     rm "$TARGET"
     cp --no-preserve=mode,ownership "$D_WINDOWS_HOME/.ideavimrc" "$TARGET"
   else

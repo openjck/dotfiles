@@ -145,8 +145,23 @@ function setup_tmux() {
   fi
 }
 
+function setup_vcsh() {
+  # Do not display the LICENSE file or README.md file from the
+  # "dotfiles-openjck" vcsh repo.
+  vcsh dotfiles-openjck config core.sparseCheckout true
+  cat > "$XDG_CONFIG_HOME/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout" <<EOF
+*
+!README.md
+!LICENSE
+EOF
+  vcsh dotfiles-openjck checkout --quiet
+
+  echo 'done.'
+}
+
 echo 'Install packages... ' && install_packages
 echo
 echo -n 'Set up directories... ' && setup_directories
+echo -n 'Set up vcsh... ' && setup_vcsh
 echo -n 'Set up nvim... ' && setup_nvim
 echo -n 'Set up tmux... ' && setup_tmux

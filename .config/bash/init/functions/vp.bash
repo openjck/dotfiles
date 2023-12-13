@@ -1,5 +1,5 @@
 function vp() {
-  vcsh public "$@"
+  vcsh dotfiles-openjck "$@"
 }
 
 __reuse-completions vcsh vp
