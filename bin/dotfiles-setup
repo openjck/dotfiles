@@ -59,7 +59,6 @@ function install_packages() {
     'fd-find'
     'fzf'
     'git'
-    'gnome-shell-pomodoro'
     'moreutils'
     'neovim'
     'ripgrep'
