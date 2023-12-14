@@ -23,8 +23,8 @@ page if you'd like to ask any questions or otherwise discuss these files.
 
 Follow these steps to install _all_ of these files:
 
-1. Install [docopts](https://github.com/docopt/docopts) somewhere along your
-   `$PATH`. Shell scripts require docopts and will not function without it.
+1. Install [docopts](https://github.com/docopt/docopts). Shell scripts require
+   docopts and will not function without it.
 2. Install [vcsh](https://github.com/RichiH/vcsh).
 3. Run `vcsh clone git@github.com:openjck/dotfiles.git dotfiles-openjck`.
 4. Run `vcsh dotfiles-openjck switch main`.
@@ -33,8 +33,8 @@ Follow these steps to install _all_ of these files:
 
 Follow these steps to install a single shell script:
 
-1. Install [docopts](https://github.com/docopt/docopts) somewhere along your
-   `$PATH`. Shell scripts require docopts and will not function without it.
+1. Install [docopts](https://github.com/docopt/docopts). Shell scripts require
+   docopts and will not function without it.
 2. Save the shell script somewhere along your `$PATH`.
 3. Make the script executable (e.g., `chmod u+x /path/to/script`).
 
