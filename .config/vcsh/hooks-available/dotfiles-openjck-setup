@@ -48,6 +48,9 @@ Options:
 EOF
 )"
 
+RETURN_CODE_DONE=0
+RETURN_CODE_ALREADY_DONE=1
+
 # Manually source the ".profile" file, since we need to use some of the
 # environment variables that it sets and this script might be running before the
 # ".profile" file is applied.
@@ -99,9 +102,9 @@ function setup_directories() {
   done
 
   if [[ $CREATED_ANY == true ]]; then
-    echo 'done.'
+    return $RETURN_CODE_DONE
   else
-    echo 'already done.'
+    return $RETURN_CODE_ALREADY_DONE
   fi
 }
 
@@ -114,7 +117,9 @@ function setup_directories() {
 function setup_nvim() {
   local PLUGIN_MANAGER_FILENAME=$XDG_DATA_HOME/nvim/site/autoload/plug.vim
 
-  if [[ ! -f "$PLUGIN_MANAGER_FILENAME" ]]; then
+  if [[ -f "$PLUGIN_MANAGER_FILENAME" ]]; then
+    return $RETURN_CODE_ALREADY_DONE
+  else
     # Install vim-plug.
     curl --silent --fail --location --create-dirs --output \
       "$PLUGIN_MANAGER_FILENAME" \
@@ -123,25 +128,23 @@ function setup_nvim() {
     # Install plugins.
     nvim -u "$XDG_CONFIG_HOME/nvim/init/plugins/index.vim" -c PlugInstall -c quitall
 
-    echo 'done.'
-  else
-    echo 'already done.'
+    return $RETURN_CODE_DONE
   fi
 }
 
 function setup_tmux() {
   local PLUGIN_MANAGER_DIR=$HOME/.tmux/plugins/tpm
 
-  if [[ ! -d "$PLUGIN_MANAGER_DIR" ]]; then
+  if [[ -d "$PLUGIN_MANAGER_DIR" ]]; then
+    return $RETURN_CODE_ALREADY_DONE
+  else
     # Install tpm.
     git clone --quiet https://github.com/tmux-plugins/tpm "$PLUGIN_MANAGER_DIR"
 
     # Install plugins.
     "$HOME/.tmux/plugins/tpm/bin/install_plugins" > /dev/null
 
-    echo 'done.'
-  else
-    echo 'already done.'
+    return $RETURN_CODE_DONE
   fi
 }
 
@@ -166,6 +169,19 @@ function setup_vcsh_repo() {
 
   if [[ $MODIFIED_CONFIG == true ]]; then
     vcsh dotfiles-openjck checkout --quiet
+    return $RETURN_CODE_DONE
+  else
+    return $RETURN_CODE_ALREADY_DONE
+  fi
+}
+
+function run_setup_function() {
+  local FUNCTION=$1
+  local DESCRIPTION=$2
+
+  echo -n "Set up $DESCRIPTION... "
+
+  if "$FUNCTION"; then
     echo 'done.'
   else
     echo 'already done.'
@@ -174,7 +190,7 @@ function setup_vcsh_repo() {
 
 echo 'Install packages...' && install_packages
 echo
-echo -n 'Set up vcsh repo...   ' && setup_vcsh_repo
-echo -n 'Set up directories... ' && setup_directories
-echo -n 'Set up nvim...        ' && setup_nvim
-echo -n 'Set up tmux...        ' && setup_tmux
+run_setup_function setup_vcsh_repo 'vcsh repo'
+run_setup_function setup_directories directories
+run_setup_function setup_nvim nvim
+run_setup_function setup_tmux tmux
