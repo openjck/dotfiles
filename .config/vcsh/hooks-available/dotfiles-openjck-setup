@@ -79,6 +79,46 @@ function install_packages() {
   fi
 }
 
+function run_setup_function() {
+  local FUNCTION=$1
+  local DESCRIPTION=$2
+
+  echo -n "Set up $DESCRIPTION... "
+
+  if "$FUNCTION"; then
+    echo 'done.'
+  else
+    echo 'already done.'
+  fi
+}
+
+function setup_vcsh_repo() {
+  local MODIFIED_CONFIG=false
+
+  if [[ $(vcsh dotfiles-openjck config core.sparseCheckout) != 'true' ]]; then
+    vcsh dotfiles-openjck config core.sparseCheckout true
+    MODIFIED_CONFIG=true
+  fi
+
+  local SC_CONTENTS="*
+!README.md
+!LICENSE"
+
+  local SC_FILE=$XDG_CONFIG_HOME/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout
+
+  if [[ ! -f "$SC_FILE" || ($(cat "$SC_FILE") != "$SC_CONTENTS") ]]; then
+    echo "$SC_CONTENTS" > "$SC_FILE"
+    MODIFIED_CONFIG=true
+  fi
+
+  if [[ $MODIFIED_CONFIG == true ]]; then
+    vcsh dotfiles-openjck checkout --quiet
+    return $RETURN_CODE_DONE
+  else
+    return $RETURN_CODE_ALREADY_DONE
+  fi
+}
+
 function setup_directories() {
   local CREATED_ANY=false
 
@@ -145,46 +185,6 @@ function setup_tmux() {
     "$HOME/.tmux/plugins/tpm/bin/install_plugins" > /dev/null
 
     return $RETURN_CODE_DONE
-  fi
-}
-
-function setup_vcsh_repo() {
-  local MODIFIED_CONFIG=false
-
-  if [[ $(vcsh dotfiles-openjck config core.sparseCheckout) != 'true' ]]; then
-    vcsh dotfiles-openjck config core.sparseCheckout true
-    MODIFIED_CONFIG=true
-  fi
-
-  local SC_CONTENTS="*
-!README.md
-!LICENSE"
-
-  local SC_FILE=$XDG_CONFIG_HOME/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout
-
-  if [[ ! -f "$SC_FILE" || ($(cat "$SC_FILE") != "$SC_CONTENTS") ]]; then
-    echo "$SC_CONTENTS" > "$SC_FILE"
-    MODIFIED_CONFIG=true
-  fi
-
-  if [[ $MODIFIED_CONFIG == true ]]; then
-    vcsh dotfiles-openjck checkout --quiet
-    return $RETURN_CODE_DONE
-  else
-    return $RETURN_CODE_ALREADY_DONE
-  fi
-}
-
-function run_setup_function() {
-  local FUNCTION=$1
-  local DESCRIPTION=$2
-
-  echo -n "Set up $DESCRIPTION... "
-
-  if "$FUNCTION"; then
-    echo 'done.'
-  else
-    echo 'already done.'
   fi
 }
 
