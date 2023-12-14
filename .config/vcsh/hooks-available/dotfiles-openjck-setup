@@ -77,7 +77,7 @@ function install_packages() {
 }
 
 function setup_directories() {
-  CREATED_ANY=false
+  local CREATED_ANY=false
 
   local DIRECTORIES=(
     "$HOME/GTD/inboxes/main"
@@ -145,23 +145,36 @@ function setup_tmux() {
   fi
 }
 
-function setup_vcsh() {
-  # Do not display the LICENSE file or README.md file from the
-  # "dotfiles-openjck" vcsh repo.
-  vcsh dotfiles-openjck config core.sparseCheckout true
-  cat > "$XDG_CONFIG_HOME/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout" <<EOF
-*
-!README.md
-!LICENSE
-EOF
-  vcsh dotfiles-openjck checkout --quiet
+function setup_vcsh_repo() {
+  local MODIFIED_CONFIG=false
 
-  echo 'done.'
+  if [[ $(vcsh dotfiles-openjck config core.sparseCheckout) != 'true' ]]; then
+    vcsh dotfiles-openjck config core.sparseCheckout true
+    MODIFIED_CONFIG=true
+  fi
+
+  local SC_CONTENTS="*
+!README.md
+!LICENSE"
+
+  local SC_FILE=$XDG_CONFIG_HOME/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout
+
+  if [[ ! -f "$SC_FILE" || ($(cat "$SC_FILE") != "$SC_CONTENTS") ]]; then
+    echo "$SC_CONTENTS" > "$SC_FILE"
+    MODIFIED_CONFIG=true
+  fi
+
+  if [[ $MODIFIED_CONFIG == true ]]; then
+    vcsh dotfiles-openjck checkout --quiet
+    echo 'done.'
+  else
+    echo 'already done.'
+  fi
 }
 
-echo 'Install packages... ' && install_packages
+echo 'Install packages...' && install_packages
 echo
+echo -n 'Set up vcsh repo...   ' && setup_vcsh_repo
 echo -n 'Set up directories... ' && setup_directories
-echo -n 'Set up vcsh... ' && setup_vcsh
-echo -n 'Set up nvim... ' && setup_nvim
-echo -n 'Set up tmux... ' && setup_tmux
+echo -n 'Set up nvim...        ' && setup_nvim
+echo -n 'Set up tmux...        ' && setup_tmux
