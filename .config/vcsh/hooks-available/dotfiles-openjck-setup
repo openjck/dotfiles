@@ -56,43 +56,64 @@ RETURN_CODE_ALREADY_DONE=1
 # ".profile" file is applied.
 source "$HOME/.profile"
 
-function install_packages() {
-  local PACKAGES=(
-    'bat'
-    'fd-find'
-    'fzf'
-    'git'
-    'moreutils'
-    'neovim'
-    'ripgrep'
-    'toilet'
-    'vcsh'
-  )
+function run_set_up_function() {
+  local TARGET=$1
+  local PRINT_BLANK_LINE_INSTEAD_OF_DONE=${2:-false}
 
-  if [[ $DISTRO == Ubuntu ]]; then
-    # Ignore SC2068 because we want each package name to be a separate argument.
-    # (Quoting the list of package names would be fine, too, but we don't _need_
-    # to do that.)
-    #
-    # shellcheck disable=SC2068
-    sudo apt install ${PACKAGES[@]}
-  fi
-}
+  echo -n "Set up $TARGET... "
 
-function run_setup_function() {
-  local FUNCTION=$1
-  local DESCRIPTION=$2
-
-  echo -n "Set up $DESCRIPTION... "
-
-  if "$FUNCTION"; then
-    echo 'done.'
+  if "set_up_$TARGET"; then
+    if [[ $PRINT_BLANK_LINE_INSTEAD_OF_DONE == true ]]; then
+      echo
+    else
+      echo 'done.'
+    fi
   else
     echo 'already done.'
   fi
 }
 
-function setup_vcsh_repo() {
+function set_up_packages() {
+  declare PACKAGES_TO_INSTALL=()
+
+  if [[ $DISTRO == Ubuntu ]]; then
+    local PACKAGES=(
+      'bat'
+      'fd-find'
+      'fzf'
+      'git'
+      'moreutils'
+      'neovim'
+      'ripgrep'
+      'toilet'
+      'vcsh'
+    )
+
+    for PACKAGE in "${PACKAGES[@]}"; do
+      # If the package is not already installed, add it to the
+      # $PACKAGES_TO_INSTALL array.
+      #
+      # https://askubuntu.com/a/1393059
+      if [[ $(dpkg-query --show --showformat='${db:Status-Status}\n' "$PACKAGE" 2>/dev/null) != 'installed' ]]; then
+        PACKAGES_TO_INSTALL+=("$PACKAGE")
+      fi
+    done
+
+    # If there are no packages to install, return with a code indicating that
+    # this is already done. Otherwise, install the packages.
+    if [[ ${#PACKAGES_TO_INSTALL[@]} -eq 0 ]]; then
+      return $RETURN_CODE_ALREADY_DONE
+    else
+      # Ignore SC2068 because it's okay if each package name is a separate
+      # argument to "apt install".
+      #
+      # shellcheck disable=SC2068
+      sudo apt-get install --yes ${PACKAGES_TO_INSTALL[@]}
+    fi
+  fi
+}
+
+function set_up_vcsh() {
   local MODIFIED_CONFIG=false
 
   if [[ $(vcsh dotfiles-openjck config core.sparseCheckout) != 'true' ]]; then
@@ -119,7 +140,7 @@ function setup_vcsh_repo() {
   fi
 }
 
-function setup_directories() {
+function set_up_directories() {
   local CREATED_ANY=false
 
   local DIRECTORIES=(
@@ -154,7 +175,7 @@ function setup_directories() {
 # configured in the main configuration file and we tried to load that
 # configuration file during the initial setup, Neovim would complain about
 # things like missing colorschemes.
-function setup_nvim() {
+function set_up_nvim() {
   local PLUGIN_MANAGER_FILENAME=$XDG_DATA_HOME/nvim/site/autoload/plug.vim
 
   if [[ -f "$PLUGIN_MANAGER_FILENAME" ]]; then
@@ -172,7 +193,7 @@ function setup_nvim() {
   fi
 }
 
-function setup_tmux() {
+function set_up_tmux() {
   local PLUGIN_MANAGER_DIR=$HOME/.tmux/plugins/tpm
 
   if [[ -d "$PLUGIN_MANAGER_DIR" ]]; then
@@ -188,9 +209,8 @@ function setup_tmux() {
   fi
 }
 
-echo 'Install packages...' && install_packages
-echo
-run_setup_function setup_vcsh_repo 'vcsh repo'
-run_setup_function setup_directories directories
-run_setup_function setup_nvim nvim
-run_setup_function setup_tmux tmux
+run_set_up_function packages true
+run_set_up_function vcsh
+run_set_up_function directories
+run_set_up_function nvim
+run_set_up_function tmux
