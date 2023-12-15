@@ -105,7 +105,7 @@ function set_up_packages() {
       return $RETURN_CODE_ALREADY_DONE
     else
       # Ignore SC2068 because it's okay if each package name is a separate
-      # argument to "apt install".
+      # argument to "apt-get install".
       #
       # shellcheck disable=SC2068
       sudo apt-get install --yes ${PACKAGES_TO_INSTALL[@]}
