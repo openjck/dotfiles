@@ -30,13 +30,13 @@ set -euo pipefail
 COMMAND_NAME=$(basename "$0")
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Set up the dotfiles, packages, directories, and other standard configurations
-used across machines.
+Set up the packages, directories, plugin managers, and other dotfile
+dependencies used across machines.
 
-This command is idempotent and can therefore be run multiple times without
-affecting the result, assuming the command's implementation does not change
-between invocations. The command should be rerun occasionally or whenever
-important details change, like configured packages or configured directories.
+This script is idempotent and can therefore be run multiple times without
+affecting the result, assuming the script's implementation does not change
+between invocations. It should be rerun occasionally or whenever important
+details change, like configured packages or configured directories.
 
 Usage:
   $COMMAND_NAME
