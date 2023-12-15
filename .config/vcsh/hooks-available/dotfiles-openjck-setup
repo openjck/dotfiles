@@ -89,6 +89,7 @@ function set_up_packages() {
       'vcsh'
     )
 
+    local PACKAGE
     for PACKAGE in "${PACKAGES[@]}"; do
       # If the package is not already installed, add it to the
       # $PACKAGES_TO_INSTALL array.
@@ -155,6 +156,7 @@ function set_up_directories() {
     "$XDG_CONFIG_HOME/bash/init/functions/local"
   )
 
+  local DIRECTORY
   for DIRECTORY in "${DIRECTORIES[@]}"; do
     if [[ ! -d "$DIRECTORY" ]]; then
       mkdir --parents "$DIRECTORY"
