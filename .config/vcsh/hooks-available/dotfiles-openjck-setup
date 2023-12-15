@@ -129,6 +129,7 @@ function set_up_packages() {
       #
       # shellcheck disable=SC2068
       sudo apt-get install --yes ${PACKAGES_TO_INSTALL[@]}
+      return $RETURN_CODE_DONE
     fi
   fi
 }
