@@ -58,12 +58,12 @@ source "$HOME/.profile"
 
 function run_set_up_function() {
   local TARGET=$1
-  local PRINT_BLANK_LINE_INSTEAD_OF_DONE=${2:-false}
+  local OWN_OUTPUT_ON_SUCCESS=${2:-false}
 
   echo -n "Set up $TARGET... "
 
   if "set_up_$TARGET"; then
-    if [[ $PRINT_BLANK_LINE_INSTEAD_OF_DONE == true ]]; then
+    if [[ $OWN_OUTPUT_ON_SUCCESS == true ]]; then
       echo
     else
       echo 'done.'
