@@ -60,7 +60,26 @@ function run_set_up_function() {
   local TARGET=$1
   local OWN_OUTPUT_ON_SUCCESS=${2:-false}
 
-  echo -n "Set up $TARGET... "
+  # Manually keep this value up-to-date with the number of characters in the
+  # longest target name. For example, if "directory" is the longest target name,
+  # this value should be 11.
+  local NUM_CHARS_LONGEST_TARGET_NAME=11
+
+  local TARGET_NAME_SUFFIX='... '
+  local NUM_CHARS_TARGET_NAME_SUFFIX
+  NUM_CHARS_TARGET_NAME_SUFFIX=$(echo -n "$TARGET_NAME_SUFFIX" | wc --chars)
+
+  local PAD_LENGTH=$((
+    NUM_CHARS_LONGEST_TARGET_NAME +
+    NUM_CHARS_TARGET_NAME_SUFFIX
+  ))
+
+  local PADDED_TARGET_NAME_AND_ELLIPSES
+  PADDED_TARGET_NAME_AND_ELLIPSES=$(
+    printf "%-${PAD_LENGTH}s" "${TARGET}${TARGET_NAME_SUFFIX}"
+  )
+
+  echo -n "Set up $PADDED_TARGET_NAME_AND_ELLIPSES"
 
   if "set_up_$TARGET"; then
     if [[ $OWN_OUTPUT_ON_SUCCESS == true ]]; then
