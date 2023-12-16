@@ -35,6 +35,11 @@ Create a new shell script.
 Create a new, empty file with the given name, make it executable, and open it
 with the default editor.
 
+If the editor exits with an error code, the file that was created and opened
+with the editor will be removed. This can be helpful if FILE is accidentally
+misspelled. Simply exit the editor with an error code (e.g., by running ":cq" in
+Vim), and the file will be removed.
+
 Usage:
   $COMMAND_NAME FILE
   $COMMAND_NAME -h | --help
@@ -47,4 +52,7 @@ EOF
 
 touch "${ARGS[FILE]}"
 chmod u+x "${ARGS[FILE]}"
-$EDITOR "${ARGS[FILE]}"
+
+if ! $EDITOR "${ARGS[FILE]}"; then
+  rm "${ARGS[FILE]}"
+fi
