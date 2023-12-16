@@ -50,6 +50,7 @@ EOF
 
 RETURN_CODE_DONE=0
 RETURN_CODE_ALREADY_DONE=1
+RETURN_CODE_UNSUPPORTED=2
 
 # Manually source the ".profile" file, since we need to use some of the
 # environment variables that it sets and this script might be running before the
@@ -81,57 +82,77 @@ function run_set_up_function() {
 
   echo -n "Set up $PADDED_TARGET_NAME_AND_ELLIPSES"
 
-  if "set_up_$TARGET"; then
-    if [[ $OWN_OUTPUT_ON_SUCCESS == true ]]; then
-      echo
-    else
-      echo 'done.'
+  set +e
+  "set_up_$TARGET"
+  RETURN_CODE=$?
+  set -e
+
+  case $RETURN_CODE in
+    "$RETURN_CODE_DONE")
+      if [[ $OWN_OUTPUT_ON_SUCCESS == true ]]; then
+        echo
+      else
+        echo 'done.'
+      fi
+      ;;
+    "$RETURN_CODE_ALREADY_DONE")
+      echo 'already done.'
+      ;;
+    "$RETURN_CODE_UNSUPPORTED")
+      echo 'unsupported.'
+      ;;
+  esac
+}
+
+function set_up_packages_ubuntu() {
+  declare PACKAGES_TO_INSTALL=()
+
+  local PACKAGES=(
+    'bat'
+    'fd-find'
+    'fzf'
+    'git'
+    'moreutils'
+    'neovim'
+    'ripgrep'
+    'toilet'
+    'vcsh'
+  )
+
+  local PACKAGE
+  for PACKAGE in "${PACKAGES[@]}"; do
+    # If the package is not already installed, add it to the
+    # $PACKAGES_TO_INSTALL array.
+    #
+    # https://askubuntu.com/a/1393059
+    if [[ $(dpkg-query --show --showformat='${db:Status-Status}\n' "$PACKAGE" 2>/dev/null) != 'installed' ]]; then
+      PACKAGES_TO_INSTALL+=("$PACKAGE")
     fi
+  done
+
+  # If there are no packages to install, return with a code indicating that
+  # this is already done. Otherwise, install the packages.
+  if [[ ${#PACKAGES_TO_INSTALL[@]} -eq 0 ]]; then
+    return $RETURN_CODE_ALREADY_DONE
   else
-    echo 'already done.'
+    # Ignore SC2068 because it's okay if each package name is a separate
+    # argument to "apt-get install".
+    #
+    # shellcheck disable=SC2068
+    sudo apt-get install --yes ${PACKAGES_TO_INSTALL[@]}
+    return $RETURN_CODE_DONE
   fi
 }
 
 function set_up_packages() {
-  declare PACKAGES_TO_INSTALL=()
-
-  if [[ $DISTRO == Ubuntu ]]; then
-    local PACKAGES=(
-      'bat'
-      'fd-find'
-      'fzf'
-      'git'
-      'moreutils'
-      'neovim'
-      'ripgrep'
-      'toilet'
-      'vcsh'
-    )
-
-    local PACKAGE
-    for PACKAGE in "${PACKAGES[@]}"; do
-      # If the package is not already installed, add it to the
-      # $PACKAGES_TO_INSTALL array.
-      #
-      # https://askubuntu.com/a/1393059
-      if [[ $(dpkg-query --show --showformat='${db:Status-Status}\n' "$PACKAGE" 2>/dev/null) != 'installed' ]]; then
-        PACKAGES_TO_INSTALL+=("$PACKAGE")
-      fi
-    done
-
-    # If there are no packages to install, return with a code indicating that
-    # this is already done. Otherwise, install the packages.
-    if [[ ${#PACKAGES_TO_INSTALL[@]} -eq 0 ]]; then
-      return $RETURN_CODE_ALREADY_DONE
-    else
-      # Ignore SC2068 because it's okay if each package name is a separate
-      # argument to "apt-get install".
-      #
-      # shellcheck disable=SC2068
-      sudo apt-get install --yes ${PACKAGES_TO_INSTALL[@]}
-      return $RETURN_CODE_DONE
-    fi
-  fi
+  case $DISTRO in
+    Ubuntu)
+      set_up_packages_ubuntu
+      ;;
+    *)
+      return $RETURN_CODE_UNSUPPORTED
+      ;;
+  esac
 }
 
 function set_up_vcsh() {
