@@ -35,11 +35,10 @@ function p-search-all() {
 
   I=0
   while true; do
-    NAME=${SEARCHERS[$I,name]}
+    NAME=${SEARCHERS[$I,name]:-}
 
-    if [[ -z "$NAME" ]]; then
-      break
-    fi
+    # Break if we've passed the end of the associative array.
+    [[ -z "$NAME" ]] && break;
 
     HEADER_START="${DASH_CHARACTER}${DASH_CHARACTER}${DASH_CHARACTER} $NAME "
     HEADER_START_LENGTH=$(wc --chars <<< "$HEADER_START")
