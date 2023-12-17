@@ -24,8 +24,6 @@ function p-search-all() {
     SEARCHERS[2,name]=snap
     SEARCHERS[2,command]=snap
     SEARCHERS[2,args]=search
-
-    LAST_SEARCHER_INDEX=2
   else
     __print-unsupported-err
     return 1
@@ -35,8 +33,14 @@ function p-search-all() {
   local MAX_TEXT_WIDTH=80
   local DASH_CHARACTER=―
 
-  for I in $(seq 0 $LAST_SEARCHER_INDEX); do
+  I=0
+  while true; do
     NAME=${SEARCHERS[$I,name]}
+
+    if [[ -z "$NAME" ]]; then
+      break
+    fi
+
     HEADER_START="${DASH_CHARACTER}${DASH_CHARACTER}${DASH_CHARACTER} $NAME "
     HEADER_START_LENGTH=$(wc --chars <<< "$HEADER_START")
     NUM_TRAILING_DASHES=$((MAX_TEXT_WIDTH - HEADER_START_LENGTH))
@@ -53,5 +57,7 @@ function p-search-all() {
 
     # Print a newline after the command's output.
     echo
+
+    I=$((I + 1))
   done
 }
