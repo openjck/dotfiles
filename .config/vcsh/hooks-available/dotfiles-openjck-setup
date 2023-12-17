@@ -57,33 +57,62 @@ RETURN_CODE_UNSUPPORTED=2
 # ".profile" file is applied.
 source "$HOME/.profile"
 
+function run_set_up_functions() {
+  STEPS=$1
+
+  LONGEST_NAME_LENGTH=0
+
+  I=0
+  while true; do
+    NAME=${STEPS[$I,name]:-}
+
+    # Break if we've passed the end of the associative array.
+    [[ -z "$NAME" ]] && break;
+
+    NAME_LENGTH=$(echo -n "$NAME" | wc --chars)
+    if (( NAME_LENGTH > LONGEST_NAME_LENGTH )); then
+      LONGEST_NAME_LENGTH=$NAME_LENGTH
+    fi
+
+    I=$((I + 1))
+  done
+
+  I=0
+  while true; do
+    NAME=${STEPS[$I,name]:-}
+
+    # Break if we've passed the end of the associative array.
+    [[ -z "$NAME" ]] && break;
+
+    run_set_up_function \
+      "$NAME" \
+      "${STEPS[$I,own_output_on_success]:-false}" \
+      "$LONGEST_NAME_LENGTH"
+
+    I=$((I + 1))
+  done
+}
+
 function run_set_up_function() {
-  local TARGET=$1
+  local NAME=$1
   local OWN_OUTPUT_ON_SUCCESS=${2:-false}
+  local LONGEST_NAME_LENGTH=$3
 
-  # Manually keep this value up-to-date with the number of characters in the
-  # longest target name. For example, if "directory" is the longest target name,
-  # this value should be 11.
-  local NUM_CHARS_LONGEST_TARGET_NAME=11
+  local NAME_SUFFIX='... '
+  local NAME_SUFFIX_LENGTH
+  NAME_SUFFIX_LENGTH=$(echo -n "$NAME_SUFFIX" | wc --chars)
 
-  local TARGET_NAME_SUFFIX='... '
-  local NUM_CHARS_TARGET_NAME_SUFFIX
-  NUM_CHARS_TARGET_NAME_SUFFIX=$(echo -n "$TARGET_NAME_SUFFIX" | wc --chars)
+  local PAD_LENGTH=$(( LONGEST_NAME_LENGTH + NAME_SUFFIX_LENGTH ))
 
-  local PAD_LENGTH=$((
-    NUM_CHARS_LONGEST_TARGET_NAME +
-    NUM_CHARS_TARGET_NAME_SUFFIX
-  ))
-
-  local PADDED_TARGET_NAME_AND_ELLIPSES
-  PADDED_TARGET_NAME_AND_ELLIPSES=$(
-    printf "%-${PAD_LENGTH}s" "${TARGET}${TARGET_NAME_SUFFIX}"
+  local PADDED_NAME_AND_ELLIPSES
+  PADDED_NAME_AND_ELLIPSES=$(
+    printf "%-${PAD_LENGTH}s" "${NAME}${NAME_SUFFIX}"
   )
 
-  echo -n "Set up $PADDED_TARGET_NAME_AND_ELLIPSES"
+  echo -n "Set up $PADDED_NAME_AND_ELLIPSES"
 
   set +e
-  "set_up_$TARGET"
+  "set_up_$NAME"
   RETURN_CODE=$?
   set -e
 
@@ -135,6 +164,8 @@ function set_up_packages_ubuntu() {
   if [[ ${#PACKAGES_TO_INSTALL[@]} -eq 0 ]]; then
     return $RETURN_CODE_ALREADY_DONE
   else
+    echo
+
     # Ignore SC2068 because it's okay if each package name is a separate
     # argument to "apt-get install".
     #
@@ -252,8 +283,13 @@ function set_up_tmux() {
   fi
 }
 
-run_set_up_function packages true
-run_set_up_function vcsh
-run_set_up_function directories
-run_set_up_function nvim
-run_set_up_function tmux
+declare -A STEPS
+
+STEPS[0,name]=packages
+STEPS[0,own_output_on_success]=true
+STEPS[1,name]=vcsh
+STEPS[2,name]=directories
+STEPS[3,name]=nvim
+STEPS[4,name]=tmux
+
+run_set_up_functions "${STEPS[@]}"
