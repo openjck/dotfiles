@@ -35,7 +35,7 @@ function p-search-all() {
 
   I=0
   while true; do
-    NAME=${SEARCHERS[$I,name]:-}
+    NAME=${SEARCHERS[$I,name]}
 
     # Break if we've passed the end of the associative array.
     [[ -z "$NAME" ]] && break;
