@@ -7,7 +7,6 @@ source "$XDG_CONFIG_HOME/bash/bootstrap/source_utils.bash"
 # Source configurations.
 source "$XDG_CONFIG_HOME/bash/init/asdf.bash"
 source "$XDG_CONFIG_HOME/bash/init/bash-completion.bash"
-source "$XDG_CONFIG_HOME/bash/init/bat.bash"
 source "$XDG_CONFIG_HOME/bash/init/directories.bash"
 source "$XDG_CONFIG_HOME/bash/init/files.bash"
 source "$XDG_CONFIG_HOME/bash/init/fzf.bash"
@@ -18,6 +17,10 @@ source "$XDG_CONFIG_HOME/bash/init/nvm.bash"
 source "$XDG_CONFIG_HOME/bash/init/options.bash"
 source "$XDG_CONFIG_HOME/bash/init/prompt.bash"
 source "$XDG_CONFIG_HOME/bash/init/tmux.bash"
+
+# bat must be configured after less, since the BAT_PAGER environment variable
+# includes the value of the $LESS environment variable.
+source "$XDG_CONFIG_HOME/bash/init/bat.bash"
 
 # Source functions.
 #
