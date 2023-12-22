@@ -59,4 +59,8 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
   fi
 done
 
-whois "${ARGS[DOMAIN]}" | grep --color=never @ | trim | sort | uniq
+whois "${ARGS[DOMAIN]}" \
+  | grep --color=never @ \
+  | sed -e 's/^\s*//' -e 's/\s*$//' \
+  | sort \
+  | uniq
