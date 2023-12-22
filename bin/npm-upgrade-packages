@@ -57,7 +57,7 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
   fi
 done
 
-if [[ "${ARGS[--from-scratch]}" ]]; then
+if [[ ${ARGS[--from-scratch]} ]]; then
   rm -rf node_modules package-lock.json
 fi
 
