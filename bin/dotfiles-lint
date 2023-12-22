@@ -77,7 +77,7 @@ function is-vint-file() {
 }
 
 function run-shellcheck() {
-  SHELLCHECK_FILES=()
+  local SHELLCHECK_FILES=()
 
   for DOTFILE in "${ALL_DOTFILES[@]}"; do
     if is-shellcheck-file "$DOTFILE"; then
@@ -97,7 +97,7 @@ function run-shellcheck() {
 }
 
 function run-vint() {
-  VINT_FILES=()
+  local VINT_FILES=()
 
   for DOTFILE in "${ALL_DOTFILES[@]}"; do
     if is-vint-file "$DOTFILE"; then
