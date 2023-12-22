@@ -48,4 +48,15 @@ Options:
 EOF
 )"
 
+DEPENDENCIES=(
+  whois
+)
+
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" > /dev/null; then
+    >&2 echo "Error: \"$DEPENDENCY\" is not installed."
+    exit 1
+  fi
+done
+
 whois "${ARGS[DOMAIN]}" | grep --color=never @ | trim | sort | uniq

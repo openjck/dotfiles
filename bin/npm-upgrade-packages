@@ -45,6 +45,18 @@ Options:
 EOF
 )"
 
+DEPENDENCIES=(
+  npm
+  npx
+)
+
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" > /dev/null; then
+    >&2 echo "Error: \"$DEPENDENCY\" is not installed."
+    exit 1
+  fi
+done
+
 if [[ "${ARGS[--from-scratch]}" ]]; then
   rm -rf node_modules package-lock.json
 fi

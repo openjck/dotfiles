@@ -42,6 +42,17 @@ Options:
 EOF
 )"
 
+DEPENDENCIES=(
+  ruby
+)
+
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" > /dev/null; then
+    >&2 echo "Error: \"$DEPENDENCY\" is not installed."
+    exit 1
+  fi
+done
+
 NEW_FILE=$(mktemp)
 
 # Use Ruby to correctly handle CSV files that already double-quote values, CSV

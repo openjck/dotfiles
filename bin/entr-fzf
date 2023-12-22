@@ -47,15 +47,17 @@ Options:
 EOF
 )"
 
-if ! command -v entr > /dev/null; then
-  >&2 echo 'Error: entr is not installed.'
-  exit 1
-fi
+DEPENDENCIES=(
+  entr
+  fzf
+)
 
-if ! command -v fzf > /dev/null; then
-  >&2 echo 'Error: fzf is not installed.'
-  exit 1
-fi
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" > /dev/null; then
+    >&2 echo "Error: \"$DEPENDENCY\" is not installed."
+    exit 1
+  fi
+done
 
 # Process variadic arguments.
 #

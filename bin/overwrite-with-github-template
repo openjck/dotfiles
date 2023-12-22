@@ -50,6 +50,18 @@ Options:
 EOF
 )"
 
+DEPENDENCIES=(
+  npx
+  rsync
+)
+
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" > /dev/null; then
+    >&2 echo "Error: \"$DEPENDENCY\" is not installed."
+    exit 1
+  fi
+done
+
 APP_TEMPLATE_FILES_DIR=$(mktemp --directory)
 
 npx degit "${ARGS[IDENTIFIER]}" "$APP_TEMPLATE_FILES_DIR"

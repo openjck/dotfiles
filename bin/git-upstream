@@ -52,6 +52,17 @@ Options:
 EOF
 )"
 
+DEPENDENCIES=(
+  git
+)
+
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" > /dev/null; then
+    >&2 echo "Error: \"$DEPENDENCY\" is not installed."
+    exit 1
+  fi
+done
+
 # This script is based on the following Stack Overflow answer:
 # https://stackoverflow.com/a/9753364/715866
 

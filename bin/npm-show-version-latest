@@ -42,4 +42,15 @@ Options:
 EOF
 )"
 
+DEPENDENCIES=(
+  npm
+)
+
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" > /dev/null; then
+    >&2 echo "Error: \"$DEPENDENCY\" is not installed."
+    exit 1
+  fi
+done
+
 npm show "${ARGS[PACKAGE]}" version
