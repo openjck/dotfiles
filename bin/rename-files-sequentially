@@ -57,9 +57,11 @@ NUM_FILES=$(find . -maxdepth 1 -type f | wc --lines)
 mapfile -t PADDED_NUMBERS < <(seq --equal-width $NUM_FILES)
 
 I=0
-for FILENAME in *; do
-  # Skip anything that isn't a file.
-  [[ ! -f "$FILENAME" ]] && continue
+for INODE_NAME in *; do
+  # Skip anything that isn't a regular file.
+  [[ ! -f "$INODE_NAME" ]] && continue
+
+  FILENAME=$INODE_NAME
 
   # If the file has an extension, EXTENSION_OR_FILENAME is that extension. If
   # the file has no extension, EXTENSION_OR_FILENAME is the filename itself.
