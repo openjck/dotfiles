@@ -52,6 +52,16 @@ cd "$HOME" || exit 1
 # https://stackoverflow.com/a/13825568/715866
 mapfile -t ALL_DOTFILES < <(vcsh list-tracked)
 
+# Create an array of all dotfiles which are actually present on the filesystem.
+# Some might be managed by vcsh but not present because they are ignored via
+# sparse-checkout.
+ALL_PRESENT_DOTFILES=()
+for DOTFILE in "${ALL_DOTFILES[@]}"; do
+  if [[ -f $DOTFILE ]]; then
+    ALL_PRESENT_DOTFILES+=("$DOTFILE")
+  fi
+done
+
 function is-shellcheck-file() {
   local FILENAME=$1
   local FIRST_LINE
@@ -79,7 +89,7 @@ function is-vint-file() {
 function run-shellcheck() {
   local SHELLCHECK_FILES=()
 
-  for DOTFILE in "${ALL_DOTFILES[@]}"; do
+  for DOTFILE in "${ALL_PRESENT_DOTFILES[@]}"; do
     if is-shellcheck-file "$DOTFILE"; then
       SHELLCHECK_FILES+=("$DOTFILE")
     fi
@@ -99,7 +109,7 @@ function run-shellcheck() {
 function run-vint() {
   local VINT_FILES=()
 
-  for DOTFILE in "${ALL_DOTFILES[@]}"; do
+  for DOTFILE in "${ALL_PRESENT_DOTFILES[@]}"; do
     if is-vint-file "$DOTFILE"; then
       VINT_FILES+=("$DOTFILE")
     fi
