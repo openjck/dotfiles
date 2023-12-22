@@ -55,5 +55,5 @@ Pass the `-h` or `--help` option to any shell script to read its detailed
 documentation. For example:
 
 ```shell
-$ entr-fzf --help
+$ indent --help
 ```
