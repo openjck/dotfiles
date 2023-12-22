@@ -38,10 +38,10 @@ Usage:
   $COMMAND_NAME -h | --help
 
 Options:
-  -h, --help
-      Show this documentation
   --from-scratch
       Start by removing node_modules and package-lock.json
+  -h, --help
+      Show this documentation
 EOF
 )"
 
