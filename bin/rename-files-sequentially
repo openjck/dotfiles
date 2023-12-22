@@ -69,7 +69,8 @@ for INODE_NAME in *; do
   if [[ "$EXTENSION_OR_FILENAME" == "$FILENAME" ]]; then
     NEW_FILENAME=${PADDED_NUMBERS[$I]}
   else
-    NEW_FILENAME=${PADDED_NUMBERS[$I]}.$EXTENSION_OR_FILENAME
+    EXTENSION=$EXTENSION_OR_FILENAME
+    NEW_FILENAME=${PADDED_NUMBERS[$I]}.$EXTENSION
   fi
 
   # The --no-clobber option ensures that an existing file will not be
