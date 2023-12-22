@@ -43,9 +43,9 @@ EOF
 )"
 
 # https://unix.stackexchange.com/a/249850
-if [[ -f "${ARGS[FILE]}" ]]; then
+if [[ -f ${ARGS[FILE]} ]]; then
   chmod '=rw' "${ARGS[FILE]}"
-elif [[ -d "${ARGS[FILE]}" ]]; then
+elif [[ -d ${ARGS[FILE]} ]]; then
   chmod '=rwx' "${ARGS[FILE]}"
 else
   >&2 echo "Error: Node type is not supported."
