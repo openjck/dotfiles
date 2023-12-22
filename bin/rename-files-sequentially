@@ -75,7 +75,7 @@ for INODE_NAME in *; do
 
   # The --no-clobber option ensures that an existing file will not be
   # overwritten, which would otherwise happen if there's a file in this
-  # directory which already has this number as its filename. It also suppressed
+  # directory which already has this number as its filename. It also suppresses
   # error messages like "'1.png' and '1.png' are the same file", which can be
   # raised if this script is run more than once in the same directory.
   mv --no-clobber "$FILENAME" "$NEW_FILENAME"
