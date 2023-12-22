@@ -30,12 +30,16 @@ set -euo pipefail
 COMMAND_NAME=$(basename "$0")
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Add a byte order mark (BOM) to the beginning of a file. If one is already
+Add a byte order mark (BOM) to the beginning of input. If one is already
 present, a second will not be added.
 
 Usage:
-  $COMMAND_NAME FILE
+  $COMMAND_NAME [FILE]
   $COMMAND_NAME -h | --help
+
+Examples:
+  $COMMAND_NAME example.csv
+  (cat example.csv | $COMMAND_NAME) > example_with_bom.csv
 
 Options:
   -h, --help
@@ -44,4 +48,10 @@ EOF
 )"
 
 # https://stackoverflow.com/a/35807131/715866
-sed -i '1s/^\(\xef\xbb\xbf\)\?/\xef\xbb\xbf/' "${ARGS[FILE]}"
+SED_EXPRESSION='1s/^\(\xef\xbb\xbf\)\?/\xef\xbb\xbf/'
+
+if [[ ${ARGS[FILE]} ]]; then
+  sed -i "$SED_EXPRESSION" "${ARGS[FILE]}"
+else
+  sed "$SED_EXPRESSION"
+fi

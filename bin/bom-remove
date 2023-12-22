@@ -30,12 +30,16 @@ set -euo pipefail
 COMMAND_NAME=$(basename "$0")
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Remove a byte order mark (BOM) from the beginning of a file. If one is not
-present, file contents will not be modified.
+Remove a byte order mark (BOM) from the beginning of input. If one is not
+present, input will not be modified.
 
 Usage:
-  $COMMAND_NAME FILE
+  $COMMAND_NAME [FILE]
   $COMMAND_NAME -h | --help
+
+Examples:
+  $COMMAND_NAME example.csv
+  (cat example.csv | $COMMAND_NAME) > example_without_bom.csv
 
 Options:
   -h, --help
@@ -44,4 +48,10 @@ EOF
 )"
 
 # https://unix.stackexchange.com/a/381263/410447
-sed -i '1s/^\xef\xbb\xbf//' "${ARGS[FILE]}"
+SED_EXPRESSION='1s/^\xef\xbb\xbf//'
+
+if [[ ${ARGS[FILE]} ]]; then
+  sed -i "$SED_EXPRESSION" "${ARGS[FILE]}"
+else
+  sed "$SED_EXPRESSION"
+fi
