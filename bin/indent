@@ -55,8 +55,8 @@ the following example:
 EOF
 )"
 
-if (( ${ARGS[--size]} < 0 )); then
-  >&2 echo 'Error: Indent size must be non-negative.'
+if [[ ! ${ARGS[--size]} =~ ^[0-9]+$ ]]; then
+  >&2 echo 'Error: Indent size must be a non-negative integer.'
   exit 1
 fi
 
