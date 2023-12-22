@@ -30,7 +30,7 @@ set -euo pipefail
 COMMAND_NAME=$(basename "$0")
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Set the default system permissions on a file or directory.
+Set the default system permissions on a regular file or a directory.
 
 Usage:
   $COMMAND_NAME FILE
