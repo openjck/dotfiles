@@ -1,7 +1,9 @@
-These are my public configuration files, shell scripts, and more. My shell
-scripts are well-documented, and readers may also be interested in my methods of
-organization, my Bash functions, my Neovim configuration, my tmux configuration,
-and my Git configuration.
+These are my public configuration files, shell scripts, and more. I'm sharing
+them for the benefit of others, and I sincerely hope others find them useful.
+
+My shell scripts are well-documented, and readers may also be interested in my
+methods of organization, my Bash functions, my Neovim configuration, my tmux
+configuration, and my Git configuration.
 
 In general, Bash utilities that might be useful to others are written as proper
 Bash scripts and stored in the [bin](bin) directory, whereas Bash utilities that
