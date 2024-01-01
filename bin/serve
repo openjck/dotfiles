@@ -44,7 +44,7 @@ EOF
 )"
 
 DEPENDENCIES=(
-  python3
+  python
 )
 
 for DEPENDENCY in "${DEPENDENCIES[@]}"; do
@@ -55,4 +55,4 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
 done
 
 cd "${ARGS[DIRECTORY]:-.}"
-python3 -m http.server
+python -m http.server
