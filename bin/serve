@@ -30,10 +30,11 @@ set -euo pipefail
 COMMAND_NAME=$(basename "$0")
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Start a static server, with the current directory as the server root.
+Start a static server with DIRECTORY served at the server root. If DIRECTORY is
+not provided, the current directory will be served at the server root.
 
 Usage:
-  $COMMAND_NAME
+  $COMMAND_NAME [DIRECTORY]
   $COMMAND_NAME -h | --help
 
 Options:
@@ -53,4 +54,5 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
   fi
 done
 
+cd "${ARGS[DIRECTORY]:-.}"
 python3 -m http.server
