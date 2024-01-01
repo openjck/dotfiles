@@ -34,10 +34,12 @@ Start a static server with DIRECTORY served at the server root. If DIRECTORY is
 not provided, the current directory will be served at the server root.
 
 Usage:
-  $COMMAND_NAME [DIRECTORY]
+  $COMMAND_NAME [--port PORT] [DIRECTORY]
   $COMMAND_NAME -h | --help
 
 Options:
+  -p PORT, --port PORT
+      The port that the static server should use [default: 8000]
   -h, --help
       Show this documentation
 EOF
@@ -55,4 +57,4 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
 done
 
 cd "${ARGS[DIRECTORY]:-.}"
-python -m http.server
+python -m http.server "${ARGS[--port]}"
