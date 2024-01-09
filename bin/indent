@@ -33,7 +33,7 @@ eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Indent input with spaces.
 
 Usage:
-  $COMMAND_NAME [--size SIZE] [FILE]
+  $COMMAND_NAME [-s SIZE] [FILE]
   $COMMAND_NAME -h | --help
 
 Examples:
