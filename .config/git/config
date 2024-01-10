@@ -21,15 +21,8 @@
 [tag]
   gpgsign = true
 
-# Use Neovim as the difftool and mergetool.
-#
-# https://gist.github.com/openjck/93b335dfe5e33955d7dec3c9aec9d609
 [diff]
-  tool = vimdiff
-[merge]
-  tool = vimdiff
-[mergetool "vimdiff"]
-  path = nvim
+  tool = nvimdiff
 
 [mergetool]
   # Remove backup files after a successful merge.
