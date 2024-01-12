@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# Copyright (c) 2023 John Karahalis
+# Copyright (c) 2023, 2024 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,8 +32,8 @@ COMMAND_NAME=$(basename "$0")
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Trim whitespace from every line of the given file or from stdin.
 
-Leading whitespace and trailing whitespace is removed, but not whitespace
-between words.
+Leading whitespace and trailing whitespace is removed, but whitespace between
+words is not.
 
 Usage:
   $COMMAND_NAME [FILE]
