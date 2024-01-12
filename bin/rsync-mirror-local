@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# Copyright (c) 2023 John Karahalis
+# Copyright (c) 2023, 2024 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -63,8 +63,8 @@ done
 SOURCE_WITH_NO_TRAILING_SLASH=${ARGS[SOURCE]%/}
 TARGET_WITH_NO_TRAILING_SLASH=${ARGS[TARGET]%/}
 
-SOURCE_WITH_TRAILING_SLASH="$SOURCE_WITH_NO_TRAILING_SLASH/"
-TARGET_WITH_TRAILING_SLASH="$TARGET_WITH_NO_TRAILING_SLASH/"
+SOURCE_WITH_TRAILING_SLASH=$SOURCE_WITH_NO_TRAILING_SLASH/
+TARGET_WITH_TRAILING_SLASH=$TARGET_WITH_NO_TRAILING_SLASH/
 
 if [[ ! -d "$SOURCE_WITH_TRAILING_SLASH" ]]; then
     >&2 echo "Error: \"$SOURCE_WITH_TRAILING_SLASH\" does not exist."
