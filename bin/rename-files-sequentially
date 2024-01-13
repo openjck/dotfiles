@@ -32,11 +32,11 @@ COMMAND_NAME=$(basename "$0")
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Rename files in the current directory, non-recursively, to ordinal, sequential
 numbers. The first file according to \$LC_COLLATE is renamed to 1, the second
-file is renamed to 2, and so on.
+file is renamed to 2, and so on. File extensions are preserved.
 
-File extensions are preserved. Filenames are padded when appropriate. That is,
-if there are 10-99 files, the first file will be named 01, and if there are
-100-999 files, the first file will be named 001.
+Filenames are padded when appropriate. That is, if there are 10-99 files, the
+first file will be named 01, and if there are 100-999 files, the first file will
+be named 001.
 
 Usage:
   $COMMAND_NAME
