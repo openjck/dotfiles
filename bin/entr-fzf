@@ -60,11 +60,7 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
 done
 
 # Process variadic arguments.
-#
-# See the last example of the following page:
-# https://github.com/docopt/docopts#examples
-LAST_VARIADIC_INDEX=$((${ARGS[COMMAND,#]} - 1))
-for I in $(seq 0 $LAST_VARIADIC_INDEX); do
+for ((I=0; I < ARGS[COMMAND,#]; I++)); do
   ENTR_ARGS+=("${ARGS[COMMAND,$I]}")
 done
 
