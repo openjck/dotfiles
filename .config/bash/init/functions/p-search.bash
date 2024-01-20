@@ -1,6 +1,6 @@
 function p-search() {
   if [[ $DISTRO == "Ubuntu" ]]; then
-    apt search "$@"
+    apt-cache search "$@"
   else
     __print-unsupported-err
     return 1
