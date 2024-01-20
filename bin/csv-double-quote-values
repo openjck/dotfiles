@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# Copyright (c) 2023 John Karahalis
+# Copyright (c) 2023, 2024 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -30,13 +30,15 @@ set -euo pipefail
 COMMAND_NAME=$(basename "$0")
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Overwrite a CSV file, adding double quotes around all values.
+Add double quotes around all values of a CSV file.
 
 Usage:
-  $COMMAND_NAME FILE
+  $COMMAND_NAME [--overwrite] FILE
   $COMMAND_NAME -h | --help
 
 Options:
+  --overwrite
+      Overwrite the input file
   -h, --help
       Show this documentation
 EOF
@@ -53,7 +55,7 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
   fi
 done
 
-NEW_FILE=$(mktemp)
+OUTPUT_FILE=$(mktemp)
 
 # Use Ruby to correctly handle CSV files that already double-quote values, CSV
 # files that do not double quote values, and CSV files that double-quote some
@@ -67,6 +69,10 @@ NEW_FILE=$(mktemp)
 # shellcheck disable=SC2016
 if ruby -rcsv -ne \
     'puts CSV.generate_line(CSV.parse_line($_), :force_quotes=>true)' \
-    "${ARGS[FILE]}" > "$NEW_FILE"; then
-  mv "$NEW_FILE" "${ARGS[FILE]}"
+    "${ARGS[FILE]}" > "$OUTPUT_FILE"; then
+  if ${ARGS[--overwrite]}; then
+    mv "$OUTPUT_FILE" "${ARGS[FILE]}"
+  else
+    cat "$OUTPUT_FILE"
+  fi
 fi
