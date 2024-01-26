@@ -67,7 +67,7 @@ php <<EOF
 function exitWithError(string \$errorMessage): void {
   \$filePointer = fopen('php://stderr', 'w');
   fwrite(\$filePointer, \$errorMessage . PHP_EOL);
-  fcclose(\$filePointer);
+  fclose(\$filePointer);
   exit(1);
 }
 
