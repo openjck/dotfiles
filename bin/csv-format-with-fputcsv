@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# Copyright (c) 2023 John Karahalis
+# Copyright (c) 2023, 2024 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -30,22 +30,21 @@ set -euo pipefail
 COMMAND_NAME=$(basename "$0")
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Overwrite a CSV with its own data, but as written by PHP's fputcsv function.
-This can be helpful when compatibility with fputcsv's formatting is required.
-For example, fputcsv surrounds all values containing spaces with double quotes,
-whereas some other tools, like PhpStorm's CSV editor, do not appear to be able
-to do this.
-
-NOTE: The provided file will be overwritten.
+Format a CSV with PHP's fputcsv function. This can be helpful when compatibility
+with fputcsv's formatting is required. For example, fputcsv surrounds all values
+containing spaces with double quotes, whereas some other tools, like PhpStorm's
+CSV editor, do not appear to be able to do this.
 
 Usage:
-  $COMMAND_NAME FILE
+  $COMMAND_NAME [--overwrite] FILE
   $COMMAND_NAME -h | --help
 
 Examples:
   $COMMAND_NAME example.csv
 
 Options:
+  --overwrite
+      Overwrite the input file
   -h, --help
       Show this documentation
 EOF
@@ -95,7 +94,12 @@ while ((\$data = fgetcsv(\$inputHandle)) !== FALSE) {
 
 \$outputFilename = stream_get_meta_data(\$outputHandle)['uri'];
 
-rename(\$outputFilename, \$inputFilename);
+if (${ARGS[--overwrite]}) {
+  rename(\$outputFilename, \$inputFilename);
+}
+else {
+  echo file_get_contents(\$outputFilename);
+}
 
 fclose(\$inputHandle);
 fclose(\$outputHandle);
