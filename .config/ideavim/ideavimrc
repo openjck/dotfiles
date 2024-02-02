@@ -1,23 +1,22 @@
-" NOTE: If this is the Windows copy of this file, remember to update
-" $XDG_CONFIG_HOME/ideavim/ideavimrc in WSL whenever it changes.
+" Note: Remember to update $XDG_CONFIG_HOME/ideavim/ideavimrc in WSL whenever
+" this file changes.
 "
-" When using IdeaVim on Windows, IdeaVim requires that this file be named
-" .ideavimrc and that it live in the Windows home directory. For the purposes of
-" this documentation, we'll call that the Windows file.
+" IdeaVim requires that the IdeaVim configuration file be named .ideavimrc and
+" live in the Windows home directory. For the purposes of this comment, we'll
+" call that the Windows file.
 "
 " I'd rather the file live at $XDG_CONFIG_HOME/ideavim/ideavimrc in WSL so that
-" it can be managed by vcsh. For the purposes of this documentation, we'll
-" call that the WSL file.
+" it can be managed by vcsh. For the purposes of this comment, we'll call that
+" the WSL file.
 "
 " On Windows 10, I was able to source the WSL file from the Windows file using
 " the `source` feature of Vimscript. On Windows 11, I can't seem to make that
 " work. I also haven't had success creating a symbolic link, hard link, or
-" Windows shortcut from the Windows file to the WSL file, even when specifying
-" the target as a "Windows-style" path like _W:/path/to/file/in/wsl.
+" Windows shortcut from the Windows file to the WSL file.
 "
-" When modifying IdeaVim settings, the Windows file should be edited, then the
-" WSL file should be updated to exactly match the Windows file, so that those
-" changes can be tracked in vcsh. It's an imperfect solution, but it works.
+" Therefore, the "official" version of this file is the Windows file, and any
+" changes should be manually copied to the WSL file so that those changes can be
+" tracked by vcsh. It's an imperfect solution, but it works.
 
 " Set some options that are recommended by the IdeaVim team.
 "
@@ -26,7 +25,7 @@ set ideajoin
 set ideamarks
 set clipboard+=ideaput
 
-" Enable emulation for some plugins that I use in Neovim.
+" Enable some emulated Vim plugins.
 Plug 'kana/vim-textobj-entire'
 Plug 'machakann/vim-highlightedyank'
 Plug 'tpope/vim-commentary'
@@ -35,8 +34,9 @@ Plug 'vim-scripts/ReplaceWithRegister'
 
 " Add support for `gqq` and `<visual selection>gq`.
 "
-" This does not add support for `gq`-based motions like `gqip`. This also
-" assumes that the "Wrap to Column" plugin is installed.
+" This does not add support for `gq`-based motions like `gqip`, however.
+"
+" This assumes that the "Wrap to Column" plugin is installed.
 "
 " https://youtrack.jetbrains.com/issue/VIM-186/gq-does-not-reformat-word-wrap-comments#focus=Comments-27-4355985.0-0
 nmap gqq <Action>(com.andrewbrookins.idea.wrap.WrapAction)
@@ -67,8 +67,8 @@ set incsearch
 
 " Use C-[direction] to move between splits.
 "
-" In my Neovim configuration, this is achieved through the use of the
-" vim-tmux-navigator plugin.
+" In my Neovim configuration, this is done by the vim-tmux-navigator plugin. I
+" like this behavior and I want it to be the same in IdeaVim for consistency.
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
@@ -86,10 +86,10 @@ set visualbell
 
 " Set up leader commands that are also supported in my Neovim configuration.
 "
-" For these leader commands, use features that are built into JetBrains IDEs
-" rather than features that are provided by Neovim or Neovim plugins. IdeaVim
-" doesn't support any Neovim plugins except for those that are emulated and
-" manually enabled.
+" For these leader commands, use features that are built into IntelliJ rather
+" than features that are provided by Neovim or Neovim plugins. IdeaVim doesn't
+" support any Neovim plugins except for those that are emulated and manually
+" enabled.
 "
 " See leader.vim for the corresponding leader commands in Neovim.
 nnoremap <Space> <Nop>
@@ -100,10 +100,12 @@ nmap <Leader>gip <Action>(GotoPreviousError)
 nmap <Leader>gt <Action>(GotoTypeDeclaration)
 nnoremap <Leader>hh :<C-U>nohlsearch<CR>
 nmap <Leader>mf <Action>(ReformatWithPrettierAction)
+nmap <Leader>mi <Action>(Inline)
 nmap <Leader>mr <Action>(RenameElement)
 nmap <Leader>os <Action>(NewScratchFile)
 nmap <Leader>sd <Action>(QuickJavaDoc)
 nmap <Leader>sm <Action>(ShowErrorDescription)
+nmap <Leader>t <Action>(RunClass)
 
  " Show usages (mini)
 nmap <Leader>sum <Action>(ShowUsages)
@@ -114,22 +116,21 @@ nmap <Leader>suf <Action>(FindUsages)
 " Support the <Leader>nr command.
 "
 " For reasons I don't understand, this will only work if the filename is
-" specified as ~/.ideavimrc, even if the file lives in Windows. This will not
-" work if the filename is specified with a Windows-style path or if the filename
-" is specified using the $HOME environment variable.
+" specified as ~/.ideavimrc, even though the file lives in Windows. This will
+" not work if the filename is specified with a Windows-style path or if the
+" filename is specified using the $HOME environment variable.
 command! Reconfigure source ~/.ideavimrc
 nnoremap <Leader>nr :<C-U>Reconfigure<CR>
 
 " Set up leader commands that are not yet supported in my Neovim configuration.
 "
 " These are additional leader commands that use features that built into
-" JetBrains IDEs, but that are not yet supported in my Neovim configuration.
+" IntelliJ, but that are not yet supported in my Neovim configuration.
 "
 " There should be one corresponding leader command in leader.vim for each leader
 " command added here, even if it doesn't do anything useful. In other words, I
 " should keep leader.vim as the single source of truth. That will help me keep
 " things in order, so that I don't accidentally create a leader command in my
-" Neovim configuration that conflicts with the IdeaVim configuration.
-nmap <Leader>mi <Action>(Inline)
+" Neovim configuration that conflicts with the configuration of IntelliJ or some
+" other editor.
 nmap <Leader>ms <Action>(ShowIntentionActions)
-nmap <Leader>t <Action>(RunClass)
