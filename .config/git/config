@@ -24,6 +24,9 @@
 [diff]
   tool = nvimdiff
 
+[merge]
+  tool = nvimdiff
+
 [mergetool]
   # Remove backup files after a successful merge.
   #
