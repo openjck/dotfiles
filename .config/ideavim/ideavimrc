@@ -54,11 +54,13 @@ nnoremap gQ <Nop>
 
 " Show the active mode.
 "
-" This isn't enabled in IdeaVim by default, but there is a ticket about
-" something similar:
+" https://youtrack.jetbrains.com/issue/VIM-1377/Normal-mode-needs-to-be-more-obvious#focus=Comments-27-8731813.0-0
 "
-" https://youtrack.jetbrains.com/issue/VIM-1377/Normal-mode-needs-to-be-more-obvious
-set showmode
+" Note, this may become the default in the future, depending on the answer to
+" the following question:
+"
+" https://youtrack.jetbrains.com/issue/VIM-1377/Normal-mode-needs-to-be-more-obvious#focus=Comments-27-8999759.0-0
+set colorfulmodewidget
 
 " These are enabled in Neovim by default, but disabled in Vim and IdeaVim by
 " default.
