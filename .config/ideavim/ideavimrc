@@ -52,15 +52,16 @@ inoremap <F1> <nop>
 nnoremap Q <Nop>
 nnoremap gQ <Nop>
 
-" Show the active mode.
+" Show the active mode with a colorful indicator.
 "
 " https://youtrack.jetbrains.com/issue/VIM-1377/Normal-mode-needs-to-be-more-obvious#focus=Comments-27-8731813.0-0
 "
-" Note, this may become the default in the future, depending on the answer to
-" the following question:
+" Note, according to the following question, at some point in the future,
+" neither of these should be needed, as this configuration will be the default.
 "
 " https://youtrack.jetbrains.com/issue/VIM-1377/Normal-mode-needs-to-be-more-obvious#focus=Comments-27-8999759.0-0
 set colorfulmodewidget
+set showmodewidget
 
 " These are enabled in Neovim by default, but disabled in Vim and IdeaVim by
 " default.
