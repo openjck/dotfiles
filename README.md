@@ -3,16 +3,15 @@ them for the benefit of others, and I sincerely hope others find them useful.
 
 My shell scripts are well-documented, and readers may also be interested in my
 methods of organization, my Bash functions, my Neovim configuration, my tmux
-configuration, and my Git configuration.
+configuration, and my Git configuration, among other things.
 
-In general, Bash utilities that might be useful to others are written as proper
-Bash scripts and stored in the [bin](bin) directory, whereas Bash utilities that
-are specific to my setup and reflect my personal preferences are written as Bash
-functions and stored in the
+In general, shell scripts that might be useful to others are stored in the
+[bin](bin) directory, whereas Bash utilities that are specific to my setup or
+reflect my personal preferences are written as Bash functions and stored in the
 [.config/bash/init/functions](.config/bash/init/functions) directory.
 
-I'm very pleased with my Bash function setup. I've tried many methods of
-organizing aliases and functions, but this method, inspired by
+I'm very pleased with the organization of my Bash functions. I've tried many
+methods of organizing aliases and functions, but this method, inspired by
 [fish](https://github.com/fish-shell/fish-shell), feels the most natural. No
 aliases are used. Everything is a function, and every function has its own file.
 
