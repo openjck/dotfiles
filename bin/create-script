@@ -50,6 +50,11 @@ Options:
 EOF
 )"
 
+if [[ -f "${ARGS[FILE]}" ]]; then
+  >&2 echo "Error: File \"${ARGS[FILE]}\" already exists."
+  exit 1
+fi
+
 touch "${ARGS[FILE]}"
 chmod u+x "${ARGS[FILE]}"
 
