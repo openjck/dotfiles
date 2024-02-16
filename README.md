@@ -15,8 +15,11 @@ methods of organizing aliases and functions, but this method, inspired by
 [fish](https://github.com/fish-shell/fish-shell), feels the most natural. No
 aliases are used. Everything is a function, and every function has its own file.
 
-Please use the [Discussions](https://github.com/openjck/dotfiles/discussions)
-page if you'd like to ask any questions or otherwise discuss these files.
+I welcome [issues](https://github.com/openjck/dotfiles/issues), including bug
+reports and feature requests, as well as [pull
+requests](https://github.com/openjck/dotfiles/pulls). To ask questions or
+discuss these files for any other reason, please use the
+[Discussions](https://github.com/openjck/dotfiles/discussions) page.
 
 ### Installation
 
