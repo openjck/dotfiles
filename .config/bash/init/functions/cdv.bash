@@ -1,7 +1,7 @@
 # cdv: cd with visibility
 #
-# Change the shell working directory and immediately list directory contents.
-# Takes the same arguments as cd.
+# Change the current directory and immediately list directory contents. All "cd"
+# options are accepted and behave in the same way.
 #
 # This would not work properly if it were a shell script. Shell scripts are
 # executed in subshells, where "cd" does not affect the shell that called the
