@@ -13,7 +13,7 @@ function cdv() {
       find . -maxdepth 1 -not -path '\.' -not -path '\./\.' | wc --lines
     )
 
-    if [[ $NUM_VISIBLE_FILES -eq 0 ]]; then
+    if (( NUM_VISIBLE_FILES == 0 )); then
       ls --all
     else
       ls
