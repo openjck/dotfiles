@@ -9,7 +9,9 @@
 function cdv() {
   if cd "$@"; then
     local NUM_VISIBLE_FILES
-    NUM_VISIBLE_FILES=$(find . -maxdepth 1 -not -path '\.' -not -path '\./\.*' | wc --lines)
+    NUM_VISIBLE_FILES=$(
+      find . -maxdepth 1 -not -path '\.' -not -path '\./\.' | wc --lines
+    )
 
     if [[ $NUM_VISIBLE_FILES -eq 0 ]]; then
       ls --all
