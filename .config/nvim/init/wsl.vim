@@ -1,4 +1,4 @@
-call system('source "$XDG_CONFIG_HOME/sh/utils/__in_wsl.sh" && __in_wsl')
+call system('source "$XDG_CONFIG_HOME/sh/init/utils/__in_wsl.sh" && __in_wsl')
 if v:shell_error == 0
   " Add support for opening links.
   "
