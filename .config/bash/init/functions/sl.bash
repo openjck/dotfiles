@@ -18,8 +18,5 @@ function sl() {
     fi
   done
 
-  # Disable SC2068 because each argument can be passed separately.
-  #
-  # shellcheck disable=SC2068
-  command sl ${ARGUMENTS[@]}
+  command sl "${ARGUMENTS[@]}"
 }

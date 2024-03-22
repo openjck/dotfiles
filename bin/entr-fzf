@@ -64,8 +64,4 @@ for ((I=0; I < ARGS[COMMAND,#]; I++)); do
   ENTR_ARGS+=("${ARGS[COMMAND,$I]}")
 done
 
-# Disable SC2086. We don't need to worry about word splitting here because entr
-# will work as expected if each word of COMMAND is a separate argument to entr.
-#
-# shellcheck disable=SC2068
-fzf --multi | entr ${ENTR_ARGS[@]}
+fzf --multi | entr "${ENTR_ARGS[@]}"
