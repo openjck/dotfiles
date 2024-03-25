@@ -1,0 +1,15 @@
+theme = "onedark"
+
+[editor]
+color-modes = true
+insert-final-newline = false
+
+# As of 2024-03-25, in my work environment, Helix does not correctly detect that
+# the terminal supports true color, so this needs to be manually set to "true".
+true-color = true
+
+[editor.search]
+smart-case = false
+
+[editor.whitespace.render]
+tab = "all"
