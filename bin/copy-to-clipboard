@@ -32,8 +32,8 @@ COMMAND_NAME=$(basename "$0")
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Copy the contents of the given file to the clipboard.
 
-This script only supports common Linux desktop environments. In the future, it
-could be extended to support WSL and other systems.
+This script only supports systems with "xclip" installed. In the future, it
+could be extended to support Windows and other systems.
 
 Usage:
   $COMMAND_NAME [--include-final-newline] FILE
