@@ -36,19 +36,32 @@ This script only supports common Linux desktop environments. In the future, it
 could be extended to support WSL and other systems.
 
 Usage:
-  $COMMAND_NAME [--no-final-newline] FILE
+  $COMMAND_NAME [--include-final-newline] FILE
   $COMMAND_NAME -h | --help
 
 Options:
-  -n, --no-final-newline
-      Do not include the final newline of the file, if one is present at all.
+  -n, --include-final-newline
+      Include the final newline of the file, if one is present at all.
   -h, --help
       Show this documentation
 EOF
 )"
 
+# NOTE: If other platforms are supported in the future, xclip might not be a
+# dependency in all cases.
+DEPENDENCIES=(
+  xclip
+)
+
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" > /dev/null; then
+    >&2 echo "Error: \"$DEPENDENCY\" is not installed."
+    exit 1
+  fi
+done
+
 XCLIP_ADDITIONAL_ARGS=''
-if ${ARGS[--no-final-newline]}; then
+if ! ${ARGS[--include-final-newline]}; then
   XCLIP_ADDITIONAL_ARGS='-rmlastnl '
 fi
 
