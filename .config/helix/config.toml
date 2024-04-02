@@ -13,3 +13,15 @@ smart-case = false
 
 [editor.whitespace.render]
 tab = "all"
+
+# Disable movement keys that take the hands off the home row and fail to take
+# advantage of Helix's advanced movement features.
+[keys.insert]
+up = "no_op"
+down = "no_op"
+left = "no_op"
+right = "no_op"
+pageup = "no_op"
+pagedown = "no_op"
+home = "no_op"
+end = "no_op"
