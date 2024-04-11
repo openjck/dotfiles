@@ -13,6 +13,13 @@ set number
 " Do not soft-wrap text.
 set nowrap
 
+" Highlight the column whose position is 1 greater than the value of
+" "textwidth".
+"
+" The "colorcolumn" option accepts a value prepended with + or -, which is then
+" added to or subtracted from the value of "textwidth".
+set colorcolumn=+1
+
 " When creating a vertical split, open it to the right of the current one, not
 " the left. When creating a horizontal split, open it below the current one, not
 " above.
