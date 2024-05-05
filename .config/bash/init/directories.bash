@@ -1,6 +1,6 @@
-# Add environment variables for GTD directories.
-export D_INBOX=$HOME/GTD/inboxes/main
-export D_PROJECT_SUPPORT=$HOME/GTD/project-support/main
+# Add environment variables for LGTD directories.
+export D_INBOX=$HOME/LGTD/inboxes/main
+export D_PROJECT_SUPPORT=$HOME/LGTD/project-support/main
 
 # Add environment variables for other general-purpose directories.
 export D_BASH_FUNCTIONS_GLOBAL=$XDG_CONFIG_HOME/bash/init/functions

@@ -213,8 +213,8 @@ function set_up_directories() {
   local CREATED_ANY=false
 
   local DIRECTORIES=(
-    "$HOME/GTD/inboxes/main"
-    "$HOME/GTD/project-support/main"
+    "$HOME/LGTD/inboxes/main"
+    "$HOME/LGTD/project-support/main"
     "$HOME/apps/repos/git"
     "$HOME/bin/local"
     "$HOME/bin/local/downloaded"
