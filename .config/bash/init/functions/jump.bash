@@ -1,18 +1,24 @@
-# Use fzf to navigate to the home directory or to any directory that has a `$D_`
-# environment variable associated with it.
+# Use fzf to navigate to the home directory, any repo, or any directory assigned
+# to an environment variable that starts with "D_".
 function jump() {
-  local D_PATHS
-  local HOME_PLUS_D_PATHS
+  local CHOICES
 
-  D_PATHS=$(env | grep '^D_' | sed 's/^.*=//' | sort)
-
-  # Add $HOME, followed by a newline, followed by all other paths, which are
-  # already separated by newlines.
+  # Make "$HOME" the first choice so that it can be chosen quickly.
   #
-  # https://stackoverflow.com/a/9139891/715866
-  HOME_PLUS_D_PATHS="$HOME"$'\n'"$D_PATHS"
+  # Make the rest of the choices a sorted and unique list built from a _single
+  # set_ that contains:
+  #
+  #   - All repos
+  #   - All "D_" paths
+  CHOICES=$({
+    echo "$HOME"
+    {
+      env | grep '^D_' | sed 's/^.*=//'
+      find "$HOME/devel/repos" -maxdepth 1 -type d
+    } | sort | uniq
+  })
 
-  if SELECTION=$(fzf <<< "$HOME_PLUS_D_PATHS"); then
+  if SELECTION=$(fzf <<< "$CHOICES"); then
     cdv "$SELECTION"
   fi
 }

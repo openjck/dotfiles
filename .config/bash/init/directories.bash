@@ -11,7 +11,6 @@ export D_BIN_DOWNLOADED=$HOME/bin/local/downloaded
 export D_BIN_TEMPORARY=$HOME/bin/local/temporary
 export D_DEVEL=$HOME/devel
 export D_REPOS=$HOME/devel/repos
-export D_DOTFILES_OPENJCK=$HOME/devel/repos/dotfiles-openjck
 
 # Add environment variables for Windows directories if WSL is being used.
 if __in_wsl; then
