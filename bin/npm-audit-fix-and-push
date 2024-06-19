@@ -30,7 +30,7 @@ set -euo pipefail
 COMMAND_NAME=$(basename "$0")
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Run "npm audit fix" in a repo, commit the result, and push.
+Run "npm audit fix" in a repo. Then, use Git to commit and push the result.
 
 Git command output is not hidden. Additionally, "npm audit" is run before "npm
 audit fix" to the issues that will be fixed.
