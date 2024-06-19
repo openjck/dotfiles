@@ -30,16 +30,18 @@ set -euo pipefail
 COMMAND_NAME=$(basename "$0")
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Run "npm audit fix" on the main branch of a repo, commit the result, and push.
+Run "npm audit fix" in a repo, commit the result, and push.
 
 Git command output is not hidden. Additionally, "npm audit" is run before "npm
 audit fix" to the issues that will be fixed.
 
 Usage:
-  $COMMAND_NAME
+  $COMMAND_NAME [-b BRANCH]
   $COMMAND_NAME -h | --help
 
 Options:
+  -b BRANCH, --branch BRANCH
+      The branch that "npm audit fix" should be run on [default: main]
   -h, --help
       Show this documentation
 EOF
@@ -52,7 +54,7 @@ if test -n "$(git status --porcelain)"; then
   exit 1
 fi
 
-git switch main
+git switch "${ARGS[--branch]}"
 git pull
 npm audit || true
 npm audit fix
