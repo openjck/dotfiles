@@ -33,7 +33,7 @@ eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Run "npm audit fix" in a repo. Then, use Git to commit and push the result.
 
 Git command output is not hidden. Additionally, "npm audit" is run before "npm
-audit fix" to the issues that will be fixed.
+audit fix" to display the issues that will be fixed.
 
 Usage:
   $COMMAND_NAME [-b BRANCH]
@@ -47,17 +47,23 @@ Options:
 EOF
 )"
 
-if test -n "$(git status --porcelain)"; then
-  >&2 echo 'Error: Working directory is dirty. Stash or commit any changes.'\
-           'Then, run this'
-  >&2 echo 'command again.'
-  exit 1
-fi
+# Running "git rev-parse" prints an error if we are not in a Git repo. If the
+# command is successful, however, it is silent and we continue.
+if git rev-parse; then
+  if test -n "$(git status --porcelain)"; then
+    >&2 cat <<'EOF'
+Error: Working directory is dirty. Stash or commit any changes. Then, run this
+command again.
+EOF
+    exit 1
+  fi
 
-git switch "${ARGS[--branch]}"
-git pull
-npm audit || true
-npm audit fix
-git add -u
-git commit -m 'Run "npm audit fix"'
-git push
+  git switch "${ARGS[--branch]}"
+  git pull
+  npm audit || true
+  npm audit fix
+  git add -u
+  git commit -m 'Run "npm audit fix"'
+  git push
+  git switch -
+fi
