@@ -36,12 +36,15 @@ Git command output is not hidden. Additionally, "npm audit" is run before "npm
 audit fix" to display the issues that will be fixed.
 
 Usage:
-  $COMMAND_NAME [-b BRANCH]
+  $COMMAND_NAME [-b BRANCH] [-m MESSAGE]
   $COMMAND_NAME -h | --help
 
 Options:
   -b BRANCH, --branch BRANCH
       The branch that "npm audit fix" should be run on [default: main]
+  -m MESSAGE, --message MESSAGE
+      The commit message to use when committing the change
+      [default: Run "npm audit fix"]
   -h, --help
       Show this documentation
 EOF
@@ -63,7 +66,7 @@ EOF
   npm audit || true
   npm audit fix
   git add -u
-  git commit -m 'Run "npm audit fix"'
+  git commit -m "${ARGS[--message]}"
   git push
   git switch -
 fi
