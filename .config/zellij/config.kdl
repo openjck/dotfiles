@@ -1,0 +1,10 @@
+// The default user interface uses Powerline characters. Those characters can be
+// made to appear correctly, but it's a bit of a hassle, especially when using
+// WSL.
+//
+// I had everything working for some time by installing "Cascadia Mono PL" on
+// Windows and "fonts-powerline" on Ubuntu, but at some point, Windows suddenly
+// complained that "Cascadia Mono PL" was no longer installed. I don't know why.
+// I could have fixed the issue, but I think the simplified UI looks just as
+// good as the default UI anyway, if not better.
+simplified_ui true
