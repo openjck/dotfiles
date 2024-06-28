@@ -9,3 +9,6 @@
 " the appearance or behavior of Neovim in ways that I find annoying.
 " Configuration may be necessary in those cases.
 Plug 'sheerun/vim-polyglot'
+
+" Support languages that are not yet included with vim-polyglot.
+Plug 'imsnif/kdl.vim'
