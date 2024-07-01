@@ -215,6 +215,7 @@ function set_up_directories() {
   local DIRECTORIES=(
     "$HOME/LGTD/inboxes/main"
     "$HOME/apps/repos/git"
+    "$HOME/apps/appimage"
     "$HOME/bin/local"
     "$HOME/bin/local/downloaded"
     "$HOME/bin/local/temporary"
