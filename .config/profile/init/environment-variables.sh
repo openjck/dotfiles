@@ -11,3 +11,6 @@ export HOSTNAME
 
 KERNEL=$(uname)
 export KERNEL
+
+# Exit the shell when Zellij exits.
+export ZELLIJ_AUTO_EXIT=true
