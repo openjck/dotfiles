@@ -12,7 +12,6 @@
 # Source configurations.
 . "$XDG_CONFIG_HOME/profile/init/editors.sh"
 . "$XDG_CONFIG_HOME/profile/init/environment-variables.sh"
-. "$XDG_CONFIG_HOME/profile/init/gpg.sh"
 . "$XDG_CONFIG_HOME/profile/init/nvm.sh"
 . "$XDG_CONFIG_HOME/profile/init/path.sh"
 
