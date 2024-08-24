@@ -17,12 +17,18 @@ source "$XDG_CONFIG_HOME/bash/init/npm.bash"
 source "$XDG_CONFIG_HOME/bash/init/nvm.bash"
 source "$XDG_CONFIG_HOME/bash/init/options.bash"
 source "$XDG_CONFIG_HOME/bash/init/prompt.bash"
-# source "$XDG_CONFIG_HOME/bash/init/tmux.bash"
 source "$XDG_CONFIG_HOME/bash/init/zellij.bash"
 
 # bat must be configured after less, since the BAT_PAGER environment variable
 # includes the value of the $LESS environment variable.
 source "$XDG_CONFIG_HOME/bash/init/bat.bash"
+
+# Intentionally disabled configurations.
+#
+# These configurations can be enabled in the future, but are not needed right
+# now.
+#
+# source "$XDG_CONFIG_HOME/bash/init/tmux.bash"
 
 # Source functions.
 #
