@@ -1,3 +1,3 @@
 function cpr() {
-  c-project-root
+  cdv-project-root
 }

@@ -1,3 +1,3 @@
 function cmr() {
-  c-module-root
+  cdv-module-root
 }

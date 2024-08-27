@@ -1,4 +1,4 @@
-function c-module-root() {
+function cdv-module-root() {
   local MODULE_ROOT
   MODULE_ROOT=$(module-root)
 

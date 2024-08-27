@@ -1,4 +1,4 @@
-function c-project-directory() {
+function cdv-project-directory() {
   local PROJECT_ROOT
   PROJECT_ROOT=$(project-root)
 

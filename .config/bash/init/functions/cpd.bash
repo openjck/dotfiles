@@ -1,3 +1,3 @@
 function cpd() {
-  c-project-directory
+  cdv-project-directory
 }

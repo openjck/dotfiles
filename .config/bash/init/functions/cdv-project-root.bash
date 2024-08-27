@@ -1,4 +1,4 @@
-function c-project-root() {
+function cdv-project-root() {
   local PROJECT_ROOT
   PROJECT_ROOT=$(project-root)
 
