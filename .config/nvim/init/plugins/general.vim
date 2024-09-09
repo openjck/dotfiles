@@ -3,7 +3,6 @@ Plug 'tpope/vim-commentary'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
 Plug 'mkitt/tabline.vim'
 Plug 'simnalamburt/vim-mundo'
 Plug 'psliwka/vim-smoothie'
@@ -17,6 +16,7 @@ Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-abolish'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'jremmen/vim-ripgrep'
+Plug 'machakann/vim-sandwich'
 
 " This plugin allows one to open the output of an ex-command in a new buffer.
 " This makes it possible to, for example, search the output of the ex-command.
