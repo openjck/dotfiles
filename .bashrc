@@ -13,7 +13,6 @@ source "$XDG_CONFIG_HOME/bash/init/fzf.bash"
 source "$XDG_CONFIG_HOME/bash/init/gpg.bash"
 source "$XDG_CONFIG_HOME/bash/init/history.bash"
 source "$XDG_CONFIG_HOME/bash/init/less.bash"
-source "$XDG_CONFIG_HOME/bash/init/npm.bash"
 source "$XDG_CONFIG_HOME/bash/init/nvm.bash"
 source "$XDG_CONFIG_HOME/bash/init/options.bash"
 source "$XDG_CONFIG_HOME/bash/init/prompt.bash"
@@ -23,22 +22,24 @@ source "$XDG_CONFIG_HOME/bash/init/zellij.bash"
 # includes the value of the $LESS environment variable.
 source "$XDG_CONFIG_HOME/bash/init/bat.bash"
 
+# Functions must be sourced after Bash completion configuration because some
+# functions reuse completions from other commands.
+#
+# Functions must also be sourced after shell option configuration because the
+# "c" function reuses "cd" completion, which is altered when "cdable_vars" is
+# enabled.
+source "$XDG_CONFIG_HOME/bash/init/functions.bash"
+
+# npm must be configured after nvm, or npm completion will not use the version
+# of npm provided by nvm.
+source "$XDG_CONFIG_HOME/bash/init/npm.bash"
+
 # Intentionally disabled configurations.
 #
 # These configurations can be enabled in the future, but are not needed right
 # now.
 #
 # source "$XDG_CONFIG_HOME/bash/init/tmux.bash"
-
-# Source functions.
-#
-# This must be done after Bash completion configuration is sourced because some
-# functions reuse completions from other commands.
-#
-# This must also be done after shell option configuration is sourced because the
-# "c" function reuses "cd" completion, which is altered when "cdable_vars" is
-# enabled.
-source "$XDG_CONFIG_HOME/bash/init/functions.bash"
 
 # Source private, non-pushed, local configurations, if any.
 __source_if_file_exists "$HOME/.bashrc.local"
