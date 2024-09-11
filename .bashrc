@@ -22,6 +22,10 @@ source "$XDG_CONFIG_HOME/bash/init/zellij.bash"
 # includes the value of the $LESS environment variable.
 source "$XDG_CONFIG_HOME/bash/init/bat.bash"
 
+# npm must be configured after nvm, or npm completion will not use the version
+# of npm provided by nvm.
+source "$XDG_CONFIG_HOME/bash/init/npm.bash"
+
 # Functions must be sourced after Bash completion configuration because some
 # functions reuse completions from other commands.
 #
@@ -29,10 +33,6 @@ source "$XDG_CONFIG_HOME/bash/init/bat.bash"
 # "c" function reuses "cd" completion, which is altered when "cdable_vars" is
 # enabled.
 source "$XDG_CONFIG_HOME/bash/init/functions.bash"
-
-# npm must be configured after nvm, or npm completion will not use the version
-# of npm provided by nvm.
-source "$XDG_CONFIG_HOME/bash/init/npm.bash"
 
 # Intentionally disabled configurations.
 #
