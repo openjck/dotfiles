@@ -1,6 +1,5 @@
 Plug 'dense-analysis/ale'
 Plug 'tpope/vim-commentary'
-Plug 'editorconfig/editorconfig-vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-repeat'
 Plug 'mkitt/tabline.vim'
