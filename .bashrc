@@ -16,7 +16,7 @@ source "$XDG_CONFIG_HOME/bash/init/less.bash"
 source "$XDG_CONFIG_HOME/bash/init/nvm.bash"
 source "$XDG_CONFIG_HOME/bash/init/options.bash"
 source "$XDG_CONFIG_HOME/bash/init/prompt.bash"
-source "$XDG_CONFIG_HOME/bash/init/zellij.bash"
+source "$XDG_CONFIG_HOME/bash/init/tmux.bash"
 
 # bat must be configured after less, since the BAT_PAGER environment variable
 # includes the value of the $LESS environment variable.
@@ -39,7 +39,7 @@ source "$XDG_CONFIG_HOME/bash/init/functions.bash"
 # These configurations can be enabled in the future, but are not needed right
 # now.
 #
-# source "$XDG_CONFIG_HOME/bash/init/tmux.bash"
+# source "$XDG_CONFIG_HOME/bash/init/zellij.bash"
 
 # Source private, non-pushed, local configurations, if any.
 __source_if_file_exists "$HOME/.bashrc.local"
