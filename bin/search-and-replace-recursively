@@ -55,11 +55,30 @@ Options:
 EOF
 )"
 
-FD_COMMAND=fd
+DEPENDENCIES=(
+  sd
+)
 
-# Unlike most other distros, Ubuntu installs fd with the name "fdfind".
-if [[ $(lsb_release --short --id) == 'Ubuntu' ]]; then
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" > /dev/null; then
+    >&2 echo "Error: \"$DEPENDENCY\" is not installed."
+    exit 1
+  fi
+done
+
+# Some distros, including Ubuntu, use the name "fdfind" for the command because
+# something else already uses the name "fd". In the case of Ubuntu, the package
+# that uses the name "fd" is "fdclone".
+#
+# Here, fdfind is tested first, even though it's less common, because it's more
+# specific and doesn't have any common conflicts that I know of.
+if command -v fdfind > /dev/null; then
   FD_COMMAND=fdfind
+elif command -v fd > /dev/null; then
+  FD_COMMAND=fd
+else
+  >&2 echo "Error: fd (a.k.a. fdfind) is not installed."
+  exit 1
 fi
 
 # Use fd and sd together to conveniently search and replace, as suggested by the
