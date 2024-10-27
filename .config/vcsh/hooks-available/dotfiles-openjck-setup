@@ -143,7 +143,9 @@ function set_up_packages_ubuntu() {
     'git'
     'moreutils'
     'neovim'
+    'pwgen'
     'ripgrep'
+    'sd'
     'toilet'
     'vcsh'
   )
