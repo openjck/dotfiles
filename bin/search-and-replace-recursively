@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# Copyright (c) 2023 John Karahalis
+# Copyright (c) 2023, 2024 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -33,30 +33,43 @@ eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Recursively replace a string or pattern with a given string, modifying all files
 in the current directory and all subdirectories.
 
+This script uses sd to search and replace within files, so please consult the sd
+documentation for more informaiton about the regular expression style supported
+in the "SEARCH" and "REPLACE" arguments:
+
+https://github.com/chmln/sd
+
 Usage:
-  $COMMAND_NAME SEARCH REPLACE
+  $COMMAND_NAME [--backups] SEARCH REPLACE
   $COMMAND_NAME -h | --help
 
 Examples:
-  $COMMAND_NAME "John.*?Karahalis" "JK"
+  $COMMAND_NAME 'John.*?Karahalis' JK
 
 Options:
+  -b, --backups
+      Back up all files before performing search and replace. Backups will end
+      with the ".$COMMAND_NAME.backup" file extension.
   -h, --help
       Show this documentation
 EOF
 )"
 
-# This works, but if it becomes unwieldy in the future, it could potentially be
-# made simpler (and support a more common regex style) by using sd and fd
-# instead.
+FD_COMMAND=fd
+
+# Unlike most other distros, Ubuntu installs fd with the name "fdfind".
+if [[ $(lsb_release --short --id) == 'Ubuntu' ]]; then
+  FD_COMMAND=fdfind
+fi
+
+# Use fd and sd together to conveniently search and replace, as suggested by the
+# sd documentation.
 #
 # https://github.com/chmln/sd#quick-guide
-grep \
-  --recursive \
-  --files-with-matches \
-  --perl-regexp \
-  "${ARGS[SEARCH]}" \
-  | xargs sed \
-    --in-place \
-    --regexp-extended \
-    "s/${ARGS[SEARCH]}/${ARGS[REPLACE]}/g"
+if ${ARGS[--backups]}; then
+  "$FD_COMMAND" --type file \
+    --exec cp {} "{}.$COMMAND_NAME.backup" \; \
+    --exec sd "${ARGS[SEARCH]}" "${ARGS[REPLACE]}"
+else
+  "$FD_COMMAND" --type file --exec sd "${ARGS[SEARCH]}" "${ARGS[REPLACE]}"
+fi
