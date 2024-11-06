@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+
+# MIT License
+#
+# Copyright (c) 2024 John Karahalis
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+COMMAND_NAME=$(basename "$0")
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Move Everything Into (MEI) the given directory.
+
+Move all files and directories in the current directory into the given directory
+instead. If the given directory does not exist, it will be created.
+
+This can be especially helpful when everything in the current directory should
+be moved into a directory which itself exists in the current directory. For
+example, if the current directory contains directories named "a", "b", and
+"target", "$COMMAND_NAME target" could be used to move "a" and "b" into
+"target". That could also be achieved by running "mv {*,.*} target", but it's
+more verbose and an error message would appear explaining that "target" cannot
+be moved into itself.
+
+Usage:
+  $COMMAND_NAME [DIRECTORY]
+  $COMMAND_NAME -h | --help
+
+Examples:
+  $COMMAND_NAME /path/to/directory
+  $COMMAND_NAME local-directory
+
+Detailed example:
+  $ tree --noreport
+  .
+  ├── animals
+  ├── cat
+  ├── dog
+  └── fish
+      ├── catfish
+      └── goldfish
+  $ $COMMAND_NAME animals # The "animals" directory already existed.
+  $ tree --noreport
+  .
+  └── animals
+      ├── cat
+      ├── dog
+      └── fish
+          ├── catfish
+          └── goldfish
+  $ $COMMAND_NAME life # The "life" directory did not yet exist.
+  $ tree --noreport
+  .
+  └── life
+      └── animals
+          ├── cat
+          ├── dog
+          └── fish
+              ├── catfish
+              └── goldfish
+
+Options:
+  -h, --help
+      Show this documentation
+EOF
+)"
+
+if [[ ! -d "${ARGS[DIRECTORY]}" ]]; then
+  mkdir -p "${ARGS[DIRECTORY]}"
+fi
+
+# https://stackoverflow.com/a/789029/715866
+shopt -s extglob
+mv !("${ARGS[DIRECTORY]}") "${ARGS[DIRECTORY]}"
