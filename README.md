@@ -27,11 +27,12 @@ discuss these files for any other reason, please use the
 
 Follow these steps to install _all_ of these files:
 
-1. Install [docopts](https://github.com/docopt/docopts). Shell scripts require
-   docopts and will not function without it.
+1. Install [docopts](https://github.com/docopt/docopts). Shell scripts (files in
+   the [bin](bin) directory) require docopts and will not function without it.
 2. Install [vcsh](https://github.com/RichiH/vcsh).
 3. Run `vcsh clone git@github.com:openjck/dotfiles.git dotfiles-openjck`.
-4. Run `vcsh dotfiles-openjck switch main`.
+4. Run `vcsh dotfiles-openjck fetch`.
+5. Run `vcsh dotfiles-openjck switch main`.
 
 #### Single shell script
 
