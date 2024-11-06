@@ -29,3 +29,8 @@ source <sfile>:h/init/projects.vim
 source <sfile>:h/init/spacing.vim
 source <sfile>:h/init/spelling.vim
 source <sfile>:h/init/wsl.vim
+
+" Source private, non-pushed, local configurations, if any.
+if filereadable("init.local.vim")
+  source <sfile>:h/init.local.vim
+endif
