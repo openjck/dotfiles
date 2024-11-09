@@ -30,26 +30,23 @@ set -euo pipefail
 COMMAND_NAME=$(basename "$0")
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Move Everything Into (MEI) the given directory.
+Move Everything Into (MEI) a new directory with the given name.
 
-Move all files and directories in the current directory into the given directory
-instead. If the given directory does not exist, it will be created.
+That is, move all files and directories in the current directory into a new
+directory with the given name.
 
-This can be especially helpful when everything in the current directory should
-be moved into a directory which itself exists in the current directory. For
-example, if the current directory contains directories named "a", "b", and
-"target", "$COMMAND_NAME target" could be used to move "a" and "b" into
-"target". That could also be achieved by running "mv {*,.*} target", but it's
-more verbose and an error message would appear explaining that "target" cannot
-be moved into itself.
+To simplify the implementation and avoid some edge cases, a directory with the
+given name must not already exist. Among other things, handling that would
+require doing something to handle potential overwrites (e.g., "mei animals" when
+the "animals" directory already exists and it contains a file with the same name
+as a file in this directory).
 
 Usage:
   $COMMAND_NAME DIRECTORY
   $COMMAND_NAME -h | --help
 
 Examples:
-  $COMMAND_NAME /path/to/directory
-  $COMMAND_NAME local-directory
+  $COMMAND_NAME /path/to/new/directory
 
 Extended example:
   $ tree --noreport
@@ -59,8 +56,7 @@ Extended example:
   └── fish
       ├── goldfish.png
       └── neon-tetra.png
-  $ mkdir animals
-  $ $COMMAND_NAME animals # The "animals" directory already existed.
+  $ $COMMAND_NAME animals
   $ tree --noreport
   .
   └── animals
@@ -69,7 +65,7 @@ Extended example:
       └── fish
           ├── goldfish.png
           └── neon-tetra.png
-  $ $COMMAND_NAME life # The "life" directory did not yet exist.
+  $ $COMMAND_NAME life
   $ tree --noreport
   .
   └── life
@@ -86,18 +82,20 @@ Options:
 EOF
 )"
 
-if [[ -f "${ARGS[DIRECTORY]}" ]]; then
-  >&2 fold --spaces <<EOF
-Error: There is already file named "${ARGS[DIRECTORY]}", so a directory named \
-"${ARGS[DIRECTORY]}" cannot be created.
-EOF
-  exit 1
-fi
+# Move hidden files (e.g., .gitignore) when using "mv".
+shopt -s dotglob
 
-if [[ ! -d "${ARGS[DIRECTORY]}" ]]; then
-  mkdir -p "${ARGS[DIRECTORY]}"
-fi
-
+# Move everything into a temporary directory first in case there is already a
+# file or directory in the current directory with the given name.
+#
+# For example, this handles the case where there is a directory in the currknt
+# directory named "matryoshka" and the user wants to move it into a new
+# directory also named "matryoshka", so that the original directory is named
+# "matryoshka/matryoshka".
+#
+# If this weren't a consideration, we could use this simpler approach:
 # https://stackoverflow.com/a/789029/715866
-shopt -s extglob
-mv !("${ARGS[DIRECTORY]}") "${ARGS[DIRECTORY]}"
+TEMP_DIRECTORY=$(mktemp --directory)
+mv ./* "$TEMP_DIRECTORY"
+mkdir -p "${ARGS[DIRECTORY]}"
+mv "$TEMP_DIRECTORY"/* "${ARGS[DIRECTORY]}"
