@@ -51,34 +51,34 @@ Examples:
   $COMMAND_NAME /path/to/directory
   $COMMAND_NAME local-directory
 
-Detailed example:
+Extended example:
   $ tree --noreport
   .
-  ├── animals
-  ├── cat
-  ├── dog
+  ├── cat.png
+  ├── dog.png
   └── fish
-      ├── catfish
-      └── goldfish
+      ├── goldfish.png
+      └── neon-tetra.png
+  $ mkdir animals
   $ $COMMAND_NAME animals # The "animals" directory already existed.
   $ tree --noreport
   .
   └── animals
-      ├── cat
-      ├── dog
+      ├── cat.png
+      ├── dog.png
       └── fish
-          ├── catfish
-          └── goldfish
+          ├── goldfish.png
+          └── neon-tetra.png
   $ $COMMAND_NAME life # The "life" directory did not yet exist.
   $ tree --noreport
   .
   └── life
       └── animals
-          ├── cat
-          ├── dog
+          ├── cat.png
+          ├── dog.png
           └── fish
-              ├── catfish
-              └── goldfish
+              ├── goldfish.png
+              └── neon-tetra.png
 
 Options:
   -h, --help
