@@ -44,7 +44,7 @@ more verbose and an error message would appear explaining that "target" cannot
 be moved into itself.
 
 Usage:
-  $COMMAND_NAME [DIRECTORY]
+  $COMMAND_NAME DIRECTORY
   $COMMAND_NAME -h | --help
 
 Examples:
