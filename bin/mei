@@ -86,6 +86,14 @@ Options:
 EOF
 )"
 
+if [[ -f "${ARGS[DIRECTORY]}" ]]; then
+  >&2 fold --spaces <<EOF
+Error: There is alredy file named "${ARGS[DIRECTORY]}", so a directory named \
+"${ARGS[DIRECTORY]}" cannot be created.
+EOF
+  exit 1
+fi
+
 if [[ ! -d "${ARGS[DIRECTORY]}" ]]; then
   mkdir -p "${ARGS[DIRECTORY]}"
 fi
