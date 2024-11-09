@@ -88,7 +88,7 @@ EOF
 
 if [[ -f "${ARGS[DIRECTORY]}" ]]; then
   >&2 fold --spaces <<EOF
-Error: There is alredy file named "${ARGS[DIRECTORY]}", so a directory named \
+Error: There is already file named "${ARGS[DIRECTORY]}", so a directory named \
 "${ARGS[DIRECTORY]}" cannot be created.
 EOF
   exit 1
