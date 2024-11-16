@@ -57,10 +57,10 @@ nnoremap <Leader>fd <Cmd>FZFDotfiles<CR>
 """""""""""""""""
 
 " Mnemonic: Go conflict next (for diff conflicts)
-nnoremap <Leader>gcn /=======<CR>
+nmap <Leader>gcn ]n
 
 " Mnemonic: Go conflict previous (for diff conflicts)
-nnoremap <Leader>gcp ?=======<CR>
+nmap <Leader>gcp [n
 
 " Mnemonic: Go definition
 nmap <Leader>gd <Plug>(ale_go_to_definition)
