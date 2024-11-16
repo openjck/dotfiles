@@ -120,31 +120,12 @@ nnoremap <Leader>mr <Cmd>ALERename<CR>
 " analogue for this in ale.
 nnoremap <Leader>ms <Cmd>echo "Not supported."<CR>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Newline                                                                      "
-"                                                                              "
-" These modify the buffer, but since they're such common operations, it's more "
-" convenient for them to be mapped to a single key.                            "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""
+" Neovim "
+""""""""""
 
-" Mnemonic: newline (below the current line)
-"
-" This is based on the following Stack Overflow answer. It's modified to _not_
-" delete anything that is inserted (like a comment character), since I'd rather
-" preserve that.
-"
-" https://stackoverflow.com/a/77422590/715866
-nnoremap <Leader>n mao<Esc>`a<Cmd>delmarks a<CR>
-
-" Mnemonic: Newline (above the current line)
-"
-" This is based on the following Stack Overflow answer. It's modified to _not_
-" delete anything that is inserted (like a comment character), since I'd rather
-" preserve that.
-"
-" https://stackoverflow.com/a/77422590/715866
-nnoremap <Leader>N maO<Esc>`a<Cmd>delmarks a<CR>
-
+" Mnemonic: Neovim reconfigure
+nnoremap <Leader>nr <Cmd>Reconfigure<CR>
 
 """"""""
 " Open "
@@ -175,13 +156,6 @@ nnoremap <Leader>pi <Cmd>Reconfigure <Bar> PlugInstall<CR>
 
 " Mnemonic: Plugins clean
 nnoremap <Leader>pc <Cmd>Reconfigure <Bar> PlugClean!<CR>
-
-"""""""""""""""
-" Reconfigure "
-"""""""""""""""
-
-" Mnemonic: Reconfigure
-nnoremap <Leader>r <Cmd>Reconfigure<CR>
 
 """"""""
 " Show "
