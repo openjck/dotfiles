@@ -56,12 +56,6 @@ nnoremap <Leader>fd <Cmd>FZFDotfiles<CR>
 " Go (movement) "
 """""""""""""""""
 
-" Mnemonic: Go conflict next (for diff conflicts)
-nmap <Leader>gcn ]n
-
-" Mnemonic: Go conflict previous (for diff conflicts)
-nmap <Leader>gcp [n
-
 " Mnemonic: Go definition
 nmap <Leader>gd <Plug>(ale_go_to_definition)
 
