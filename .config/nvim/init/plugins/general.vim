@@ -19,6 +19,11 @@ Plug 'machakann/vim-sandwich'
 Plug 'junegunn/vim-easy-align'
 Plug 'mhinz/vim-startify'
 Plug 'tpope/vim-unimpaired'
+
+" This plugin automatically saves folds when a file is closed and restores them
+" when the file is opened again. It saves and restores some other stuff, too,
+" like cursor position, as well as anything else specified in viewoptions, but I
+" don't care about those, and that's not why I use it.
 Plug 'vim-scripts/restore_view.vim'
 
 " This plugin allows one to open the output of an ex-command in a new buffer.
