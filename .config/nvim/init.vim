@@ -31,6 +31,6 @@ source <sfile>:h/init/spelling.vim
 source <sfile>:h/init/wsl.vim
 
 " Source private, non-pushed, local configurations, if any.
-if filereadable("init.local.vim")
+if filereadable(expand('<sfile>:h') . '/init.local.vim')
   source <sfile>:h/init.local.vim
 endif
