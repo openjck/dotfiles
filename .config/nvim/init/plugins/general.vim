@@ -19,6 +19,7 @@ Plug 'machakann/vim-sandwich'
 Plug 'junegunn/vim-easy-align'
 Plug 'mhinz/vim-startify'
 Plug 'tpope/vim-unimpaired'
+Plug 'vim-scripts/restore_view.vim'
 
 " This plugin allows one to open the output of an ex-command in a new buffer.
 " This makes it possible to, for example, search the output of the ex-command.
