@@ -1,3 +1,3 @@
 function vcsh-list-files() {
-  vcsh-all ls-files "$HOME"
+  vcsh-all ls-files "$HOME" | sort --unique
 }
