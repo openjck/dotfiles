@@ -43,7 +43,7 @@ command! FZFHome call s:configured_fzf({'dir': '$HOME'})
 "
 " I'd like to use vcsh-all here rather than reimplementing it, but I'm not sure
 " how to make it available to this Vim script.
-command! FZFDotfiles call s:configured_fzf({'source': '{ for REPO in $(vcsh list); do vcsh "$REPO" ls-files $HOME; done; } | sort'})
+command! FZFDotfiles call s:configured_fzf({'source': '{ for REPO in $(vcsh list); do vcsh "$REPO" ls-files $HOME; done; } | sort --unique'})
 
 " Add a command for files in the current project.
 command! FZFProject call s:FZFProjectHelper()
