@@ -19,7 +19,7 @@ function jump() {
     {
       env | grep '^D_' | sed 's/^.*=//'
       find "$HOME/devel/repos" -maxdepth 1 -type d 2> /dev/null
-    } | sort | uniq
+    } | sort --unique
   })
 
   if SELECTION=$(fzf <<< "$CHOICES"); then
