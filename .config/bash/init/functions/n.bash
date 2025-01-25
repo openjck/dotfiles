@@ -1,7 +1,5 @@
 function n() {
-  echo 'Using helix...'
-  sleep 1
-  hx "$@"
+  nvim "$@"
 }
 
 __reuse-completions nvim n
