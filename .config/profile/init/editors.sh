@@ -1,5 +1,5 @@
 # shellcheck shell=sh
 
 # Set the default editors.
-export EDITOR=hx
-export VISUAL=hx
+export EDITOR=nvim
+export VISUAL=nvim
