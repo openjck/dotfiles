@@ -6,3 +6,4 @@ require('init.plugins')
 
 -- Load general configurations.
 require('init.appearance')
+require('init.leader')

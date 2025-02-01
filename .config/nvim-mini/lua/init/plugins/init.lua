@@ -3,3 +3,4 @@
 require('init.plugins.mini')
 
 require('init.plugins.colors')
+require('init.plugins.general')
