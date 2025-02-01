@@ -1,0 +1,32 @@
+-- Install mini.nvim from its stable branch.
+--
+-- https://github.com/echasnovski/mini.nvim?tab=readme-ov-file#installation
+local path_package = vim.fn.stdpath('data') .. '/site'
+local mini_path = path_package .. '/pack/deps/start/mini.nvim'
+if not vim.loop.fs_stat(mini_path) then
+  vim.cmd('echo "Installing mini.nvim..." | redraw')
+  local clone_cmd = {
+    'git', 'clone', '--filter=blob:none', '--branch', 'stable',
+    'https://github.com/echasnovski/mini.nvim', mini_path
+  }
+  vim.fn.system(clone_cmd)
+  vim.cmd('packadd mini.nvim | helptags ALL')
+end
+
+enabled_plugins = {
+  'ai',
+  'align',
+  'animate',
+  'basics',
+  'clue',
+  'comment',
+  'deps',
+  'notify',
+  'pairs',
+  'starter',
+  'surround',
+}
+
+for _, plugin in ipairs(enabled_plugins) do
+  require(string.format('mini.%s', plugin)).setup()
+end
