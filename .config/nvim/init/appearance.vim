@@ -5,8 +5,6 @@ if has('termguicolors')
   set termguicolors
 endif
 
-colorscheme onedark
-
 " Show line numbers.
 set number
 

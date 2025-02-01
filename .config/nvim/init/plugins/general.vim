@@ -1,23 +1,16 @@
 Plug 'dense-analysis/ale'
-Plug 'tpope/vim-commentary'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'tpope/vim-repeat'
 Plug 'mkitt/tabline.vim'
 Plug 'simnalamburt/vim-mundo'
-Plug 'psliwka/vim-smoothie'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'openjck/vim-yadm-files'
 Plug 'tpope/vim-fugitive'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-abolish'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'jremmen/vim-ripgrep'
-Plug 'machakann/vim-sandwich'
-Plug 'junegunn/vim-easy-align'
-Plug 'mhinz/vim-startify'
 Plug 'tpope/vim-unimpaired'
 
 " This plugin automatically saves folds when a file is closed and restores them

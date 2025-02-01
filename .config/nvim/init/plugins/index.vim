@@ -7,7 +7,6 @@ endfor
 
 " Enable plugins.
 call plug#begin()
-  source <sfile>:h/colors.vim
   source <sfile>:h/general.vim
   source <sfile>:h/languages.vim
 call plug#end()

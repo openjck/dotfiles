@@ -39,19 +39,6 @@ nnoremap <Leader>en <Cmd>next<CR>
 " Mnemonic: Edit previous
 nnoremap <Leader>ep <Cmd>previous<CR>
 
-"""""""""
-" Files "
-"""""""""
-
-" Mnemonic: Files home
-nnoremap <Leader>fh <Cmd>FZFHome<CR>
-
-" Mnemonic: Files project
-nnoremap <Leader>fp <Cmd>FZFProject<CR>
-
-" Mnemonic: Files dotfiles
-nnoremap <Leader>fd <Cmd>FZFDotfiles<CR>
-
 """""""""""""""""
 " Go (movement) "
 """""""""""""""""
