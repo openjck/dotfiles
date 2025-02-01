@@ -1,5 +1,5 @@
 local telescopeBuiltin = require('telescope.builtin')
-local telescopeCustom = require('init.telescope.custom')
+local telescopeCustom = require('entities.telescope')
 
 -- Use the spacebar as the leader key.
 --
