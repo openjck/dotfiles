@@ -1,1 +1,1 @@
-require('init/mini')
+require('init')
