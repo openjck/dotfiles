@@ -51,3 +51,41 @@ vim.keymap.set(
     desc = 'Find dotfiles',
   }
 )
+
+------------------------
+-- Edit (as in :edit) --
+------------------------
+
+vim.keymap.set(
+  'n',
+  '<Leader>en',
+  '<Cmd>next<CR>',
+  {
+    desc = 'Edit next',
+    noremap = true,
+  }
+)
+
+vim.keymap.set(
+  'n',
+  '<Leader>ep',
+  '<Cmd>previous<CR>',
+  {
+    desc = 'Edit previous',
+    noremap = true,
+  }
+)
+
+----------
+-- Hide --
+----------
+
+vim.keymap.set(
+  'n',
+  '<Leader>hh',
+  '<Cmd>nohlsearch<CR>',
+  {
+    desc = 'Hide highlights',
+    noremap = true,
+  }
+)
