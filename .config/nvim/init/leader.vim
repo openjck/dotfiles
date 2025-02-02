@@ -29,16 +29,6 @@ map <Space> <Leader>
 " [4] https://stackoverflow.com/a/13831705/4297741
 " [5] https://vi.stackexchange.com/a/9752/28836
 
-""""""""""""""""""""""
-" Edit (as in :edit) "
-""""""""""""""""""""""
-
-" Mnemonic: Edit next
-nnoremap <Leader>en <Cmd>next<CR>
-
-" Mnemonic: Edit previous
-nnoremap <Leader>ep <Cmd>previous<CR>
-
 """""""""""""""""
 " Go (movement) "
 """""""""""""""""
@@ -60,18 +50,6 @@ nmap <Leader>gip <Plug>(ale_previous_wrap)
 
 " Mnemonic: Go type
 nmap <Leader>gt <Plug>(ale_go_to_type_definition)
-
-""""""""
-" Hide "
-""""""""
-
-" Turn off search highlights until a new search is done
-"
-" NOTE: Do not use ":set nohlsearch" here, as that would turn off highlighting
-" even after a new search is done.
-"
-" Mnemonic: Hide highlights
-nnoremap <Leader>hh <Cmd>nohlsearch<CR>
 
 """"""""""""""""
 " Modification "
