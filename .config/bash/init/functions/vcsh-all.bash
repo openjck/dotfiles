@@ -6,4 +6,8 @@ function vcsh-all() {
   done
 }
 
-__reuse-completions vcsh vcsh-all
+# This function might be sourced in non-interactive environments, so we should
+# only set up completions if the shell is interactive.
+if [[ $- == *i* ]]; then
+  __reuse-completions vcsh vcsh-all
+fi
