@@ -1,9 +1,9 @@
 -- This file is based on mini.clue's recommended "quick start" configuration.
 --
 -- https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-clue.md#config-quick-start
-local miniclue = require('mini.clue')
+local clue = require('mini.clue')
 
-miniclue.setup({
+clue.setup({
   triggers = {
     -- Leader triggers
     { mode = 'n', keys = '<Leader>' },
@@ -37,12 +37,12 @@ miniclue.setup({
   },
 
   clues = {
-    miniclue.gen_clues.builtin_completion(),
-    miniclue.gen_clues.g(),
-    miniclue.gen_clues.marks(),
-    miniclue.gen_clues.registers(),
-    miniclue.gen_clues.windows(),
-    miniclue.gen_clues.z(),
+    clue.gen_clues.builtin_completion(),
+    clue.gen_clues.g(),
+    clue.gen_clues.marks(),
+    clue.gen_clues.registers(),
+    clue.gen_clues.windows(),
+    clue.gen_clues.z(),
 
     -- Add clues for <Leader> mappings.
     { mode = 'n', keys = '<Leader>e', desc = 'Edit' },
