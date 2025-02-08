@@ -11,3 +11,7 @@ MiniDeps.add({
     'nvim-treesitter/nvim-treesitter',
   },
 })
+
+MiniDeps.add({
+  source = 'dense-analysis/ale'
+})
