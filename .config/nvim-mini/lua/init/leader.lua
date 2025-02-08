@@ -1,6 +1,20 @@
 local telescopeBuiltin = require('telescope.builtin')
 local telescopeCustom = require('entities.telescope')
 
+function leader_map(description, keys, action, noremap)
+  noremap = noremap or false
+
+  vim.keymap.set(
+    'n',
+    string.format('<Leader>%s', keys),
+    action,
+    {
+      desc = description,
+      noremap = noremap
+    }
+  )
+end
+
 -- Use the spacebar as the leader key.
 --
 -- Mapping `<Space>` to `<Nop>` before mapping `<Space>` to `<Leader>` ensures
@@ -25,67 +39,19 @@ vim.g.mapleader = ' '
 -- Find --
 ----------
 
-vim.keymap.set(
-  'n',
-  '<Leader>fp',
-  telescopeBuiltin.find_files,
-  {
-    desc = 'Find project files',
-  }
-)
-
-vim.keymap.set(
-  'n',
-  '<Leader>fh',
-  telescopeBuiltin.help_tags,
-  {
-    desc = 'Find help',
-  }
-)
-
-vim.keymap.set(
-  'n',
-  '<Leader>fd',
-  telescopeCustom.dotfiles,
-  {
-    desc = 'Find dotfiles',
-  }
-)
+leader_map('Find project files', 'fp', telescopeBuiltin.find_files)
+leader_map('Find help', 'fh', telescopeBuiltin.help_tags)
+leader_map('Find dotfiles', 'fd', telescopeCustom.dotfiles)
 
 ------------------------
 -- Edit (as in :edit) --
 ------------------------
 
-vim.keymap.set(
-  'n',
-  '<Leader>en',
-  '<Cmd>next<CR>',
-  {
-    desc = 'Edit next',
-    noremap = true,
-  }
-)
-
-vim.keymap.set(
-  'n',
-  '<Leader>ep',
-  '<Cmd>previous<CR>',
-  {
-    desc = 'Edit previous',
-    noremap = true,
-  }
-)
+leader_map('Edit next', 'en', '<Cmd>next<CR>', true)
+leader_map('Edit previous', 'ep', '<Cmd>previous<CR>', true)
 
 ----------
 -- Hide --
 ----------
 
-vim.keymap.set(
-  'n',
-  '<Leader>hh',
-  '<Cmd>nohlsearch<CR>',
-  {
-    desc = 'Hide highlights',
-    noremap = true,
-  }
-)
+leader_map('Hide highlights', 'hh', '<Cmd>nohlsearch<CR>', true)
