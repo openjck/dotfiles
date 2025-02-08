@@ -27,10 +27,10 @@ vim.g.mapleader = ' '
 
 vim.keymap.set(
   'n',
-  '<Leader>ff',
+  '<Leader>fp',
   telescopeBuiltin.find_files,
   {
-    desc = 'Find files',
+    desc = 'Find project files',
   }
 )
 
