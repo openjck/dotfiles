@@ -1,4 +1,3 @@
-Plug 'dense-analysis/ale'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mkitt/tabline.vim'
 Plug 'simnalamburt/vim-mundo'
