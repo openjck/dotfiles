@@ -6,7 +6,10 @@
 -- ALE does have a similar option called ale_sign_column_always, but even
 -- when it's enabled, a sign column is only shown if there are linters enabled
 -- for the open buffer.
-vim.cmd.signcolumn = true
+--
+-- mini.basics already sets "signcolumn" to "yes", but I'd like to do so here
+-- as well, just in case I ever stop using mini.basics.
+vim.o.signcolumn = 'yes'
 
 -- Use different symbols for warnings and errors.
 vim.g.ale_sign_warning = '!'
