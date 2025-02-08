@@ -3,6 +3,7 @@ enabled_plugins = {
   'align',
   'animate',
   'basics',
+  'clue',
   'comment',
   'deps',
   'notify',

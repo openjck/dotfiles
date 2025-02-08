@@ -4,3 +4,6 @@ require('init.plugins.mini')
 
 require('init.plugins.colors')
 require('init.plugins.general')
+
+-- Source plugin configurations.
+require('init.plugins.config')
