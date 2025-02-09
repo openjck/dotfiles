@@ -13,10 +13,6 @@ set nofixendofline
 " Use one space after punctuation, not two, when reformatting lines with gq.
 set nojoinspaces
 
-" Enable persistent undo. In other words, remember undo history for files even
-" after those files are closed and reopened.
-set undofile
-
 " When using CTRL-A and CTRL-X, treat all numbers as unsigned.
 "
 " With this option enabled, any number with a dash before it is considered to be

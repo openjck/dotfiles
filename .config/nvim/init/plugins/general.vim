@@ -1,9 +1,4 @@
-Plug 'christoomey/vim-tmux-navigator'
 Plug 'mkitt/tabline.vim'
-Plug 'simnalamburt/vim-mundo'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 Plug 'openjck/vim-yadm-files'
 Plug 'tpope/vim-fugitive'
 Plug 'alvan/vim-closetag'
