@@ -1,3 +1,5 @@
+-- Install plugins provided by the mini.nvim project.
+
 -- Strictly speaking, any plugin that is configured (see init.plugins.config)
 -- does not need to be listed here. At the same time, calling setup() here
 -- doesn't hurt, except perhaps by causing startup time to be longer by some
