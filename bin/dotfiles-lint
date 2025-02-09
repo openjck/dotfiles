@@ -76,16 +76,6 @@ function is-shellcheck-file() {
   [[ $FIRST_LINE == '#!/usr/bin/env bash' ]]
 }
 
-function is-vint-file() {
-  local FILENAME=$1
-  local BASENAME
-
-  BASENAME=$(basename "$FILENAME")
-
-  [[ $FILENAME =~ \.vim$ ]] ||
-  [[ $BASENAME == ideavimrc ]]
-}
-
 function run-shellcheck() {
   local SHELLCHECK_FILES=()
 
@@ -106,25 +96,4 @@ function run-shellcheck() {
   shellcheck --external-sources "${SHELLCHECK_FILES[@]}"
 }
 
-function run-vint() {
-  local VINT_FILES=()
-
-  for DOTFILE in "${ALL_PRESENT_DOTFILES[@]}"; do
-    if is-vint-file "$DOTFILE"; then
-      VINT_FILES+=("$DOTFILE")
-    fi
-  done
-
-  # The "2>&1" (redirecting stderr to stdout in xargs output) and the
-  # inverse-grep are used to work around the following bug:
-  #
-  # https://github.com/Vimjas/vint/issues/329#issuecomment-1029628054
-  #
-  # Disable SC2016 because we don't _indent_ to expand `line`.
-  #
-  # shellcheck disable=SC2016
-  vint "${VINT_FILES[@]}" 2>&1 | grep --invert-match 'vint WARNING: Policy `line` is not defined'
-}
-
 run-shellcheck
-run-vint
