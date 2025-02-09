@@ -11,7 +11,6 @@ source <sfile>:h/init/keys.vim
 source <sfile>:h/init/leader.vim
 source <sfile>:h/init/listchars.vim
 source <sfile>:h/init/projects.vim
-source <sfile>:h/init/spacing.vim
 source <sfile>:h/init/spelling.vim
 source <sfile>:h/init/wsl.vim
 

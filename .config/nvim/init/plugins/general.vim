@@ -25,7 +25,3 @@ Plug 'vim-scripts/restore_view.vim'
 "
 " https://vi.stackexchange.com/a/10472/28836
 Plug 'AmaiSaeta/capture.vim'
-
-" vim-textobj-entire depends on vim-textobj-user.
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-entire'
