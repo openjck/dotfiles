@@ -10,6 +10,7 @@ enabled_plugins = {
   'basics',
   'clue',
   'comment',
+  'completion',
   'deps',
   'notify',
   'pairs',
