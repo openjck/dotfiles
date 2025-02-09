@@ -15,3 +15,7 @@ MiniDeps.add({
 MiniDeps.add({
   source = 'dense-analysis/ale'
 })
+
+MiniDeps.add({
+  source = 'christoomey/vim-tmux-navigator'
+})
