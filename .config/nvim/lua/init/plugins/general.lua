@@ -1,3 +1,5 @@
+local add = MiniDeps.add
+
 -- mini.nvim does offer a fuzzy finder plugin,[1] but I don't believe it's
 -- possible to use it to create a fuzzy finder with a custom source. With
 -- telescope, I create a custom fuzzy finder fot dotfiles.
@@ -5,7 +7,7 @@
 -- Plus, I've always wanted to use telescope.
 --
 -- [1] https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-fuzzy.md
-MiniDeps.add({
+add({
   source = 'nvim-telescope/telescope.nvim',
   checkout = '0.1.x',
   hooks = {
@@ -30,10 +32,14 @@ MiniDeps.add({
 --
 -- [1] https://github.com/mfussenegger/nvim-lint
 -- [2] https://github.com/stevearc/conform.nvim
-MiniDeps.add({
+add({
   source = 'dense-analysis/ale'
 })
 
-MiniDeps.add({
+add({
   source = 'christoomey/vim-tmux-navigator'
+})
+
+add({
+  source = 'jremmen/vim-ripgrep'
 })

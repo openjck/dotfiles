@@ -4,7 +4,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-abolish'
 Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'jremmen/vim-ripgrep'
 Plug 'tpope/vim-unimpaired'
 
 " This plugin automatically saves folds when a file is closed and restores them
