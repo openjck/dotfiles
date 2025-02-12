@@ -14,6 +14,8 @@ enabled_plugins = {
   'comment',
   'completion',
   'deps',
+  'diff',
+  'indentscope',
   'notify',
   'pairs',
   'starter',
