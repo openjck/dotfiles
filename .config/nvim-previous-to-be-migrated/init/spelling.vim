@@ -1,6 +1,3 @@
-" Spell-check comments.
-set spell
-
 " Automatically generate binary files for personal dictionaries.
 "
 " Neovim maintains two files for each personal dictionary: a plaintext .add file

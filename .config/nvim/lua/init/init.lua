@@ -8,7 +8,9 @@ require('init.plugins')
 require('init.appearance')
 require('init.editing')
 require('init.leader')
+require('init.listchars')
 require('init.spacing')
+require('init.spelling')
 
 -- Source private, non-pushed, local configurations, if any.
 --
