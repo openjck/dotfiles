@@ -33,11 +33,6 @@
   # https://stackoverflow.com/a/37472341/715866
   keepBackup = false
 
-[help]
-  # When a command is believed to be misspelled, prompt to ask whether the
-  # command that is believed to be the correct command should be used instead.
-  autocorrect = "prompt"
-
 [pager]
   # Do not use pagers with certain commands that use pagers by default.
   branch = false
