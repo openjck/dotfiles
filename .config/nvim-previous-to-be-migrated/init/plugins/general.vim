@@ -1,6 +1,4 @@
 Plug 'mkitt/tabline.vim'
-Plug 'openjck/vim-yadm-files'
-Plug 'tpope/vim-fugitive'
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-abolish'
 Plug 'vim-scripts/ReplaceWithRegister'
