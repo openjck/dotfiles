@@ -16,6 +16,7 @@ enabled_plugins = {
   'cursorword',
   'deps',
   'diff',
+  'hipatterns',
   'indentscope',
   'move',
   'notify',
