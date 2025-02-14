@@ -11,6 +11,7 @@ export D_BIN_DOWNLOADED=$HOME/bin/local/downloaded
 export D_BIN_TEMPORARY=$HOME/bin/local/temporary
 export D_DEVEL=$HOME/devel
 export D_REPOS=$HOME/devel/repos
+export D_NVIM=$XDG_CONFIG_HOME/nvim
 
 # Add environment variables for Windows directories if WSL is being used.
 if __in_wsl; then
