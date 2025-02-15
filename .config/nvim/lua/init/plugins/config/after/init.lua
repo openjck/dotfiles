@@ -1,5 +1,6 @@
 require('init.plugins.config.after.ai')
 require('init.plugins.config.after.ale')
+require('init.plugins.config.after.csv')
 require('init.plugins.config.after.hipatterns')
 require('init.plugins.config.after.mini-clue')
 require('init.plugins.config.after.mini-starter')
