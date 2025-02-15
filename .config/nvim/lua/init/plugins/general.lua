@@ -43,3 +43,7 @@ add({
 add({
   source = 'jremmen/vim-ripgrep',
 })
+
+add({
+  source = 'micarmst/vim-spellsync',
+})
