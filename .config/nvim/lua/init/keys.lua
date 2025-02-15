@@ -2,8 +2,10 @@
 -- almost always because I meant to hit the escape key.
 vim.keymap.set({ 'n', 'i' }, '<F1>', '<Nop>', { noremap = true })
 
--- Disable ex mode.
+-- Disable Ex mode and the search string command-line window.
 --
--- https://stackoverflow.com/a/12753980/4297741
-vim.keymap.set('n', 'Q', '<Nop>', { noremap = true })
+-- https://stackoverflow.com/a/79440961/715866
 vim.keymap.set('n', 'gQ', '<Nop>', { noremap = true })
+vim.keymap.set('n', 'q:', '<Nop>', { noremap = true })
+vim.keymap.set('n', 'q/', '<Nop>', { noremap = true })
+vim.keymap.set('n', 'q?', '<Nop>', { noremap = true })
