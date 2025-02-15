@@ -33,13 +33,13 @@ add({
 -- [1] https://github.com/mfussenegger/nvim-lint
 -- [2] https://github.com/stevearc/conform.nvim
 add({
-  source = 'dense-analysis/ale'
+  source = 'dense-analysis/ale',
 })
 
 add({
-  source = 'christoomey/vim-tmux-navigator'
+  source = 'christoomey/vim-tmux-navigator',
 })
 
 add({
-  source = 'jremmen/vim-ripgrep'
+  source = 'jremmen/vim-ripgrep',
 })
