@@ -5,7 +5,7 @@ vim.cmd.colorscheme('onedark')
 --
 -- The "colorcolumn" option accepts a value prepended with + or -, which is then
 -- added to or subtracted from the value of "textwidth".
-vim.opt.colorcolumn = "+1"
+vim.opt.colorcolumn = '+1'
 
 -- Show the ruler, which mini.basics disables.
 --
