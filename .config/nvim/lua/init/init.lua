@@ -13,6 +13,7 @@ require('init.leader')
 require('init.listchars')
 require('init.spacing')
 require('init.spelling')
+require('init.wsl')
 
 -- Source private, non-pushed, local configurations, if any.
 --
