@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# Copyright (c) 2024 John Karahalis
+# Copyright (c) 2024, 2025 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -88,7 +88,7 @@ shopt -s dotglob
 # Move everything into a temporary directory first in case there is already a
 # file or directory in the current directory with the given name.
 #
-# For example, this handles the case where there is a directory in the currknt
+# For example, this handles the case where there is a directory in the current
 # directory named "matryoshka" and the user wants to move it into a new
 # directory also named "matryoshka", so that the original directory is named
 # "matryoshka/matryoshka".
