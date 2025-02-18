@@ -1,8 +1,31 @@
 local telescopeBuiltin = require('telescope.builtin')
 local telescopeCustom = require('entities.telescope')
 
-function leader_map(description, keys, action, noremap)
-  noremap = noremap or false
+-- Some general notes:
+--
+-- mini.basics already sets the leader to the space key. Additionally, because
+-- mini.clue is being used, the space key does not fall back to its default
+-- behavior (moving forward one character) when "timeoutlen" expires. Rather,
+-- the clue window is opened when "timeoutlen" expires.
+--
+-- With regard to "remaps", one should almost always disable remaps. An
+-- exception to this rule is that mappings to "<Plug>" mappings should not use
+-- "nore" commands because they are themselves mappings that need to be looked
+-- up.
+--
+-- I use "<Plug>" mappings as values whenever possible. I'm not completely
+-- convinced of the benefits of doing this, but it seems to be a best
+-- practice.[2]
+--
+-- [1] https://learnvimscriptthehardway.stevelosh.com/chapters/05.html#nonrecursive-mapping
+-- [2] https://www.reddit.com/r/vim/comments/bgf3zt/why_should_i_use_plug_in_my_mappings_instead_of/
+
+-- Create a mapping from normal mode that uses the <Leader> key as a prefix.
+--
+-- Taking "keys" as the parameter argument allows mappings to more easily be
+-- sorted alphabetically by keys.
+function leader_map(keys, action, description, remap)
+  remap = remap or false
 
   vim.keymap.set(
     'n',
@@ -10,48 +33,44 @@ function leader_map(description, keys, action, noremap)
     action,
     {
       desc = description,
-      noremap = noremap,
+      remap = remap,
     }
   )
 end
-
--- Use the spacebar as the leader key.
---
--- Mapping `<Space>` to `<Nop>` before mapping `<Space>` to `<Leader>` ensures
--- that the spacebar does not fall back to its default behavior when
--- `timeoutlen` expires, assuming `timeout` is enabled.
---
--- https://stackoverflow.com/a/74906531
-
-vim.keymap.set(
-  'n',
-  '<Space>',
-  '<Nop>',
-  {
-    silent = true,
-    noremap = true,
-  }
-)
-
-vim.g.mapleader = ' '
 
 ----------
 -- Find --
 ----------
 
-leader_map('Find project files', 'fp', telescopeBuiltin.find_files)
-leader_map('Find help', 'fh', telescopeBuiltin.help_tags)
-leader_map('Find dotfiles', 'fd', telescopeCustom.dotfiles)
+leader_map('fd', telescopeCustom.dotfiles, 'Find dotfiles')
+leader_map('fh', telescopeBuiltin.help_tags, 'Find help')
+leader_map('fp', telescopeBuiltin.find_files, 'Find project files')
 
 ------------------------
 -- Edit (as in :edit) --
 ------------------------
 
-leader_map('Edit next', 'en', '<Cmd>next<CR>', true)
-leader_map('Edit previous', 'ep', '<Cmd>previous<CR>', true)
+leader_map('en', '<Cmd>next<CR>', 'Edit next')
+leader_map('ep', '<Cmd>previous<CR>', 'Edit previous')
 
 ----------
 -- Hide --
 ----------
 
-leader_map('Hide highlights', 'hh', '<Cmd>nohlsearch<CR>', true)
+leader_map('hh', '<Cmd>nohlsearch<CR>', 'Hide highlights')
+
+----------
+-- Tabs --
+----------
+
+leader_map('tc', '<Cmd>tabclose<CR>', 'Tab close')
+leader_map('te', '<Cmd>tabonly<CR>', 'Tab exclusive (close others)')
+leader_map('tf', '<Cmd>tabfirst<CR>', 'Tab first')
+leader_map('tl', '<Cmd>tablast<CR>', 'Tab last')
+leader_map('tm$', '<Cmd>tabmove $<CR>', 'Tab move last')
+leader_map('tm0', '<Cmd>tabmove 0<CR>', 'Tab move first')
+leader_map('tmh', '<Cmd>-tabmove<CR>', 'Tab move left')
+leader_map('tml', '<Cmd>+tabmove<CR>', 'Tab move right')
+leader_map('tn', '<Cmd>tabnext<CR>', 'Tab next')
+leader_map('to', '<Cmd>tabnew<CR>', 'Tab open')
+leader_map('tp', '<Cmd>tabprevious<CR>', 'Tab previous')

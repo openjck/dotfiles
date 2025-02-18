@@ -1,34 +1,3 @@
-" Use the spacebar as the leader key.
-"
-" Mapping `<Space>` to `<Nop>` before mapping `<Space>` to `<Leader>` ensures
-" that the spacebar does not fall back to its default behavior when `timeoutlen`
-" expires, assuming `timeout` is enabled.
-"
-" Note that `map` must be used in the second line, rather than `noremap`,
-" otherwise the mapping would recurse, since we define other mappings in this
-" file which use the leader.
-"
-" https://stackoverflow.com/questions/446269/can-i-use-space-as-mapleader-in-vim
-nnoremap <Space> <Nop>
-map <Space> <Leader>
-
-" Always use `nore` mapping commands.[1] An exception to this rule is that
-" mappings to `<Plug>` mappings should not use `nore` commands because they are
-" themselves mappings that need to be looked up.
-"
-" I use `<Plug>` mappings as values whenever possible. I'm not completely
-" convinced of the benefits of doing this, but it seems to be a best
-" practice.[2]
-"
-" When `<Plug>` mappings are not used as values, using `<C-U>` after the colon
-" seems to be a best practice as well.[3][4][5]
-"
-" [1] https://learnvimscriptthehardway.stevelosh.com/chapters/05.html#nonrecursive-mapping
-" [2] https://www.reddit.com/r/vim/comments/bgf3zt/why_should_i_use_plug_in_my_mappings_instead_of/
-" [3] https://dev.to/vintharas/5-minutes-vim-ctrlp-considered-harmful-48eg
-" [4] https://stackoverflow.com/a/13831705/4297741
-" [5] https://vi.stackexchange.com/a/9752/28836
-
 """""""""""""""""
 " Go (movement) "
 """""""""""""""""
@@ -131,19 +100,6 @@ nmap <Leader>sm <Plug>(ale_detail)
 
 " Mnemonic: Show usages
 nnoremap <Leader>su <Plug>(ale_find_references)
-
-""""""""
-" Test "
-""""""""
-
-" Mnemonic: Test
-"
-" This is supported in JetBrains IDEs, but not in Neovim. In JetBrains IDEs, if
-" the cursor is located in a test method, it runs that test method. If the
-" cursor is located elsewhere, it runs all tests in the file. In JetBrains IDEs,
-" there does not appear to be a way to run all tests in a file if the cursor is
-" located in a test method.
-nnoremap <Leader>t <Cmd>echo "Not supported."<CR>
 
 """""""""
 " Utils "
