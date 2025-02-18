@@ -12,7 +12,7 @@ function custom.dotfiles()
         source "$XDG_CONFIG_HOME/bash/init/functions/vcsh-all.bash" && \
         source "$XDG_CONFIG_HOME/bash/init/functions/vcsh-list-files.bash" && \
         vcsh-list-files
-      ]]
+      ]],
     }
   })
 end

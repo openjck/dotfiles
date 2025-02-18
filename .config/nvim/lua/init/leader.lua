@@ -10,7 +10,7 @@ function leader_map(description, keys, action, noremap)
     action,
     {
       desc = description,
-      noremap = noremap
+      noremap = noremap,
     }
   )
 end
