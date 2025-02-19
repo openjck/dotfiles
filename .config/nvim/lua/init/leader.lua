@@ -63,10 +63,18 @@ leader_map('hh', '<Cmd>nohlsearch<CR>', 'Hide highlights')
 -- Tabs --
 ----------
 
+for number = 1, 9 do
+  leader_map(
+    string.format('t%d', number),
+    string.format('<Cmd>tabnext %d<CR>', number),
+    string.format('Tab %d', number)
+  )
+end
+
+leader_map('t$', '<Cmd>tablast<CR>', 'Tab last')
+leader_map('t0', '<Cmd>tabfirst<CR>', 'Tab first')
 leader_map('tc', '<Cmd>tabclose<CR>', 'Tab close')
 leader_map('te', '<Cmd>tabonly<CR>', 'Tab exclusive (close others)')
-leader_map('tf', '<Cmd>tabfirst<CR>', 'Tab first')
-leader_map('tl', '<Cmd>tablast<CR>', 'Tab last')
 leader_map('tm$', '<Cmd>tabmove $<CR>', 'Tab move last')
 leader_map('tm0', '<Cmd>tabmove 0<CR>', 'Tab move first')
 leader_map('tmh', '<Cmd>-tabmove<CR>', 'Tab move left')
