@@ -22,13 +22,15 @@ local telescopeCustom = require('entities.telescope')
 
 -- Create a mapping from normal mode that uses the <Leader> key as a prefix.
 --
--- Taking "keys" as the parameter argument allows mappings to more easily be
--- sorted alphabetically by keys.
-function leader_map(keys, action, description, remap)
+-- "modes" can be either a string (e.g., 'n') or a table (e.g., { 'n', 'v' }).
+--
+-- Taking "modes" as the first parameter and "keys" as the second parameter
+-- allows mappings to be sorted alphabetically first by mode(s), then by keys.
+function leader_map(modes, keys, action, description, remap)
   remap = remap or false
 
   vim.keymap.set(
-    'n',
+    modes,
     string.format('<Leader>%s', keys),
     action,
     {
@@ -42,22 +44,22 @@ end
 -- Find --
 ----------
 
-leader_map('fd', telescopeCustom.dotfiles, 'Find dotfiles')
-leader_map('fh', telescopeBuiltin.help_tags, 'Find help')
-leader_map('fp', telescopeBuiltin.find_files, 'Find project files')
+leader_map('n', 'fd', telescopeCustom.dotfiles, 'Find dotfiles')
+leader_map('n', 'fh', telescopeBuiltin.help_tags, 'Find help')
+leader_map('n', 'fp', telescopeBuiltin.find_files, 'Find project files')
 
 ------------------------
 -- Edit (as in :edit) --
 ------------------------
 
-leader_map('en', '<Cmd>next<CR>', 'Edit next')
-leader_map('ep', '<Cmd>previous<CR>', 'Edit previous')
+leader_map('n', 'en', '<Cmd>next<CR>', 'Edit next')
+leader_map('n', 'ep', '<Cmd>previous<CR>', 'Edit previous')
 
 ----------
 -- Hide --
 ----------
 
-leader_map('hh', '<Cmd>nohlsearch<CR>', 'Hide highlights')
+leader_map('n', 'hh', '<Cmd>nohlsearch<CR>', 'Hide highlights')
 
 ----------
 -- Tabs --
@@ -65,20 +67,39 @@ leader_map('hh', '<Cmd>nohlsearch<CR>', 'Hide highlights')
 
 for number = 1, 9 do
   leader_map(
+    'n',
     string.format('t%d', number),
     string.format('<Cmd>tabnext %d<CR>', number),
     string.format('Tab %d', number)
   )
 end
 
-leader_map('t$', '<Cmd>tablast<CR>', 'Tab last')
-leader_map('t0', '<Cmd>tabfirst<CR>', 'Tab first')
-leader_map('tc', '<Cmd>tabclose<CR>', 'Tab close')
-leader_map('te', '<Cmd>tabonly<CR>', 'Tab exclusive (close others)')
-leader_map('tm$', '<Cmd>tabmove $<CR>', 'Tab move last')
-leader_map('tm0', '<Cmd>tabmove 0<CR>', 'Tab move first')
-leader_map('tmh', '<Cmd>-tabmove<CR>', 'Tab move left')
-leader_map('tml', '<Cmd>+tabmove<CR>', 'Tab move right')
-leader_map('tn', '<Cmd>tabnext<CR>', 'Tab next')
-leader_map('to', '<Cmd>tabnew<CR>', 'Tab open')
-leader_map('tp', '<Cmd>tabprevious<CR>', 'Tab previous')
+leader_map('n', 't$', '<Cmd>tablast<CR>', 'Tab last')
+leader_map('n', 't0', '<Cmd>tabfirst<CR>', 'Tab first')
+leader_map('n', 'tc', '<Cmd>tabclose<CR>', 'Tab close')
+leader_map('n', 'te', '<Cmd>tabonly<CR>', 'Tab exclusive (close others)')
+leader_map('n', 'tm$', '<Cmd>tabmove $<CR>', 'Tab move last')
+leader_map('n', 'tm0', '<Cmd>tabmove 0<CR>', 'Tab move first')
+leader_map('n', 'tmh', '<Cmd>-tabmove<CR>', 'Tab move left')
+leader_map('n', 'tml', '<Cmd>+tabmove<CR>', 'Tab move right')
+leader_map('n', 'tn', '<Cmd>tabnext<CR>', 'Tab next')
+leader_map('n', 'to', '<Cmd>tabnew<CR>', 'Tab open')
+leader_map('n', 'tp', '<Cmd>tabprevious<CR>', 'Tab previous')
+
+----------------------
+-- System clipboard --
+----------------------
+
+-- These are the only leader maps that don't share a namespace (e.g., s), only
+-- because it's more convenient to type two characters (e.g., <Leader>y) than
+-- three (e.g., <Leader>sy), and these maps are used often. The built-in motions
+-- (e.g., "+y) use three characters, so it wouldn't be much of an improvement to
+-- use a leader map that requires typing three characters. (It might be a slight
+-- improvement because typing motions like "+y is awkward, in part because they
+-- require the hand to take such a strange shape and in part because they
+-- require the use of the shift key.)
+
+leader_map('v', 'd', '"+d', 'Delete to system clipboard')
+leader_map('v', 'P', '"+P', 'Paste above from system clipboard')
+leader_map('v', 'p', '"+p', 'Paste from system clipboard')
+leader_map('v', 'y', '"+y', 'Yank to system clipboard')

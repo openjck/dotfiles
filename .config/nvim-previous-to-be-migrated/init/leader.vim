@@ -72,6 +72,10 @@ nnoremap <Leader>os <Cmd>vnew<CR>
 " Plugins "
 """""""""""
 
+" NOTE: In the new profile, <Leader>p is used for pasting from the system
+" clipboard, so I'd need to use another namespace for these if I keep them.
+" Maybe <Leader>x for "extensions".
+
 " "Reconfigure" must be run before vim-plug will pick up on any changes that can
 " be acted upon.
 "
