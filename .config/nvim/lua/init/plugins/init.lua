@@ -15,6 +15,9 @@ require('init.plugins.colors')
 require('init.plugins.general')
 require('init.plugins.languages')
 
+-- Apply any additional setup a plugin may need.
+require('init.plugins.setup')
+
 -- Source configuration files that can or must be loaded after plugins are
 -- enabled.
 require('init.plugins.config.after')
