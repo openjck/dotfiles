@@ -5,6 +5,8 @@ Plug 'tpope/vim-abolish'
 " often, anyway.
 Plug 'vim-scripts/ReplaceWithRegister'
 
+" mini.nvim has an alternative called mini.bracketed. The mappings are a bit
+" different, but it's probably good enough.
 Plug 'tpope/vim-unimpaired'
 
 " This plugin automatically saves folds when a file is closed and restores them
