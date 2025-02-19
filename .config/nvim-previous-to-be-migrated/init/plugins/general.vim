@@ -1,5 +1,3 @@
-Plug 'mkitt/tabline.vim'
-Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-abolish'
 
 " mini.nvim apparently has some similar functionality in mini.operators. I don't
