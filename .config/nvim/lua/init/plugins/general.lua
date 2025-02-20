@@ -61,12 +61,8 @@ add({
   source = 'alvan/vim-closetag'
 })
 
--- When Neovim < 0.10 is being used, the neogit release tagged v0.0.1 must also
--- be used. It's old, but not as old as it might sound. It was last updated in
--- May 2024.
 add({
   source = 'NeogitOrg/neogit',
-  checkout = 'v0.0.1',
   depends = {
     'nvim-lua/plenary.nvim',
     'sindrets/diffview.nvim',
