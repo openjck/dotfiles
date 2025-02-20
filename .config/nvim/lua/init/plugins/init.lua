@@ -4,19 +4,20 @@
 -- before their corresponding plugins are enabled.
 require('init.plugins.config.before')
 
--- Install plugins from the mini.nvim project.
+-- Enable plugins from the mini.nvim project.
 --
--- Plugins from the mini.nvim project must be installed before others because
--- mini.deps is among them and mini.deps is used to install all other plugins.
-require('init.plugins.mini')
+-- Plugins from the mini.nvim project must be enabled before others are
+-- installed because mini.deps is among them and mini.deps is used to install
+-- all other plugins.
+require('init.plugins.setup.mini')
 
--- Install all other plugins.
+-- Install and/or enable all other plugins.
 require('init.plugins.colors')
 require('init.plugins.general')
 require('init.plugins.languages')
 
--- Apply any additional setup a plugin may need.
-require('init.plugins.setup')
+-- Apply any additional setup that other, non-mini plugins may need.
+require('init.plugins.setup.general')
 
 -- Source configuration files that can or must be loaded after plugins are
 -- enabled.
