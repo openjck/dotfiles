@@ -7,11 +7,7 @@ local add = MiniDeps.add
 -- The plugins vim-polyglot pulls in can sometimes be too clever, changing the
 -- appearance or behavior of Neovim in ways I find annoying. Configuration may
 -- be necessary in those cases.
-add({
-  source = 'sheerun/vim-polyglot',
-})
+add('sheerun/vim-polyglot')
 
 -- Neither Neovim nor vim-polyglot supports KDL.
-add({
-  source = 'imsnif/kdl.vim',
-})
+add('imsnif/kdl.vim')

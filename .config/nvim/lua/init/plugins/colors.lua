@@ -1,1 +1,3 @@
-MiniDeps.add('joshdick/onedark.vim')
+local add = MiniDeps.add
+
+add('joshdick/onedark.vim')
