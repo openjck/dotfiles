@@ -12,3 +12,7 @@ set formatoptions+=cro
 if expand('%:e') ==? 'bash'
   let b:is_bash = 1
 endif
+
+" Note to self: Yes, this is still needed. In the current Neovim profile,
+" opening a Bash function (e.g., neovim-git.bash) causes it to be treated like
+" a POSIX sh file.
