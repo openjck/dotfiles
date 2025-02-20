@@ -1,3 +1,3 @@
 function neovim-git() {
-  nvim -c Git
+  nvim -c Neogit
 }
