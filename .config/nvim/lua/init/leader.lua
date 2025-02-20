@@ -22,7 +22,7 @@ local telescopeCustom = require('entities.telescope')
 
 -- Create a mapping from normal mode that uses the <Leader> key as a prefix.
 --
--- "modes" can be either a string (e.g., 'n') or a table (e.g., { 'n', 'v' }).
+-- "modes" can be either a string (e.g., 'n') or a table (e.g., { 'n', 'x' }).
 --
 -- Taking "modes" as the first parameter and "keys" as the second parameter
 -- allows mappings to be sorted alphabetically first by mode(s), then by keys.
@@ -99,7 +99,7 @@ leader_map('n', 'tp', '<Cmd>tabprevious<CR>', 'Tab previous')
 -- require the hand to take such a strange shape and in part because they
 -- require the use of the shift key.)
 
-leader_map('v', 'd', '"+d', 'Delete to system clipboard')
-leader_map('v', 'P', '"+P', 'Paste above from system clipboard')
-leader_map('v', 'p', '"+p', 'Paste from system clipboard')
-leader_map('v', 'y', '"+y', 'Yank to system clipboard')
+leader_map('x', 'd', '"+d', 'Delete to system clipboard')
+leader_map('x', 'P', '"+P', 'Paste above from system clipboard')
+leader_map('x', 'p', '"+p', 'Paste from system clipboard')
+leader_map('x', 'y', '"+y', 'Yank to system clipboard')
