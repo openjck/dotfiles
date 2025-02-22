@@ -1,4 +1,4 @@
-vim.cmd.colorscheme('onedark')
+vim.cmd.colorscheme('tokyonight-storm')
 
 -- Highlight the column whose position is 1 greater than the value of
 -- "textwidth".
