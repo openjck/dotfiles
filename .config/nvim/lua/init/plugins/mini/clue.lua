@@ -1,8 +1,8 @@
--- This file is based on mini.clue's recommended "quick start" configuration.
---
--- https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-clue.md#config-quick-start
 local clue = require('mini.clue')
 
+-- This configuration is based on mini.clue's recommended "quick start" configuration.
+--
+-- https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-clue.md#config-quick-start
 clue.setup({
   triggers = {
     -- Leader triggers

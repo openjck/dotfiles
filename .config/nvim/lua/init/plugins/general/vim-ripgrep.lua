@@ -1,3 +1,5 @@
+MiniDeps.add('jremmen/vim-ripgrep')
+
 -- Highlight matches.
 vim.g.rg_highlight = true
 

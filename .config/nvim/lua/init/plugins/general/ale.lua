@@ -1,3 +1,16 @@
+-- I considered using newer projects like nvim-lint[1] and conform,[2] but as
+-- of the time of this writing (2025-02-08), nvim-lint currently cannot easily
+-- use a copy of ESLint that exists in node_modules. That's important, because
+-- different projects often use differnt versions of ESLint.
+--
+-- ale is also a more mature project, and I've enjoyed working with it. It does
+-- ship with its own Language Server client, which is not needed in Neovim
+-- since Neovim ships its own, but ale's can be disabled.
+--
+-- [1] https://github.com/mfussenegger/nvim-lint
+-- [2] https://github.com/stevearc/conform.nvim
+MiniDeps.add('dense-analysis/ale')
+
 -- Always show the sign column, even when no linters are enabled.
 --
 -- ALE shows the sign column when any linters are enabled, so this helps the UI
