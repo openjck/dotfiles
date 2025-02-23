@@ -12,33 +12,33 @@ clue.setup({
   },
 
   triggers = {
-    -- Leader triggers
+    -- Show the clue window when the "<Leader>" key is pressed.
     { mode = 'n', keys = '<Leader>' },
     { mode = 'x', keys = '<Leader>' },
 
-    -- Built-in completion
+    -- Show the clue window for built-in completion.
     { mode = 'i', keys = '<C-x>' },
 
-    -- `g` key
+    -- Show the clue window when the "g" key is pressed.
     { mode = 'n', keys = 'g' },
     { mode = 'x', keys = 'g' },
 
-    -- Marks
+    -- Show the clue window for marks.
     { mode = 'n', keys = "'" },
     { mode = 'n', keys = '`' },
     { mode = 'x', keys = "'" },
     { mode = 'x', keys = '`' },
 
-    -- Registers
+    -- Show the clue window for registers.
     { mode = 'n', keys = '"' },
     { mode = 'x', keys = '"' },
     { mode = 'i', keys = '<C-r>' },
     { mode = 'c', keys = '<C-r>' },
 
-    -- Window commands
+    -- Show the clue window when the "<C-w>" keystroke is pressed.
     { mode = 'n', keys = '<C-w>' },
 
-    -- `z` key
+    -- Show the clue window when the "z" key is pressed.
     { mode = 'n', keys = 'z' },
     { mode = 'x', keys = 'z' },
   },
