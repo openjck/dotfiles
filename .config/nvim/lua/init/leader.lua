@@ -44,28 +44,28 @@ end
 -- Find --
 ----------
 
-leader_map('n', 'fd', telescopeCustom.dotfiles, 'Find dotfiles')
-leader_map('n', 'fh', telescopeBuiltin.help_tags, 'Find help')
+leader_map('n', 'fd', telescopeCustom.dotfiles, 'Dotfiles')
+leader_map('n', 'fh', telescopeBuiltin.help_tags, 'Help')
 leader_map(
   'n',
   'fp',
   telescopeCustom.find_files_including_hidden,
-  'Find project files'
+  'Project files'
 )
-leader_map('n', 'fs', telescopeBuiltin.planets, 'Find solar system')
+leader_map('n', 'fs', telescopeBuiltin.planets, 'Solar system')
 
 ------------------------
 -- Edit (as in :edit) --
 ------------------------
 
-leader_map('n', 'en', '<Cmd>next<CR>', 'Edit next')
-leader_map('n', 'ep', '<Cmd>previous<CR>', 'Edit previous')
+leader_map('n', 'en', '<Cmd>next<CR>', 'Next')
+leader_map('n', 'ep', '<Cmd>previous<CR>', 'Previous')
 
 ----------
 -- Hide --
 ----------
 
-leader_map('n', 'hh', '<Cmd>nohlsearch<CR>', 'Hide highlights')
+leader_map('n', 'hh', '<Cmd>nohlsearch<CR>', 'Highlights')
 
 ----------
 -- Tabs --
@@ -80,17 +80,17 @@ for number = 1, 9 do
   )
 end
 
-leader_map('n', 't$', '<Cmd>tablast<CR>', 'Tab last')
-leader_map('n', 't0', '<Cmd>tabfirst<CR>', 'Tab first')
-leader_map('n', 'tc', '<Cmd>tabclose<CR>', 'Tab close')
-leader_map('n', 'te', '<Cmd>tabonly<CR>', 'Tab exclusive (close others)')
-leader_map('n', 'tm$', '<Cmd>tabmove $<CR>', 'Tab move last')
-leader_map('n', 'tm0', '<Cmd>tabmove 0<CR>', 'Tab move first')
-leader_map('n', 'tmh', '<Cmd>-tabmove<CR>', 'Tab move left')
-leader_map('n', 'tml', '<Cmd>+tabmove<CR>', 'Tab move right')
-leader_map('n', 'tn', '<Cmd>tabnext<CR>', 'Tab next')
-leader_map('n', 'to', '<Cmd>tabnew<CR>', 'Tab open')
-leader_map('n', 'tp', '<Cmd>tabprevious<CR>', 'Tab previous')
+leader_map('n', 't$', '<Cmd>tablast<CR>', 'Last')
+leader_map('n', 't0', '<Cmd>tabfirst<CR>', 'First')
+leader_map('n', 'tc', '<Cmd>tabclose<CR>', 'Close')
+leader_map('n', 'te', '<Cmd>tabonly<CR>', 'Exclusive (close all others)')
+leader_map('n', 'tm$', '<Cmd>tabmove $<CR>', 'Last')
+leader_map('n', 'tm0', '<Cmd>tabmove 0<CR>', 'First')
+leader_map('n', 'tmh', '<Cmd>-tabmove<CR>', 'Left')
+leader_map('n', 'tml', '<Cmd>+tabmove<CR>', 'Right')
+leader_map('n', 'tn', '<Cmd>tabnext<CR>', 'Next')
+leader_map('n', 'to', '<Cmd>tabnew<CR>', 'Open')
+leader_map('n', 'tp', '<Cmd>tabprevious<CR>', 'Previous')
 
 ----------------------
 -- System clipboard --
@@ -106,6 +106,6 @@ leader_map('n', 'tp', '<Cmd>tabprevious<CR>', 'Tab previous')
 -- require the use of the shift key.)
 
 leader_map('n', 'P', '"+P', 'Paste above from system clipboard')
-leader_map('n', 'p', '"+p', 'Paste from system clipboard')
-leader_map('x', 'd', '"+d', 'Delete to system clipboard')
-leader_map('x', 'y', '"+y', 'Yank to system clipboard')
+leader_map('n', 'p', '"+p', 'Paste below from system clipboard')
+leader_map('x', 'd', '"+d', 'Delete (cut) to system clipboard')
+leader_map('x', 'y', '"+y', 'Yank (copy) to system clipboard')

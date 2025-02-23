@@ -56,6 +56,6 @@ clue.setup({
     { mode = 'n', keys = '<Leader>f', desc = 'Find' },
     { mode = 'n', keys = '<Leader>h', desc = 'Hide' },
     { mode = 'n', keys = '<Leader>t', desc = 'Tabs' },
-    { mode = 'n', keys = '<Leader>tm', desc = 'Tab move' },
+    { mode = 'n', keys = '<Leader>tm', desc = 'Move' },
   },
 })
