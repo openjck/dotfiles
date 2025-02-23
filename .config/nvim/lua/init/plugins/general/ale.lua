@@ -1,7 +1,7 @@
 -- I considered using newer projects like nvim-lint[1] and conform,[2] but as
 -- of the time of this writing (2025-02-08), nvim-lint currently cannot easily
 -- use a copy of ESLint that exists in node_modules. That's important, because
--- different projects often use differnt versions of ESLint.
+-- different projects often use different versions of ESLint.
 --
 -- ale is also a more mature project, and I've enjoyed working with it. It does
 -- ship with its own Language Server client, which is not needed in Neovim
