@@ -99,7 +99,7 @@ leader_map('n', 'tp', '<Cmd>tabprevious<CR>', 'Tab previous')
 -- require the hand to take such a strange shape and in part because they
 -- require the use of the shift key.)
 
+leader_map('n', 'P', '"+P', 'Paste above from system clipboard')
+leader_map('n', 'p', '"+p', 'Paste from system clipboard')
 leader_map('x', 'd', '"+d', 'Delete to system clipboard')
-leader_map('x', 'P', '"+P', 'Paste above from system clipboard')
-leader_map('x', 'p', '"+p', 'Paste from system clipboard')
 leader_map('x', 'y', '"+y', 'Yank to system clipboard')
