@@ -17,6 +17,9 @@ require('init.wsl')
 
 -- Source private, non-pushed, local configurations, if any.
 --
--- To be found and used, the local configurations must exist in a file named
--- $XDG_CONFIG_HOME/nvim/lua/init/local/init.lua.
+-- To be found and used, the local configurations must exist in a file with
+-- either of the following names:
+--
+--   - $XDG_CONFIG_HOME/nvim/lua/init/local.lua
+--   - $XDG_CONFIG_HOME/nvim/lua/init/local/init.lua
 pcall(require, 'init.local')
