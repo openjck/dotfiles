@@ -56,6 +56,21 @@ clue.setup({
     { mode = 'n', keys = '<Leader>f', desc = 'Find' },
     { mode = 'n', keys = '<Leader>h', desc = 'Hide' },
     { mode = 'n', keys = '<Leader>t', desc = 'Tabs' },
+
+    -- Add clues for tab submode <Leader> mappings.
     { mode = 'n', keys = '<Leader>tm', desc = 'Move' },
+    { mode = 'n', keys = '<Leader>tm', desc = 'Navigate' },
+
+    -- Enable submode support for "Tab move" leader mappings.
+    { mode = 'n', keys = '<Leader>tm$', postkeys = '<Leader>tm' },
+    { mode = 'n', keys = '<Leader>tm0', postkeys = '<Leader>tm' },
+    { mode = 'n', keys = '<Leader>tmh', postkeys = '<Leader>tm' },
+    { mode = 'n', keys = '<Leader>tml', postkeys = '<Leader>tm' },
+
+    -- Enable submode support for "Tab navigate" leader mappings.
+    { mode = 'n', keys = '<Leader>tn$', postkeys = '<Leader>tn' },
+    { mode = 'n', keys = '<Leader>tn0', postkeys = '<Leader>tn' },
+    { mode = 'n', keys = '<Leader>tnh', postkeys = '<Leader>tn' },
+    { mode = 'n', keys = '<Leader>tnl', postkeys = '<Leader>tn' },
   },
 })

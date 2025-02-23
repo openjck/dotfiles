@@ -80,17 +80,21 @@ for number = 1, 9 do
   )
 end
 
-leader_map('n', 't$', '<Cmd>tablast<CR>', 'Last')
-leader_map('n', 't0', '<Cmd>tabfirst<CR>', 'First')
-leader_map('n', 'tx', '<Cmd>tabclose<CR>', 'Close')
 leader_map('n', 'te', '<Cmd>tabonly<CR>', 'Exclusive (close all others)')
+leader_map('n', 'to', '<Cmd>tabnew<CR>', 'Open')
+leader_map('n', 'tx', '<Cmd>tabclose<CR>', 'Close')
+
+-- Set up <Leader> mappings for "Tab move" submode.
 leader_map('n', 'tm$', '<Cmd>tabmove $<CR>', 'Last')
 leader_map('n', 'tm0', '<Cmd>tabmove 0<CR>', 'First')
 leader_map('n', 'tmh', '<Cmd>-tabmove<CR>', 'Left')
 leader_map('n', 'tml', '<Cmd>+tabmove<CR>', 'Right')
-leader_map('n', 'tl', '<Cmd>tabnext<CR>', 'Next')
-leader_map('n', 'tn', '<Cmd>tabnew<CR>', 'New')
-leader_map('n', 'th', '<Cmd>tabprevious<CR>', 'Previous')
+
+-- Set up <Leader> mappings for "Tab navigate" submode.
+leader_map('n', 'tn$', '<Cmd>tablast<CR>', 'Last')
+leader_map('n', 'tn0', '<Cmd>tabfirst<CR>', 'First')
+leader_map('n', 'tnh', '<Cmd>tabprevious<CR>', 'Left')
+leader_map('n', 'tnl', '<Cmd>tabnext<CR>', 'Right')
 
 ----------------------
 -- System clipboard --
