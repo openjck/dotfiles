@@ -52,6 +52,7 @@ leader_map(
   telescopeCustom.find_files_including_hidden,
   'Find project files'
 )
+leader_map('n', 'fs', telescopeBuiltin.planets, 'Find solar system')
 
 ------------------------
 -- Edit (as in :edit) --
