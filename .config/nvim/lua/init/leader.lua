@@ -46,7 +46,12 @@ end
 
 leader_map('n', 'fd', telescopeCustom.dotfiles, 'Find dotfiles')
 leader_map('n', 'fh', telescopeBuiltin.help_tags, 'Find help')
-leader_map('n', 'fp', telescopeBuiltin.find_files, 'Find project files')
+leader_map(
+  'n',
+  'fp',
+  telescopeCustom.find_files_including_hidden,
+  'Find project files'
+)
 
 ------------------------
 -- Edit (as in :edit) --
