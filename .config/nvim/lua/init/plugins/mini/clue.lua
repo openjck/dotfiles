@@ -4,6 +4,13 @@ local clue = require('mini.clue')
 --
 -- https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-clue.md#config-quick-start
 clue.setup({
+  window = {
+    config = {
+      -- Ensure the window is wide enough to show all text.
+      width = 'auto',
+    },
+  },
+
   triggers = {
     -- Leader triggers
     { mode = 'n', keys = '<Leader>' },
