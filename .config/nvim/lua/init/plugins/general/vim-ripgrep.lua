@@ -6,9 +6,9 @@ vim.g.rg_highlight = true
 -- Search hidden files.
 --
 -- It would be better to append to g:rg_command so that I could more reliably
--- preserve its options, but g:rg_command isn't set at this point for reasons I
--- don't understand. The vim-ripgrep/plugin/vim-ripgrep.vim file must be executed
--- after this file.
+-- preserve its options, but g:rg_command isn't set at this point for reasons
+-- I don't understand. The vim-ripgrep/plugin/vim-ripgrep.vim file must be
+-- executed after this file.
 vim.g.rg_command = 'rg --vimgrep --hidden'
 
 -- Search from the project root directory.
