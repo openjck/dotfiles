@@ -65,7 +65,15 @@ leader_map('n', 'ep', '<Cmd>previous<CR>', 'Previous')
 -- Go --
 --------
 
-leader_map('n', 'gd', vim.lsp.buf.definition, 'Definition')
+-- Open the definition of the symbol under the cursor _in a new tab_.
+--
+-- https://www.reddit.com/r/neovim/comments/1abayyi/comment/kjmlxah/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+leader_map(
+  'n',
+  'gd',
+  '<Cmd>tab split | lua vim.lsp.buf.definition()<CR>',
+  'Definition'
+)
 
 ----------
 -- Hide --
