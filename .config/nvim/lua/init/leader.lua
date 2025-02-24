@@ -61,11 +61,23 @@ leader_map('n', 'fs', telescopeBuiltin.planets, 'Solar system')
 leader_map('n', 'en', '<Cmd>next<CR>', 'Next')
 leader_map('n', 'ep', '<Cmd>previous<CR>', 'Previous')
 
+--------
+-- Go --
+--------
+
+leader_map('n', 'gd', vim.lsp.buf.definition, 'Definition')
+
 ----------
 -- Hide --
 ----------
 
 leader_map('n', 'hh', '<Cmd>nohlsearch<CR>', 'Highlights')
+
+------------
+-- Modify --
+------------
+
+leader_map('n', 'mr', vim.lsp.buf.rename, 'Rename')
 
 ----------
 -- Tabs --
@@ -93,6 +105,12 @@ leader_map('n', 'tm$', '<Cmd>tabmove $<CR>', 'Last')
 leader_map('n', 'tm0', '<Cmd>tabmove 0<CR>', 'First')
 leader_map('n', 'tmh', '<Cmd>-tabmove<CR>', 'Left')
 leader_map('n', 'tml', '<Cmd>+tabmove<CR>', 'Right')
+
+----------
+-- Show --
+----------
+
+leader_map('n', 'sh', vim.lsp.buf.hover, 'Hover')
 
 ----------------------
 -- System clipboard --

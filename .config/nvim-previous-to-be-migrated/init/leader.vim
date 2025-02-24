@@ -2,9 +2,6 @@
 " Go (movement) "
 """""""""""""""""
 
-" Mnemonic: Go definition
-nmap <Leader>gd <Plug>(ale_go_to_definition)
-
 " Mnemonic: Go issue first
 nmap <Leader>gif <Plug>(ale_first)
 
@@ -37,9 +34,6 @@ nmap <Leader>mf <Plug>(ale_fix)
 
 " Mnemonic: Modify move
 nnoremap <Leader>mm <Cmd>ALEFileRename<CR>
-
-" Mnemonic: Modify rename
-nnoremap <Leader>mr <Cmd>ALERename<CR>
 
 " Mnemonic: Modify suggest
 "
@@ -95,9 +89,6 @@ nnoremap <Leader>pc <Cmd>Reconfigure <Bar> PlugClean!<CR>
 
 " Mnemonic: Show documentation
 nmap <Leader>sd <Plug>(ale_documentation)
-
-" Mnemonic: Show hover
-nmap <Leader>sh <Plug>(ale_hover)
 
 " Mnemonic: Show message
 nmap <Leader>sm <Plug>(ale_detail)
