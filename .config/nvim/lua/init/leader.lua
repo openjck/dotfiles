@@ -8,10 +8,9 @@ local telescopeCustom = require('entities.telescope')
 -- behavior (moving forward one character) when "timeoutlen" expires. Rather,
 -- the clue window is opened when "timeoutlen" expires.
 --
--- With regard to "remaps", one should almost always disable remaps. An
--- exception to this rule is that mappings to "<Plug>" mappings should not use
--- "nore" commands because they are themselves mappings that need to be looked
--- up.
+-- One should almost always disable remaps. An exception is that mappings to
+-- "<Plug>" mappings should _enable_ remaps because they are themselves mappings
+-- that need to be looked up, so to speak.
 --
 -- I use "<Plug>" mappings as values whenever possible. I'm not completely
 -- convinced of the benefits of doing this, but it seems to be a best
@@ -44,21 +43,23 @@ end
 -- Find --
 ----------
 
+leader_map('n', 'fd', telescopeCustom.dotfiles, 'Dotfiles')
+leader_map('n', 'fh', telescopeBuiltin.help_tags, 'Help')
+leader_map('n', 'fs', telescopeBuiltin.planets, 'Solar system')
+
 leader_map(
   'n',
   'fc',
   telescopeCustom.find_files_including_hidden,
   'Current working directory files'
 )
-leader_map('n', 'fd', telescopeCustom.dotfiles, 'Dotfiles')
-leader_map('n', 'fh', telescopeBuiltin.help_tags, 'Help')
+
 leader_map(
   'n',
   'fp',
   telescopeCustom.git_files_including_untracked,
   'Project files'
 )
-leader_map('n', 'fs', telescopeBuiltin.planets, 'Solar system')
 
 ------------------------
 -- Edit (as in :edit) --
