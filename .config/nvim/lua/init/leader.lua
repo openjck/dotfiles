@@ -44,12 +44,18 @@ end
 -- Find --
 ----------
 
+leader_map(
+  'n',
+  'fc',
+  telescopeCustom.find_files_including_hidden,
+  'Current working directory files'
+)
 leader_map('n', 'fd', telescopeCustom.dotfiles, 'Dotfiles')
 leader_map('n', 'fh', telescopeBuiltin.help_tags, 'Help')
 leader_map(
   'n',
   'fp',
-  telescopeCustom.find_files_including_hidden,
+  telescopeCustom.git_files_including_untracked,
   'Project files'
 )
 leader_map('n', 'fs', telescopeBuiltin.planets, 'Solar system')
