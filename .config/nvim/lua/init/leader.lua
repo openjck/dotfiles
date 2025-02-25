@@ -119,6 +119,7 @@ leader_map('n', 'tml', '<Cmd>+tabmove<CR>', 'Right')
 ----------
 
 leader_map('n', 'sh', vim.lsp.buf.hover, 'Hover')
+leader_map('n', 'sr', vim.lsp.buf.references, 'References')
 
 ----------------------
 -- System clipboard --

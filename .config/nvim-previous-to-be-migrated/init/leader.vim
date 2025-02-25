@@ -93,9 +93,6 @@ nmap <Leader>sd <Plug>(ale_documentation)
 " Mnemonic: Show message
 nmap <Leader>sm <Plug>(ale_detail)
 
-" Mnemonic: Show usages
-nnoremap <Leader>su <Plug>(ale_find_references)
-
 """""""""
 " Utils "
 """""""""
