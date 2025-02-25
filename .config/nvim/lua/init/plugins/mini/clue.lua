@@ -12,16 +12,28 @@ clue.setup({
   },
 
   triggers = {
+    -- Show the clue window when the square bracket keys are pressed.
+    -- mini.bracketed provides functionality (and clues!) for brackets.
+    { mode = 'n', keys = '[' },
+    { mode = 'n', keys = ']' },
+
     -- Show the clue window when the "<Leader>" key is pressed.
     { mode = 'n', keys = '<Leader>' },
     { mode = 'x', keys = '<Leader>' },
 
-    -- Show the clue window for built-in completion.
-    { mode = 'i', keys = '<C-x>' },
-
     -- Show the clue window when the "g" key is pressed.
     { mode = 'n', keys = 'g' },
     { mode = 'x', keys = 'g' },
+
+    -- Show the clue window when the "z" key is pressed.
+    { mode = 'n', keys = 'z' },
+    { mode = 'x', keys = 'z' },
+
+    -- Show the clue window when the "<C-w>" keystroke is pressed.
+    { mode = 'n', keys = '<C-w>' },
+
+    -- Show the clue window for built-in completion.
+    { mode = 'i', keys = '<C-x>' },
 
     -- Show the clue window for marks.
     { mode = 'n', keys = "'" },
@@ -34,22 +46,15 @@ clue.setup({
     { mode = 'x', keys = '"' },
     { mode = 'i', keys = '<C-r>' },
     { mode = 'c', keys = '<C-r>' },
-
-    -- Show the clue window when the "<C-w>" keystroke is pressed.
-    { mode = 'n', keys = '<C-w>' },
-
-    -- Show the clue window when the "z" key is pressed.
-    { mode = 'n', keys = 'z' },
-    { mode = 'x', keys = 'z' },
   },
 
   clues = {
-    clue.gen_clues.builtin_completion(),
     clue.gen_clues.g(),
+    clue.gen_clues.z(),
+    clue.gen_clues.windows(),
+    clue.gen_clues.builtin_completion(),
     clue.gen_clues.marks(),
     clue.gen_clues.registers(),
-    clue.gen_clues.windows(),
-    clue.gen_clues.z(),
 
     -- Add clues for <Leader> mappings.
     { mode = 'n', keys = '<Leader>e', desc = 'Edit' },
