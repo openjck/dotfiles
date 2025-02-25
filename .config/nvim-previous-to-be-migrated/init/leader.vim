@@ -9,12 +9,18 @@ nmap <Leader>gif <Plug>(ale_first)
 nmap <Leader>gil <Plug>(ale_last)
 
 " Mnemonic: Go issue next
+"
+" vim.lsp.diagnostic.goto_next?
 nmap <Leader>gin <Plug>(ale_next_wrap)
 
 " Mnemonic: Go issue previous
+"
+" vim.lsp.diagnostic.goto_prev?
 nmap <Leader>gip <Plug>(ale_previous_wrap)
 
 " Mnemonic: Go type
+"
+" vim.lsp.buf.type_definition?
 nmap <Leader>gt <Plug>(ale_go_to_type_definition)
 
 """"""""""""""""
@@ -91,6 +97,8 @@ nnoremap <Leader>pc <Cmd>Reconfigure <Bar> PlugClean!<CR>
 nmap <Leader>sd <Plug>(ale_documentation)
 
 " Mnemonic: Show message
+"
+" Is this comparable to vim.lsp.diagnostic.show_line_diagnostics
 nmap <Leader>sm <Plug>(ale_detail)
 
 """""""""
