@@ -17,6 +17,10 @@ clue.setup({
     { mode = 'n', keys = '[' },
     { mode = 'n', keys = ']' },
 
+    -- Show the clue window when the backslash is pressed. mini.basics provides
+    -- functionality (and clues!) for the backslash.
+    { mode = 'n', keys = '\\' },
+
     -- Show the clue window when the "<Leader>" key is pressed.
     { mode = 'n', keys = '<Leader>' },
     { mode = 'x', keys = '<Leader>' },
