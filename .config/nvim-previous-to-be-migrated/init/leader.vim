@@ -96,11 +96,6 @@ nnoremap <Leader>pc <Cmd>Reconfigure <Bar> PlugClean!<CR>
 " Mnemonic: Show documentation
 nmap <Leader>sd <Plug>(ale_documentation)
 
-" Mnemonic: Show message
-"
-" Is this comparable to vim.lsp.diagnostic.show_line_diagnostics
-nmap <Leader>sm <Plug>(ale_detail)
-
 """""""""
 " Utils "
 """""""""
