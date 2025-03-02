@@ -1,13 +1,16 @@
--- No colorscheme is perfect, but nightfox has some of the best trade-offs among
--- colorschemes I've tried. Some of the most important attributes include:
+-- When choosing a colorscheme, but the following characteristics are important
+-- to me:
 --
 --   * The "MiniHipatternsFixme", "MiniHipatternsTodo", and "MiniHipatternsHack"
 --     highlight groups from mini.hipatterns render nicely.
---   * When mini.cursorword is being used, the word under the cursor is shown
---     with a differently-colored background rather than an underline, which
---     I prefer.
+--   * Diffs are easy to read, with diff sections (additions, removals, changes)
+--     being easily identifiable.
 --   * LSP hovers (e.g., vim.lsp.hover) stand out clearly.
-vim.cmd.colorscheme('nightfox')
+--   * Completion hovers (e.g., CTRL-N) stand out clearly.
+--   * Ideally, when mini.cursorword is being used, the word under the cursor is
+--     shown with a differently-colored background rather than with an
+--     underline.
+vim.cmd.colorscheme('monokai-pro')
 
 -- Highlight the column whose position is 1 greater than the value of
 -- "textwidth".
