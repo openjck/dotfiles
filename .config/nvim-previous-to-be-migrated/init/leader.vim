@@ -18,11 +18,6 @@ nmap <Leader>gin <Plug>(ale_next_wrap)
 " vim.lsp.diagnostic.goto_prev?
 nmap <Leader>gip <Plug>(ale_previous_wrap)
 
-" Mnemonic: Go type
-"
-" vim.lsp.buf.type_definition?
-nmap <Leader>gt <Plug>(ale_go_to_type_definition)
-
 """"""""""""""""
 " Modification "
 """"""""""""""""

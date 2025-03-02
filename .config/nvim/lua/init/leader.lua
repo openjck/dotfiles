@@ -72,14 +72,24 @@ leader_map('n', 'ep', '<Cmd>previous<CR>', 'Previous')
 -- Go --
 --------
 
--- Open the definition of the symbol under the cursor _in a new tab_.
+-- These mappings got to the relevant code in a new tab. The following Reddit
+-- answer explained to me how it can be done.
 --
--- https://www.reddit.com/r/neovim/comments/1abayyi/comment/kjmlxah/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+-- https://www.reddit.com/r/neovim/comments/1abayyi/comment/kjmlxah/
+
+
 leader_map(
   'n',
   'gd',
   '<Cmd>tab split | lua vim.lsp.buf.definition()<CR>',
   'Definition'
+)
+
+leader_map(
+  'n',
+  'gt',
+  '<Cmd>tab split | lua vim.lsp.buf.type_definition()<CR>',
+  'Type'
 )
 
 ----------
