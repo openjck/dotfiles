@@ -2,6 +2,10 @@
 " Go (movement) "
 """""""""""""""""
 
+" For now it might make sense to keep these as-is, so that they use ale, but
+" also create a new <Leader>gd namespace for "go to diagnostic", using the
+" functions listed in comments below.
+
 " Mnemonic: Go issue first
 nmap <Leader>gif <Plug>(ale_first)
 
