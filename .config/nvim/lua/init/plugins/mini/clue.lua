@@ -64,11 +64,13 @@ clue.setup({
     { mode = 'n', keys = '<Leader>e', desc = 'Edit' },
     { mode = 'n', keys = '<Leader>f', desc = 'Find' },
     { mode = 'n', keys = '<Leader>g', desc = 'Go' },
+      { mode = 'n', keys = '<Leader>gg', desc = 'Dia(g)nostic' },
+      { mode = 'n', keys = '<Leader>gl', desc = 'Linter' },
     { mode = 'n', keys = '<Leader>h', desc = 'Hide' },
     { mode = 'n', keys = '<Leader>m', desc = 'Modify' },
     { mode = 'n', keys = '<Leader>s', desc = 'Show' },
     { mode = 'n', keys = '<Leader>t', desc = 'Tabs' },
-    { mode = 'n', keys = '<Leader>tm', desc = 'Move' },
+      { mode = 'n', keys = '<Leader>tm', desc = 'Move' },
 
     -- Enable submode support for "Tab move" <Leader> mappings.
     { mode = 'n', keys = '<Leader>tm$', postkeys = '<Leader>tm' },

@@ -25,7 +25,7 @@ local telescopeCustom = require('entities.telescope')
 --
 -- Taking "modes" as the first parameter and "keys" as the second parameter
 -- allows mappings to be sorted alphabetically first by mode(s), then by keys.
-function leader_map(modes, keys, action, description, remap)
+local function leader_map(modes, keys, action, description, remap)
   remap = remap or false
 
   vim.keymap.set(
@@ -72,11 +72,10 @@ leader_map('n', 'ep', '<Cmd>previous<CR>', 'Previous')
 -- Go --
 --------
 
--- These mappings got to the relevant code in a new tab. The following Reddit
--- answer explained to me how it can be done.
+-- Some of these mappings go to the relevant code in a new tab. The following
+-- Reddit answer explained to me how it can be done.
 --
 -- https://www.reddit.com/r/neovim/comments/1abayyi/comment/kjmlxah/
-
 
 leader_map(
   'n',
@@ -91,6 +90,16 @@ leader_map(
   '<Cmd>tab split | lua vim.lsp.buf.type_definition()<CR>',
   'Type'
 )
+
+-- Set up mappings for LSP diagnostics.
+leader_map('n', 'ggn', vim.diagnostic.goto_next, 'Next')
+leader_map('n', 'ggp', vim.diagnostic.goto_prev, 'Previous')
+
+-- Set up mappings for linter issues.
+leader_map('n', 'glf', '<Plug>(ale_first)', 'First', true)
+leader_map('n', 'gll', '<Plug>(ale_last)', 'Last', true)
+leader_map('n', 'gln', '<Plug>(ale_next_wrap)', 'Next', true)
+leader_map('n', 'glp', '<Plug>(ale_previous_wrap)', 'Previous', true)
 
 ----------
 -- Hide --
@@ -125,7 +134,7 @@ leader_map('n', 'tl', '<Cmd>tabnext<CR>', 'Right')
 leader_map('n', 'tn', '<Cmd>tabnew<CR>', 'New')
 leader_map('n', 'tx', '<Cmd>tabclose<CR>', 'Close')
 
--- Set up <Leader> mappings for "Tab move" submode.
+-- Set up mappings for the "Tab move" submode.
 leader_map('n', 'tm$', '<Cmd>tabmove $<CR>', 'Last')
 leader_map('n', 'tm0', '<Cmd>tabmove 0<CR>', 'First')
 leader_map('n', 'tmh', '<Cmd>-tabmove<CR>', 'Left')

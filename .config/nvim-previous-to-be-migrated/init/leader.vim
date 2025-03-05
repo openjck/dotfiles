@@ -1,27 +1,3 @@
-"""""""""""""""""
-" Go (movement) "
-"""""""""""""""""
-
-" For now it might make sense to keep these as-is, so that they use ale, but
-" also create a new <Leader>gd namespace for "go to diagnostic", using the
-" functions listed in comments below.
-
-" Mnemonic: Go issue first
-nmap <Leader>gif <Plug>(ale_first)
-
-" Mnemonic: Go issue last
-nmap <Leader>gil <Plug>(ale_last)
-
-" Mnemonic: Go issue next
-"
-" vim.lsp.diagnostic.goto_next?
-nmap <Leader>gin <Plug>(ale_next_wrap)
-
-" Mnemonic: Go issue previous
-"
-" vim.lsp.diagnostic.goto_prev?
-nmap <Leader>gip <Plug>(ale_previous_wrap)
-
 """"""""""""""""
 " Modification "
 """"""""""""""""
