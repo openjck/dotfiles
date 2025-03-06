@@ -138,7 +138,7 @@ leader_map('n', 'tml', '<Cmd>+tabmove<CR>', 'Right')
 -- Show --
 ----------
 
-leader_map('n', 'sh', vim.lsp.buf.hover, 'Hover')
+leader_map('n', 'sd', vim.lsp.buf.hover, 'Documentation')
 leader_map('n', 'sm', vim.diagnostic.open_float, 'Message')
 leader_map('n', 'sr', vim.lsp.buf.references, 'References')
 

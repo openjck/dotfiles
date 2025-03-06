@@ -64,13 +64,6 @@ nnoremap <Leader>pi <Cmd>Reconfigure <Bar> PlugInstall<CR>
 " Mnemonic: Plugins clean
 nnoremap <Leader>pc <Cmd>Reconfigure <Bar> PlugClean!<CR>
 
-""""""""
-" Show "
-""""""""
-
-" Mnemonic: Show documentation
-nmap <Leader>sd <Plug>(ale_documentation)
-
 """""""""
 " Utils "
 """""""""
