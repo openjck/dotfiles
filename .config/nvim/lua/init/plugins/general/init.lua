@@ -1,4 +1,3 @@
-require('init.plugins.general.ale')
 require('init.plugins.general.neogit')
 require('init.plugins.general.tabline')
 require('init.plugins.general.telescope')

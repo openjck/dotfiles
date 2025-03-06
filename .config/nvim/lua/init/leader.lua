@@ -92,14 +92,8 @@ leader_map(
 )
 
 -- Set up mappings for LSP diagnostics.
-leader_map('n', 'ggn', vim.diagnostic.goto_next, 'Next')
-leader_map('n', 'ggp', vim.diagnostic.goto_prev, 'Previous')
-
--- Set up mappings for linter issues.
-leader_map('n', 'glf', '<Plug>(ale_first)', 'First', true)
-leader_map('n', 'gll', '<Plug>(ale_last)', 'Last', true)
-leader_map('n', 'gln', '<Plug>(ale_next_wrap)', 'Next', true)
-leader_map('n', 'glp', '<Plug>(ale_previous_wrap)', 'Previous', true)
+leader_map('n', 'gin', vim.diagnostic.goto_next, 'Next')
+leader_map('n', 'gip', vim.diagnostic.goto_prev, 'Previous')
 
 ----------
 -- Hide --
