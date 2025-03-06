@@ -91,7 +91,7 @@ leader_map(
   'Type'
 )
 
--- Set up mappings for LSP diagnostics.
+-- Set up mappings for issues (e.g., linter issues and other diagnostic issues).
 leader_map('n', 'gin', vim.diagnostic.goto_next, 'Next')
 leader_map('n', 'gip', vim.diagnostic.goto_prev, 'Previous')
 
@@ -107,9 +107,9 @@ leader_map('n', 'hh', '<Cmd>nohlsearch<CR>', 'Highlights')
 
 leader_map('n', 'mr', vim.lsp.buf.rename, 'Rename')
 
-----------
--- Tabs --
-----------
+---------
+-- Tab --
+---------
 
 for number = 1, 9 do
   leader_map(
