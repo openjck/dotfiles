@@ -13,9 +13,6 @@ nmap <Leader>mi <Cmd>echo "Not supported."<CR>
 " Mnemonic: Modify fix
 nmap <Leader>mf <Plug>(ale_fix)
 
-" Mnemonic: Modify move
-nnoremap <Leader>mm <Cmd>ALEFileRename<CR>
-
 " Mnemonic: Modify suggest
 "
 " This is supported in JetBrains IDEs, but not in Neovim. In JetBrains IDEs, it
