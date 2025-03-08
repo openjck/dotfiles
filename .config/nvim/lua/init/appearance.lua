@@ -1,15 +1,13 @@
--- When choosing a colorscheme, but the following characteristics are important
--- to me:
+-- When choosing a colorscheme, I especially care about the appearance of the
+-- following:
 --
---   * The "MiniHipatternsFixme", "MiniHipatternsTodo", and "MiniHipatternsHack"
---     highlight groups from mini.hipatterns render nicely.
---   * Diffs are easy to read, with diff sections (additions, removals, changes)
---     being easily identifiable.
---   * LSP hovers (e.g., vim.lsp.hover) stand out clearly.
---   * Completion hovers (e.g., CTRL-N) stand out clearly.
---   * Ideally, when mini.cursorword is being used, the word under the cursor is
---     shown with a differently-colored background rather than with an
---     underline.
+--   * Completion hovers (e.g., CTRL-N in normal mode)
+--   * Diffs
+--   * Document highlights (see document-highlight.lua)
+--   * Git commit messages, while being authored
+--   * LSP hovers (e.g., vim.lsp.buf.hover)
+--   * The patterns highlighted by mini.hipatterns
+--   * The telescope search window
 vim.cmd.colorscheme('monokai-pro')
 
 -- Highlight the column whose position is 1 greater than the value of
