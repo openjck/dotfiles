@@ -68,6 +68,7 @@ clue.setup({
     { mode = 'n', keys = '<Leader>h', desc = 'Hide' },
     { mode = 'n', keys = '<Leader>m', desc = 'Modify' },
     { mode = 'n', keys = '<Leader>s', desc = 'Show' },
+      { mode = 'n', keys = '<Leader>st', desc = 'Types' },
     { mode = 'n', keys = '<Leader>t', desc = 'Tab' },
       { mode = 'n', keys = '<Leader>tm', desc = 'Move' },
 

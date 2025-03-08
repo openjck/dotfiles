@@ -77,6 +77,16 @@ leader_map('n', 'ep', '<Cmd>previous<CR>', 'Previous')
 --
 -- https://www.reddit.com/r/neovim/comments/1abayyi/comment/kjmlxah/
 
+-- According to Neovim's LSP documentation, many language servers don't
+-- implement this method. Neovim suggests using vim.lsp.buf.definition() (see
+-- below) in those cases.
+leader_map(
+  'n',
+  'gc',
+  '<Cmd>tab split | lua vim.lsp.buf.declaration()<CR>',
+  'De(c)laration'
+)
+
 leader_map(
   'n',
   'gd',
@@ -91,7 +101,8 @@ leader_map(
   'Type'
 )
 
--- Set up mappings for issues (e.g., linter issues and other diagnostic issues).
+-- Set up mappings for going to issues (e.g., linter issues and other diagnostic
+-- issues).
 leader_map('n', 'gin', vim.diagnostic.goto_next, 'Next')
 leader_map('n', 'gip', vim.diagnostic.goto_prev, 'Previous')
 
@@ -105,7 +116,9 @@ leader_map('n', 'hh', '<Cmd>nohlsearch<CR>', 'Highlights')
 -- Modify --
 ------------
 
+leader_map('n', 'mf', vim.lsp.buf.format, 'Format')
 leader_map('n', 'mr', vim.lsp.buf.rename, 'Rename')
+leader_map('n', 'ms', vim.lsp.buf.code_action, 'Suggest')
 
 ---------
 -- Tab --
@@ -139,8 +152,26 @@ leader_map('n', 'tml', '<Cmd>+tabmove<CR>', 'Right')
 ----------
 
 leader_map('n', 'sd', vim.lsp.buf.hover, 'Documentation')
+leader_map('n', 'si', vim.lsp.buf.incoming_calls, 'Incoming calls')
 leader_map('n', 'sm', vim.diagnostic.open_float, 'Message')
+leader_map('n', 'sp', vim.lsp.buf.implementation, 'Im(p)lementation')
+leader_map('n', 'so', vim.lsp.buf.outgoing_calls, 'Outgoing calls')
 leader_map('n', 'sr', vim.lsp.buf.references, 'References')
+leader_map('n', 'ss', vim.lsp.buf.signature_help, 'Signature')
+
+-- Set up mappings for showing type hierarchy.
+leader_map(
+  'n',
+  'stj',
+  '<Cmd>vim.lsp.buf.typehierarchy("subtypes")<CR>',
+  'Subtypes'
+)
+leader_map(
+  'n',
+  'stk',
+  '<Cmd>vim.lsp.buf.typehierarchy("supertypes")<CR>' ,
+  'Supertypes'
+)
 
 ----------------------
 -- System clipboard --
