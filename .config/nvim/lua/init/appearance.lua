@@ -8,7 +8,7 @@
 --   * LSP hovers (e.g., vim.lsp.buf.hover)
 --   * The patterns highlighted by mini.hipatterns
 --   * The telescope search window
-vim.cmd.colorscheme('monokai-pro')
+vim.cmd.colorscheme('onedark')
 
 -- Highlight the column whose position is 1 greater than the value of
 -- "textwidth".

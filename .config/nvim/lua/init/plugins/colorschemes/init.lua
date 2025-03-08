@@ -1,5 +1,6 @@
 require('init.plugins.colorschemes.catppuccin')
 require('init.plugins.colorschemes.halcyon')
+require('init.plugins.colorschemes.jellybeans')
 require('init.plugins.colorschemes.monokai-pro')
 require('init.plugins.colorschemes.nightfox')
 require('init.plugins.colorschemes.onedark')
