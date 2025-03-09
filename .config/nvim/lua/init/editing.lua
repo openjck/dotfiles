@@ -30,3 +30,26 @@ vim.opt.fixendofline = false
 -- trade-off because I find working with a positive number that's preceded by
 -- a dash is more common than working with a number that's actually negative.
 vim.opt.nrformats:append('unsigned')
+
+-- For all file types:
+--
+--   c: Automatically wrap comments while writing them, inserting the comment
+--      character at the beginning of each line.
+--   r: Automatically insert the comment character at the beginning of a newly
+--      created line when hitting <Enter> in insert mode.
+--   o: Automatically insert the comment character at the beginning of a newly
+--      created line when hitting "o" or "O" in normal mode.
+--
+-- If a comment character is automatically inserted but not wanted, type CTRL-U
+-- to remove it. I was using Vim/Neovim for about 15 years before I discovered
+-- this.
+--
+-- If enabling these format options for all filetypes has unintended
+-- consequences, I should at least enable them for the following filetypes,
+-- which for some reason, unlike most filetypes, do not get them by default:
+--
+--   - tmux
+--
+-- I can achieve that by putting these same lines in a file named
+-- after/ftplugin/<filetype>.lua file.
+vim.opt.formatoptions:append('cro')
