@@ -213,4 +213,5 @@ leader_map('n', 'tml', '<Cmd>+tabmove<CR>', 'Right')
 -- Utils --
 -----------
 
+leader_map('n', 'un', vim.cmd.Neogit, 'Neogit')
 leader_map('n', 'uu', vim.cmd.MundoToggle, 'Undo')
