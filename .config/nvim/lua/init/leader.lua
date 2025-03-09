@@ -65,8 +65,8 @@ leader_map(
 -- Edit (as in :edit) --
 ------------------------
 
-leader_map('n', 'en', '<Cmd>next<CR>', 'Next')
-leader_map('n', 'ep', '<Cmd>previous<CR>', 'Previous')
+leader_map('n', 'en', vim.cmd.next, 'Next')
+leader_map('n', 'ep', vim.cmd.previous, 'Previous')
 
 --------
 -- Go --
@@ -110,7 +110,7 @@ leader_map('n', 'gip', vim.diagnostic.goto_prev, 'Previous')
 -- Hide --
 ----------
 
-leader_map('n', 'hh', '<Cmd>nohlsearch<CR>', 'Highlights')
+leader_map('n', 'hh', vim.cmd.nohlsearch, 'Highlights')
 
 ------------
 -- Modify --
@@ -136,7 +136,7 @@ leader_map({ 'n', 'x' }, 'miv', '<Cmd>Refactor inline_var<CR>', 'Variable')
 -- Neovim --
 ------------
 
-leader_map('n', 'nr', '<Cmd>Reconfigure<CR>', 'Reconfigure')
+leader_map('n', 'nr', vim.cmd.Reconfigure, 'Reconfigure')
 
 ----------
 -- Show --
@@ -195,13 +195,13 @@ for number = 1, 9 do
   )
 end
 
-leader_map('n', 't$', '<Cmd>tablast<CR>', 'Last')
-leader_map('n', 't0', '<Cmd>tabfirst<CR>', 'First')
-leader_map('n', 'te', '<Cmd>tabonly<CR>', 'Exclusive (close all others)')
-leader_map('n', 'th', '<Cmd>tabprevious<CR>', 'Left')
-leader_map('n', 'tl', '<Cmd>tabnext<CR>', 'Right')
-leader_map('n', 'tn', '<Cmd>tabnew<CR>', 'New')
-leader_map('n', 'tx', '<Cmd>tabclose<CR>', 'Close')
+leader_map('n', 't$', vim.cmd.tablast, 'Last')
+leader_map('n', 't0', vim.cmd.tabfirst, 'First')
+leader_map('n', 'te', vim.cmd.tabonly, 'Exclusive (close all others)')
+leader_map('n', 'th', vim.cmd.tabprevious, 'Left')
+leader_map('n', 'tl', vim.cmd.tabnext, 'Right')
+leader_map('n', 'tn', vim.cmd.tabnew, 'New')
+leader_map('n', 'tx', vim.cmd.tabclose, 'Close')
 
 -- Set up mappings for the "Tab move" submode.
 leader_map('n', 'tm$', '<Cmd>tabmove $<CR>', 'Last')
