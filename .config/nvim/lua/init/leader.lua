@@ -138,33 +138,6 @@ leader_map({ 'n', 'x' }, 'miv', '<Cmd>Refactor inline_var<CR>', 'Variable')
 
 leader_map('n', 'nr', '<Cmd>Reconfigure<CR>', 'Reconfigure')
 
----------
--- Tab --
----------
-
-for number = 1, 9 do
-  leader_map(
-    'n',
-    string.format('t%d', number),
-    string.format('<Cmd>tabnext %d<CR>', number),
-    string.format('Tab %d', number)
-  )
-end
-
-leader_map('n', 't$', '<Cmd>tablast<CR>', 'Last')
-leader_map('n', 't0', '<Cmd>tabfirst<CR>', 'First')
-leader_map('n', 'te', '<Cmd>tabonly<CR>', 'Exclusive (close all others)')
-leader_map('n', 'th', '<Cmd>tabprevious<CR>', 'Left')
-leader_map('n', 'tl', '<Cmd>tabnext<CR>', 'Right')
-leader_map('n', 'tn', '<Cmd>tabnew<CR>', 'New')
-leader_map('n', 'tx', '<Cmd>tabclose<CR>', 'Close')
-
--- Set up mappings for the "Tab move" submode.
-leader_map('n', 'tm$', '<Cmd>tabmove $<CR>', 'Last')
-leader_map('n', 'tm0', '<Cmd>tabmove 0<CR>', 'First')
-leader_map('n', 'tmh', '<Cmd>-tabmove<CR>', 'Left')
-leader_map('n', 'tml', '<Cmd>+tabmove<CR>', 'Right')
-
 ----------
 -- Show --
 ----------
@@ -208,6 +181,33 @@ leader_map('n', 'P', '"+P', 'Paste above from system clipboard')
 leader_map('n', 'p', '"+p', 'Paste below from system clipboard')
 leader_map('x', 'd', '"+d', 'Delete (cut) to system clipboard')
 leader_map('x', 'y', '"+y', 'Yank (copy) to system clipboard')
+
+---------
+-- Tab --
+---------
+
+for number = 1, 9 do
+  leader_map(
+    'n',
+    string.format('t%d', number),
+    string.format('<Cmd>tabnext %d<CR>', number),
+    string.format('Tab %d', number)
+  )
+end
+
+leader_map('n', 't$', '<Cmd>tablast<CR>', 'Last')
+leader_map('n', 't0', '<Cmd>tabfirst<CR>', 'First')
+leader_map('n', 'te', '<Cmd>tabonly<CR>', 'Exclusive (close all others)')
+leader_map('n', 'th', '<Cmd>tabprevious<CR>', 'Left')
+leader_map('n', 'tl', '<Cmd>tabnext<CR>', 'Right')
+leader_map('n', 'tn', '<Cmd>tabnew<CR>', 'New')
+leader_map('n', 'tx', '<Cmd>tabclose<CR>', 'Close')
+
+-- Set up mappings for the "Tab move" submode.
+leader_map('n', 'tm$', '<Cmd>tabmove $<CR>', 'Last')
+leader_map('n', 'tm0', '<Cmd>tabmove 0<CR>', 'First')
+leader_map('n', 'tmh', '<Cmd>-tabmove<CR>', 'Left')
+leader_map('n', 'tml', '<Cmd>+tabmove<CR>', 'Right')
 
 -----------
 -- Utils --
