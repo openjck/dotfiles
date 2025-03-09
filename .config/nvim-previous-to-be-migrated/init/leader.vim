@@ -13,13 +13,6 @@ nmap <Leader>mi <Cmd>echo "Not supported."<CR>
 " Mnemonic: Modify fix
 nmap <Leader>mf <Plug>(ale_fix)
 
-" Mnemonic: Modify suggest
-"
-" This is supported in JetBrains IDEs, but not in Neovim. In JetBrains IDEs, it
-" opens up a menu of suggested changes, but as far as I know, there is no
-" analogue for this in ale.
-nnoremap <Leader>ms <Cmd>echo "Not supported."<CR>
-
 """"""""""
 " Neovim "
 """"""""""
