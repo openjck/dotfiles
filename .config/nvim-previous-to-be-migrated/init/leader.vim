@@ -1,16 +1,3 @@
-""""""""
-" Open "
-""""""""
-
-" Mnemonic: Open scratch
-"
-" Note that this does not open a true scratch buffer. It's my understanding that
-" scratch buffers in Neovim don't prompt for saving when they are closed,
-" although I find the scratch buffer documentation to be confusing on this
-" point. I'd prefer that my "scratch" buffer _does_ prompt for saving so that I
-" don't accidentally lose anything important.
-nnoremap <Leader>os <Cmd>vnew<CR>
-
 """""""""""
 " Plugins "
 """""""""""
