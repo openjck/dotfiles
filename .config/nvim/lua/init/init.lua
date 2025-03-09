@@ -7,6 +7,7 @@ require('init.plugins')
 -- Load general configurations.
 require('init.appearance')
 require('init.autocmds')
+require('init.commands')
 require('init.diff')
 require('init.editing')
 require('init.keys')
