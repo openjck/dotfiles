@@ -197,11 +197,11 @@ end
 
 leader_map('n', 't$', vim.cmd.tablast, 'Last')
 leader_map('n', 't0', vim.cmd.tabfirst, 'First')
+leader_map('n', 'tc', vim.cmd.tabclose, 'Close')
 leader_map('n', 'te', vim.cmd.tabonly, 'Exclusive (close all others)')
 leader_map('n', 'th', vim.cmd.tabprevious, 'Left')
 leader_map('n', 'tl', vim.cmd.tabnext, 'Right')
 leader_map('n', 'tn', vim.cmd.tabnew, 'New')
-leader_map('n', 'tx', vim.cmd.tabclose, 'Close')
 
 -- Set up mappings for the "Tab move" submode.
 leader_map('n', 'tm$', '<Cmd>tabmove $<CR>', 'Last')
