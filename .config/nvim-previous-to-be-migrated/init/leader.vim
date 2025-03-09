@@ -5,13 +5,6 @@
 " Mnemonic: Modify fix
 nmap <Leader>mf <Plug>(ale_fix)
 
-""""""""""
-" Neovim "
-""""""""""
-
-" Mnemonic: Neovim reconfigure
-nnoremap <Leader>nr <Cmd>Reconfigure<CR>
-
 """"""""
 " Open "
 """"""""

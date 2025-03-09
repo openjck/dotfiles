@@ -132,6 +132,12 @@ leader_map('x', 'mev', ':Refactor extract_var ', 'Variable')
 leader_map( 'n', 'mif', '<Cmd>Refactor inline_func<CR>', 'Function')
 leader_map({ 'n', 'x' }, 'miv', '<Cmd>Refactor inline_var<CR>', 'Variable')
 
+------------
+-- Neovim --
+------------
+
+leader_map('n', 'nr', '<Cmd>Reconfigure<CR>', 'Reconfigure')
+
 ---------
 -- Tab --
 ---------
