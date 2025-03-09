@@ -208,3 +208,9 @@ leader_map('n', 'P', '"+P', 'Paste above from system clipboard')
 leader_map('n', 'p', '"+p', 'Paste below from system clipboard')
 leader_map('x', 'd', '"+d', 'Delete (cut) to system clipboard')
 leader_map('x', 'y', '"+y', 'Yank (copy) to system clipboard')
+
+-----------
+-- Utils --
+-----------
+
+leader_map('n', 'uu', vim.cmd.MundoToggle, 'Undo')

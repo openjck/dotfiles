@@ -76,6 +76,7 @@ clue.setup({
       { mode = 'n', keys = '<Leader>st', desc = 'Types' },
     { mode = 'n', keys = '<Leader>t', desc = 'Tab' },
       { mode = 'n', keys = '<Leader>tm', desc = 'Move' },
+    { mode = 'n', keys = '<Leader>u', desc = 'Util' },
 
     -- Enable submode support for "Tab move" <Leader> mappings.
     { mode = 'n', keys = '<Leader>tm$', postkeys = '<Leader>tm' },
