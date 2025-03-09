@@ -120,6 +120,18 @@ leader_map('n', 'mf', vim.lsp.buf.format, 'Format')
 leader_map('n', 'mr', vim.lsp.buf.rename, 'Rename')
 leader_map('n', 'ms', vim.lsp.buf.code_action, 'Suggest')
 
+-- Set up mappings for extracting.
+--
+-- These mappings should _not_ use "<Cmd>" and "<CR>" because a name needs to be
+-- typed in before executing this command, and "<Cmd>" cannot be used unless
+-- "<CR>" is also used.
+leader_map('x', 'mef', ':Refactor extract ', 'Function')
+leader_map('x', 'mev', ':Refactor extract_var ', 'Variable')
+
+-- Set up mappings for inlining.
+leader_map( 'n', 'mif', '<Cmd>Refactor inline_func<CR>', 'Function')
+leader_map({ 'n', 'x' }, 'miv', '<Cmd>Refactor inline_var<CR>', 'Variable')
+
 ---------
 -- Tab --
 ---------

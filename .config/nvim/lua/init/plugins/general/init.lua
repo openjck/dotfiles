@@ -1,4 +1,5 @@
 require('init.plugins.general.neogit')
+require('init.plugins.general.refactoring')
 require('init.plugins.general.tabline')
 require('init.plugins.general.telescope')
 require('init.plugins.general.vim-abolish')

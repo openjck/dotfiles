@@ -2,19 +2,6 @@
 " Modification "
 """"""""""""""""
 
-" Mnemonic: Modify inline
-"
-" This is supported in JetBrains IDEs, but not in Neovim. In JetBrains IDEs, it
-" inlines a variable or function (i.e., replaces the variable/function with its
-" value/implementation), but as far as I know, there is no analogue for this in
-" ale.
-"
-" LSP doesn't appear to provide a way to do this, but this plugin claims to be
-" able to do it:
-"
-" https://github.com/ThePrimeagen/refactoring.nvim
-nmap <Leader>mi <Cmd>echo "Not supported."<CR>
-
 " Mnemonic: Modify fix
 nmap <Leader>mf <Plug>(ale_fix)
 
