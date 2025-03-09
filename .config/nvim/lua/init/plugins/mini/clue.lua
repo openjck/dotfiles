@@ -61,6 +61,7 @@ clue.setup({
     clue.gen_clues.registers(),
 
     -- Add clues for <Leader> mappings.
+    { mode = 'n', keys = '<Leader>d', desc = 'Dependencies (plugins)' },
     { mode = 'n', keys = '<Leader>e', desc = 'Edit' },
     { mode = 'n', keys = '<Leader>f', desc = 'Find' },
     { mode = 'n', keys = '<Leader>g', desc = 'Go' },

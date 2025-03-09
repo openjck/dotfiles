@@ -39,6 +39,23 @@ local function leader_map(modes, keys, action, description, remap)
   )
 end
 
+----------------------------
+-- Dependencies (plugins) --
+----------------------------
+
+-- In these maps, "Reconfigure" is run first to ensure mini.deps picks up on the
+-- latest plugin configuration before acting on plugins.
+
+leader_map('n', 'dc', '<Cmd>Reconfigure <Bar> DepsClean!<CR>', 'Clean')
+leader_map('n', 'du', '<Cmd>Reconfigure <Bar> DepsUpdate!<CR>', 'Update')
+
+------------------------
+-- Edit (as in :edit) --
+------------------------
+
+leader_map('n', 'en', vim.cmd.next, 'Next')
+leader_map('n', 'ep', vim.cmd.previous, 'Previous')
+
 ----------
 -- Find --
 ----------
@@ -60,13 +77,6 @@ leader_map(
   telescopeCustom.git_files_including_untracked,
   'Project files'
 )
-
-------------------------
--- Edit (as in :edit) --
-------------------------
-
-leader_map('n', 'en', vim.cmd.next, 'Next')
-leader_map('n', 'ep', vim.cmd.previous, 'Previous')
 
 --------
 -- Go --
