@@ -35,9 +35,16 @@ Follow these steps to install _all_ of these files:
 1. Install [docopts](https://github.com/docopt/docopts). Shell scripts (files in
    the [bin](bin) directory) require docopts and will not function without it.
 2. Install [vcsh](https://github.com/RichiH/vcsh).
-3. Run `vcsh clone git@github.com:openjck/dotfiles.git dotfiles-openjck`.
-4. Run `vcsh dotfiles-openjck fetch`.
-5. Run `vcsh dotfiles-openjck switch main`.
+3. Run `vcsh clone https://github.com/openjck/dotfiles.git dotfiles-openjck`.
+  * If you prefer cloning over SSH for any reason, you can alternatively run
+    `vcsh clone git@github.com:openjck/dotfiles.git dotfiles-openjck`.
+4. Run `rm -f ~/.config/vcsh/repo.d/dotfiles-openjck.git/info/exclude`.
+5. Run `vcsh dotfiles-openjck fetch`.
+6. Run `vcsh dotfiles-openjck switch main`.
+7. Run `~/.config/vcsh/hooks-available/dotfiles-openjck-setup`.
+  * This is supposed to be run automatically at certain times, using vcsh hooks
+    (see _~/.config/vcsh/hooks-*_), but for some reason, it isn't. I must be
+    doing something wrong.
 
 #### Single shell script
 
