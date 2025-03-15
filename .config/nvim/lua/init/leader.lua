@@ -149,6 +149,13 @@ leader_map({ 'n', 'x' }, 'miv', '<Cmd>Refactor inline_var<CR>', 'Variable')
 leader_map('n', 'nr', vim.cmd.Reconfigure, 'Reconfigure')
 
 ----------
+-- Open --
+----------
+
+leader_map('n', 'osh', vim.cmd.OpenScratch, 'Horizontal')
+leader_map('n', 'osv', vim.cmd.OpenVScratch, 'Vertical')
+
+----------
 -- Show --
 ----------
 

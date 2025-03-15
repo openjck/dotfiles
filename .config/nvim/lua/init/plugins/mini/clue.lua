@@ -73,6 +73,8 @@ clue.setup({
       { mode = 'x', keys = '<Leader>me', desc = 'Extract' },
       { mode = 'x', keys = '<Leader>mi', desc = 'Inline' },
     { mode = 'n', keys = '<Leader>n', desc = 'Neovim' },
+    { mode = 'n', keys = '<Leader>o', desc = 'Open' },
+      { mode = 'n', keys = '<Leader>os', desc = 'Scratch' },
     { mode = 'n', keys = '<Leader>s', desc = 'Show' },
       { mode = 'n', keys = '<Leader>st', desc = 'Types' },
     { mode = 'n', keys = '<Leader>t', desc = 'Tab' },
