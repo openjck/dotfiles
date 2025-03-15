@@ -1,15 +1,19 @@
-local function open_scratch_helper(vertical)
+local orientation_enum = require('utils.orientation')
+
+local function open_scratch_helper(chosen_orientation)
   local split_command
 
-  if vertical then
+  if chosen_orientation == orientation_enum.Horizontal then
+    split_command = 'new'
+  elseif chosen_orientation == orientation_enum.Vertical then
     split_command = 'vnew'
   else
-    split_command = 'new'
+    error('Unsupported orientation')
   end
 
-  local current_filetype = vim.bo.filetype
+  local source_buffer_filetype = vim.bo.filetype
   vim.cmd(split_command)
-  vim.cmd('set filetype=' .. current_filetype)
+  vim.cmd('set filetype=' .. source_buffer_filetype)
 end
 
 -- Add a "Reconfigure" command to reconfigure an active Neovim session based on
@@ -31,7 +35,7 @@ vim.api.nvim_create_user_command(
 vim.api.nvim_create_user_command(
   'OpenScratch',
   function()
-    open_scratch_helper()
+    open_scratch_helper(orientation_enum.Horizontal)
   end,
   {
     bang = true,
@@ -41,7 +45,7 @@ vim.api.nvim_create_user_command(
 vim.api.nvim_create_user_command(
   'OpenVScratch',
   function()
-    open_scratch_helper(true)
+    open_scratch_helper(orientation_enum.Vertical)
   end,
   {
     bang = true,
