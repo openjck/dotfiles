@@ -52,10 +52,28 @@ local mason_lspconfig = require('mason-lspconfig')
 local lspconfig = require('lspconfig')
 
 mason.setup()
-mason_lspconfig.setup()
 
-mason_lspconfig.setup_handlers {
+mason_lspconfig.setup({
+  -- Automatically install these language servers if they're not installed
+  -- already.
+  --
+  -- I would also add the following to this list if I could, but for some
+  -- reason, at the time of this writing, they do not have server names and
+  -- therefore cannot be listed for automatic installation. Maybe they are not
+  -- supported by one or more tools.
+  --
+  --   - prettierd
+  ensure_installed = {
+    'bashls',
+    'eslint',
+    'lua_ls',
+    'ts_ls',
+  },
+})
+
+-- Set up language servers automatically.
+mason_lspconfig.setup_handlers({
   function (server_name)
     lspconfig[server_name].setup({})
   end,
-}
+})
