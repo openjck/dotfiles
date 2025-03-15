@@ -4,4 +4,10 @@
 -- that.
 local operators = require('mini.operators')
 
-operators.setup()
+operators.setup({
+  exchange = {
+    -- Use "gX" rather than "gX" for exchanging selections. gx normally opens
+    -- the URL under the cursor, and I do that often.
+    prefix = 'gX',
+  },
+})
