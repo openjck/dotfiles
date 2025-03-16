@@ -53,3 +53,8 @@ vim.opt.nrformats:append('unsigned')
 -- I can achieve that by putting these same lines in a file named
 -- after/ftplugin/<filetype>.lua file.
 vim.opt.formatoptions:append('cro')
+
+-- When opening a file that was previously opened and mkview (see ":h mkview")
+-- or the restore_view.vim plugin is used, do not automatically restore cursor
+-- position.
+vim.opt.viewoptions:remove('cursor')
