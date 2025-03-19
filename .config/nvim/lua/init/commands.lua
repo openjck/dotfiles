@@ -1,4 +1,4 @@
-local orientation_enum = require('utils.orientation')
+local orientation_enum = require('enums.orientation')
 
 local function open_scratch_helper(chosen_orientation)
   local split_command
