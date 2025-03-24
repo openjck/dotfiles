@@ -62,6 +62,7 @@ leader_map('n', 'ep', vim.cmd.previous, 'Previous')
 
 leader_map('n', 'fd', telescopeCustom.dotfiles, 'Dotfiles')
 leader_map('n', 'fh', telescopeBuiltin.help_tags, 'Help')
+leader_map('n', 'fk', telescopeBuiltin.keymaps, 'Keymaps')
 leader_map('n', 'fs', telescopeBuiltin.planets, 'Solar system')
 
 leader_map(
