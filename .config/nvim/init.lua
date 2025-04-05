@@ -1,1 +1,1 @@
-require('init')
+require('openjck.init')

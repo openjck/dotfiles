@@ -1,5 +1,5 @@
 local telescopeBuiltin = require('telescope.builtin')
-local telescopeCustom = require('entities.telescope')
+local telescopeCustom = require('openjck.entities.telescope')
 
 -- Some general notes:
 --

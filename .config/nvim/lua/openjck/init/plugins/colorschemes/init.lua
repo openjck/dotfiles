@@ -1,0 +1,7 @@
+require('openjck.init.plugins.colorschemes.catppuccin')
+require('openjck.init.plugins.colorschemes.halcyon')
+require('openjck.init.plugins.colorschemes.jellybeans')
+require('openjck.init.plugins.colorschemes.monokai-pro')
+require('openjck.init.plugins.colorschemes.nightfox')
+require('openjck.init.plugins.colorschemes.onedark')
+require('openjck.init.plugins.colorschemes.tokyonight')

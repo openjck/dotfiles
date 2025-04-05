@@ -1,4 +1,4 @@
-local enum = require('utils.enum')
+local enum = require('openjck.utils.enum')
 
 return enum({
   "Horizontal",

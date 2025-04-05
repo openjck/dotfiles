@@ -1,0 +1,5 @@
+require('openjck.init.plugins.mini')
+require('openjck.init.plugins.general')
+require('openjck.init.plugins.lsp')
+require('openjck.init.plugins.languages')
+require('openjck.init.plugins.colorschemes')
