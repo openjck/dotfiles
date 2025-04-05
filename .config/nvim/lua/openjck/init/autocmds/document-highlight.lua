@@ -8,9 +8,11 @@
 -- documentation with "vim.cmd()" also doesn't work. Who knows.
 
 vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+  group = 'init',
   callback = vim.lsp.buf.document_highlight,
 })
 
 vim.api.nvim_create_autocmd('CursorMoved', {
+  group = 'init',
   callback = vim.lsp.buf.clear_references,
 })

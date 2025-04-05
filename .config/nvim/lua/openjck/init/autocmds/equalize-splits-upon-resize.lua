@@ -12,6 +12,7 @@
 -- [1] https://github.com/vim-scripts/ProportionalResize
 -- [2] https://github.com/drzel/vim-in-proportion
 vim.api.nvim_create_autocmd('VimResized', {
+  group = 'init',
   callback = function()
     vim.cmd('wincmd =')
   end
