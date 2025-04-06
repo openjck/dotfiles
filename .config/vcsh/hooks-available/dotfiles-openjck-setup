@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# Copyright (c) 2023 John Karahalis
+# Copyright (c) 2023, 2024, 2025 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -142,7 +142,6 @@ function set_up_packages_ubuntu() {
     'fzf'
     'git'
     'moreutils'
-    'neovim'
     'pwgen'
     'ripgrep'
     'sd'
@@ -182,6 +181,42 @@ function set_up_packages() {
       return $RETURN_CODE_UNSUPPORTED
       ;;
   esac
+}
+
+function set_up_snaps() {
+  declare SNAPS_TO_INSTALL=()
+
+  local SNAPS=(
+    'nvim'
+  )
+
+  declare -A SNAP_INSTALL_ARGUMENTS=(
+    [nvim]='--classic'
+  )
+
+  local SNAP
+  for SNAP in "${SNAPS[@]}"; do
+    # If the snap is not already installed, add it to the $SNAPS_TO_INSTALL
+    # array.
+    if ! snap list "$SNAP" &> /dev/null; then
+      SNAPS_TO_INSTALL+=("$SNAP")
+    fi
+  done
+
+  # If there are no snaps to install, return with a code indicating that this is
+  # already done. Otherwise, install the snaps.
+  if [[ ${#SNAPS_TO_INSTALL[@]} -eq 0 ]]; then
+    return $RETURN_CODE_ALREADY_DONE
+  else
+    echo
+
+    local SNAP
+    for SNAP in "${SNAPS_TO_INSTALL[@]}"; do
+      sudo snap install "$SNAP" "${SNAP_INSTALL_ARGUMENTS[$SNAP]}"
+    done
+
+    return $RETURN_CODE_DONE
+  fi
 }
 
 function set_up_vcsh() {
@@ -241,30 +276,6 @@ function set_up_directories() {
   fi
 }
 
-# Set up Neovim.
-#
-# Note that a separate file is used for plugin configuration. If plugins were
-# configured in the main configuration file and we tried to load that
-# configuration file during the initial setup, Neovim would complain about
-# things like missing colorschemes.
-function set_up_nvim() {
-  local PLUGIN_MANAGER_FILENAME=$XDG_DATA_HOME/nvim/site/autoload/plug.vim
-
-  if [[ -f "$PLUGIN_MANAGER_FILENAME" ]]; then
-    return $RETURN_CODE_ALREADY_DONE
-  else
-    # Install vim-plug.
-    curl --silent --fail --location --create-dirs --output \
-      "$PLUGIN_MANAGER_FILENAME" \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-    # Install plugins.
-    nvim -u "$XDG_CONFIG_HOME/nvim/init/plugins/index.vim" -c PlugInstall -c quitall
-
-    return $RETURN_CODE_DONE
-  fi
-}
-
 function set_up_tmux() {
   local PLUGIN_MANAGER_DIR=$HOME/.tmux/plugins/tpm
 
@@ -285,9 +296,10 @@ declare -A STEPS
 
 STEPS[0,name]=packages
 STEPS[0,own_output_on_success]=true
-STEPS[1,name]=vcsh
-STEPS[2,name]=directories
-STEPS[3,name]=nvim
+STEPS[1,name]=snaps
+STEPS[1,own_output_on_success]=true
+STEPS[2,name]=vcsh
+STEPS[3,name]=directories
 STEPS[4,name]=tmux
 
 run_set_up_functions "${STEPS[@]}"
