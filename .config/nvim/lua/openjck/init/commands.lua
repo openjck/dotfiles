@@ -43,7 +43,7 @@ vim.api.nvim_create_user_command(
     --
     -- To easily find caches that need to be invalidated, all modules are in
     -- a scope named "openjck".
-    for name,_ in pairs(package.loaded) do
+    for name, _ in pairs(package.loaded) do
       if name:match('^openjck') then
         package.loaded[name] = nil
       end
