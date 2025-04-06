@@ -13,7 +13,7 @@ local function open_scratch_helper(chosen_orientation)
 
   local source_buffer_filetype = vim.bo.filetype
   vim.cmd(split_command)
-  vim.cmd('set filetype=' .. source_buffer_filetype)
+  vim.bo.filetype = source_buffer_filetype
 end
 
 -- Add a "Reconfigure" command to reconfigure an active Neovim session based on
