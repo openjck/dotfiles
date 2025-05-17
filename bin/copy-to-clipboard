@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# Copyright (c) 2024 John Karahalis
+# Copyright (c) 2024, 2025 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,34 @@ set -euo pipefail
 
 COMMAND_NAME=$(basename "$0")
 
+DEPENDENCIES=(
+  docopts
+
+  # NOTE: If other platforms are supported in the future, xclip might not be
+  # a dependency in all cases.
+  xclip
+)
+
+MISSING_DEPENDENCIES=()
+
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" > /dev/null; then
+    MISSING_DEPENDENCIES+=("$DEPENDENCY")
+  fi
+done
+
+if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
+  >&2 fold --spaces <<EOF
+FATAL ERROR: The following are not installed. They must be manually installed \
+for "$COMMAND_NAME" to function properly.
+EOF
+  >&2 echo
+  for DEPENDENCY in "${MISSING_DEPENDENCIES[@]}"; do
+    >&2 echo "  - $DEPENDENCY"
+  done
+  exit 1
+fi
+
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Copy the contents of the given file to the clipboard.
 
@@ -46,19 +74,6 @@ Options:
       Show this documentation
 EOF
 )"
-
-# NOTE: If other platforms are supported in the future, xclip might not be a
-# dependency in all cases.
-DEPENDENCIES=(
-  xclip
-)
-
-for DEPENDENCY in "${DEPENDENCIES[@]}"; do
-  if ! command -v "$DEPENDENCY" > /dev/null; then
-    >&2 echo "Error: \"$DEPENDENCY\" is not installed."
-    exit 1
-  fi
-done
 
 XCLIP_ADDITIONAL_ARGS=''
 if ! ${ARGS[--include-final-newline]}; then
