@@ -29,6 +29,10 @@ set -euo pipefail
 
 COMMAND_NAME=$(basename "$0")
 
+##########################
+# BEGIN DEPENDENCY CHECK #
+##########################
+
 DEPENDENCIES=(
   docopts
 
@@ -56,6 +60,10 @@ EOF
   done
   exit 1
 fi
+
+########################
+# END DEPENDENCY CHECK #
+########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Copy the contents of the given file to the clipboard.

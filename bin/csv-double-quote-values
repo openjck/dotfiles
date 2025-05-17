@@ -29,6 +29,10 @@ set -euo pipefail
 
 COMMAND_NAME=$(basename "$0")
 
+##########################
+# BEGIN DEPENDENCY CHECK #
+##########################
+
 DEPENDENCIES=(
   docopts
 )
@@ -52,6 +56,10 @@ EOF
   done
   exit 1
 fi
+
+########################
+# END DEPENDENCY CHECK #
+########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Add double quotes around all values of a CSV file.
