@@ -229,7 +229,8 @@ function set_up_vcsh() {
 
   local SC_CONTENTS="*
 !/README.md
-!/LICENSE"
+!/LICENSE
+!/docs/**"
 
   local SC_FILE=$XDG_CONFIG_HOME/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout
 
