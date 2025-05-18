@@ -26,9 +26,9 @@ a meaningful bottleneck in my work.
 To ask questions or discuss these files, please use the
 [Discussions](https://github.com/openjck/dotfiles/discussions) page.
 
-### Installation
+## Installation
 
-#### Everything
+### Everything
 
 Follow these steps to install _all_ of these files:
 
@@ -46,31 +46,12 @@ Follow these steps to install _all_ of these files:
     (see _.config/vcsh/hooks-*_), but for some reason, it isn't. I must be
     doing something wrong.
 
-#### Single shell script
+### Single shell script
 
-Follow these steps to install a single shell script:
+See the [shell script documentation](docs/scripts.md) for information on how to
+install a single shell script.
 
-1. Install [docopts](https://github.com/docopt/docopts). Shell scripts require
-   docopts and will not function without it.
-2. Save the shell script somewhere along your `$PATH`.
-3. Make the script executable (e.g., `chmod u+x /path/to/script`).
+## Usage
 
-After following the above steps, you'll be able to call the shell script by name
-without providing its full path. For example, if you downloaded the
-_rename-files-sequentially_ script, you'll be able to run the following from
-anywhere:
-
-```
-$ rename-files-sequentially
-```
-
-### Usage
-
-#### Shell script documentation
-
-Pass the `-h` or `--help` option to any shell script to read its detailed
-documentation. For example:
-
-```shell
-$ indent --help
-```
+See the [shell script documentation](docs/scripts.md) for information on how to
+use shell scripts.
