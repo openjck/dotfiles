@@ -48,10 +48,10 @@ Follow these steps to install _all_ of these files:
 
 ### Single shell script
 
-See the [shell script documentation](docs/scripts.md) for information on how to
-install a single shell script.
+See the [shell script documentation](docs/scripts.md#installation) for
+information on how to install a single shell script.
 
 ## Usage
 
-See the [shell script documentation](docs/scripts.md) for information on how to
-use shell scripts.
+See the [shell script documentation](docs/scripts.md#usage) for information on
+how to use shell scripts.
