@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# bom-remove:
+# Remove a byte order mark (BOM) from input.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2025 John Karahalis
@@ -62,8 +71,9 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Remove a byte order mark (BOM) from the beginning of input. If one is not
-present, input will not be modified.
+Remove a byte order mark (BOM) from input.
+
+If a BOM is not present, input will not be modified.
 
 Usage:
   $COMMAND_NAME [FILE]
