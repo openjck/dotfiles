@@ -65,7 +65,7 @@ eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Print the given line number.
 
 Usage:
-  $COMMAND_NAME LINE [FILE]
+  $COMMAND_NAME LINE_NUMBER [FILE]
   $COMMAND_NAME -h | --help
 
 Examples:
@@ -80,4 +80,4 @@ EOF
 
 FILE_OR_STDIN=${ARGS[FILE]:-/dev/stdin}
 
-awk "NR==${ARGS[LINE]}" "$FILE_OR_STDIN"
+awk "NR==${ARGS[LINE_NUMBER]}" "$FILE_OR_STDIN"

@@ -65,7 +65,7 @@ eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 For each line of input, print the numbered word.
 
 Usage:
-  $COMMAND_NAME WORD [FILE]
+  $COMMAND_NAME WORD_NUMBER [FILE]
   $COMMAND_NAME -h | --help
 
 Examples:
@@ -80,4 +80,4 @@ EOF
 
 FILE_OR_STDIN=${ARGS[FILE]:-/dev/stdin}
 
-awk "{print \$${ARGS[WORD]}}" "$FILE_OR_STDIN"
+awk "{print \$${ARGS[WORD_NUMBER]}}" "$FILE_OR_STDIN"
