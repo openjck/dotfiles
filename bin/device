@@ -80,6 +80,6 @@ EOF
 if OUTPUT=$(findmnt --noheadings --output SOURCE --mountpoint "${ARGS[MOUNTPOINT]}"); then
   echo "$OUTPUT"
 else
-  >&2 echo "Error: ${ARGS[MOUNTPOINT]} is not a mountpoint."
+  >&2 echo "FATAL ERROR: ${ARGS[MOUNTPOINT]} is not a mountpoint."
   exit 1
 fi

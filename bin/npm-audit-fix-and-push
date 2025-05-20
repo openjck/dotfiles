@@ -89,8 +89,8 @@ EOF
 if git rev-parse; then
   if test -n "$(git status --porcelain)"; then
     >&2 cat <<'EOF'
-Error: Working directory is dirty. Stash or commit any changes. Then, run this
-command again.
+FATAL ERROR: Working directory is dirty. Stash or commit any changes. Then, run
+this command again.
 EOF
     exit 1
   fi

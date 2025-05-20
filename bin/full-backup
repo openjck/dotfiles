@@ -79,7 +79,7 @@ EOF
 )"
 
 if [[ ! -d "${ARGS[DIRECTORY]}" ]]; then
-  >&2 echo "Error: Directory \"${ARGS[DIRECTORY]}\" does not exist."
+  >&2 echo "FATAL ERROR: Directory \"${ARGS[DIRECTORY]}\" does not exist."
   exit 1
 fi
 

@@ -96,18 +96,18 @@ function exitWithError(string \$errorMessage): void {
 \$inputFilename = '${ARGS[FILE]}';
 
 if (!file_exists(\$inputFilename)) {
-  exitWithError("Error: File \"\$inputFilename\" does not exist.");
+  exitWithError("FATAL ERROR: File \"\$inputFilename\" does not exist.");
 }
 
 \$inputHandle = fopen(\$inputFilename, 'r');
 \$outputHandle = tmpfile();
 
 if (\$inputHandle === FALSE) {
-  exitWithError("Error: Cannot open file \"\$inputFilename\".");
+  exitWithError("FATAL ERROR: Cannot open file \"\$inputFilename\".");
 }
 
 if (\$outputHandle === FALSE) {
-  exitWithError('Error: Cannot open tmpfile.');
+  exitWithError('FATAL ERROR: Cannot open tmpfile.');
 }
 
 while ((\$data = fgetcsv(\$inputHandle)) !== FALSE) {
