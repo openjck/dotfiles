@@ -52,8 +52,8 @@ if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
   >&2 fold --spaces <<EOF
 FATAL ERROR: The following are not installed. They must be manually installed \
 for "$COMMAND_NAME" to function properly.
+
 EOF
-  >&2 echo
   for DEPENDENCY in "${MISSING_DEPENDENCIES[@]}"; do
     >&2 echo "  - $DEPENDENCY"
   done
