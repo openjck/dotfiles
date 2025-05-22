@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# full-backup:
+# Make a full backup of the system currently being used.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2025 John Karahalis
@@ -62,11 +71,11 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Make a full backup of this computer. That is, make a backup that includes every
-file from the root directory on down.
+Make a full backup of the system currently being used.
 
-The backup will be stored in DIRECTORY with a filename that includes the
-hostname and the date and time the backup began.
+The backup will include every file from the root directory on down. It will be
+stored in DIRECTORY with a filename that includes the hostname and the date and
+time the backup began.
 
 Usage:
   $COMMAND_NAME DIRECTORY

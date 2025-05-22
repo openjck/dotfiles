@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# get-word:
+# For each line of input, print the word indicated by the given number.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2025 John Karahalis
@@ -62,7 +71,7 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-For each line of input, print the numbered word.
+For each line of input, print the word indicated by the given number.
 
 Usage:
   $COMMAND_NAME WORD_NUMBER [FILE]

@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# csv-format-with-fputcsv:
+# Format a CSV with PHP's fputcsv function.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2024, 2025 John Karahalis
@@ -63,10 +72,12 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Format a CSV with PHP's fputcsv function. This can be helpful when compatibility
-with fputcsv's formatting is required. For example, fputcsv surrounds all values
-containing spaces with double quotes, whereas some other tools, like PhpStorm's
-CSV editor, do not appear to be able to do this.
+Format a CSV with PHP's fputcsv function.
+
+This can be helpful when compatibility with fputcsv's formatting is required.
+For example, fputcsv surrounds all values containing spaces with double quotes,
+whereas some other tools, like PhpStorm's CSV editor, do not appear to be able
+to do this.
 
 Usage:
   $COMMAND_NAME [--overwrite] FILE
