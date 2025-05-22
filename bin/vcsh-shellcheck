@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# dotfiles-lint:
-# Lint tracked dotfiles.
+# vcsh-shellcheck:
+# Run ShellCheck against shell scripts tracked by vcsh.
 #
 # Installation instructions:
 # https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
@@ -45,6 +45,7 @@ COMMAND_NAME=$(basename "$0")
 DEPENDENCIES=(
   docopts
   shellcheck
+  vcsh
 )
 
 MISSING_DEPENDENCIES=()
@@ -72,7 +73,10 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Lint tracked dotfiles.
+Run ShellCheck against shell scripts tracked by vcsh.
+
+Currently, detection of shell scripts is somewhat limited, and only Bash and SH
+files matching certain patterns are detected.
 
 Usage:
   $COMMAND_NAME
@@ -88,19 +92,19 @@ EOF
 # files in the current directory and its subdirectories.
 cd "$HOME" || exit 1
 
-# Use vcsh to list all tracked dotfiles and use mapfile to convert the lines of
+# Use vcsh to list all tracked files and use mapfile to convert the lines of
 # output into an array.
 #
 # https://stackoverflow.com/a/13825568/715866
-mapfile -t ALL_DOTFILES < <(vcsh list-tracked)
+mapfile -t ALL_VCSH_FILES < <(vcsh list-tracked)
 
-# Create an array of all dotfiles which are actually present on the filesystem.
-# Some might be managed by vcsh but not present because they are ignored via
-# sparse-checkout.
-ALL_PRESENT_DOTFILES=()
-for DOTFILE in "${ALL_DOTFILES[@]}"; do
-  if [[ -f $DOTFILE ]]; then
-    ALL_PRESENT_DOTFILES+=("$DOTFILE")
+# Create an array of all vcsh-tracked files which are actually present on the
+# filesystem. Some might be managed by vcsh but not present because they are
+# ignored via sparse-checkout.
+ALL_PRESENT_VCSH_FILES=()
+for VCSH_FILE in "${ALL_VCSH_FILES[@]}"; do
+  if [[ -f $VCSH_FILE ]]; then
+    ALL_PRESENT_VCSH_FILES+=("$VCSH_FILE")
   fi
 done
 
@@ -121,9 +125,9 @@ function is-shellcheck-file() {
 function run-shellcheck() {
   local SHELLCHECK_FILES=()
 
-  for DOTFILE in "${ALL_PRESENT_DOTFILES[@]}"; do
-    if is-shellcheck-file "$DOTFILE"; then
-      SHELLCHECK_FILES+=("$DOTFILE")
+  for VCSH_FILE in "${ALL_PRESENT_VCSH_FILES[@]}"; do
+    if is-shellcheck-file "$VCSH_FILE"; then
+      SHELLCHECK_FILES+=("$VCSH_FILE")
     fi
   done
 
