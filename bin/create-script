@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# create-script:
+# Quickly create a new shell script with executable permission.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2024, 2025 John Karahalis
@@ -62,7 +71,7 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Create a new shell script.
+Quickly create a new shell script with executable permission.
 
 Create a new, empty file with the given name, make it executable, and open it
 with the default editor.

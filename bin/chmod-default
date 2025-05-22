@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# chmod-default:
+# Set the default system permissions on a regular file or a directory.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2025 John Karahalis
