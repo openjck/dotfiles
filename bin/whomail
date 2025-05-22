@@ -63,7 +63,8 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Show all email addresses associated with a domain, according to its whois record.
+Show all email addresses associated with a domain, according to its whois
+record.
 
 The whois record of the provided domain is filtered by the "@" character, with
 matching lines trimmed and sorted and with duplicate lines removed.
