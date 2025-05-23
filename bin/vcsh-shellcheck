@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # vcsh-shellcheck:
-# Run ShellCheck against shell scripts tracked by vcsh.
+# Run ShellCheck against supported shell scripts tracked by vcsh.
 #
 # Installation instructions:
 # https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
@@ -73,10 +73,7 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Run ShellCheck against shell scripts tracked by vcsh.
-
-Currently, detection of shell scripts is somewhat limited, and only Bash and SH
-files matching certain patterns are detected.
+Run ShellCheck against supported shell scripts tracked by vcsh.
 
 Usage:
   $COMMAND_NAME
@@ -88,41 +85,62 @@ Options:
 EOF
 )"
 
-# cd to $HOME so that "vcsh list-tracked" lists all files, not just tracked
-# files in the current directory and its subdirectories.
-cd "$HOME" || exit 1
+function has-shell-script-filename() {
+  local FILENAME=$1
+  local BASENAME
 
-# Use vcsh to list all tracked files and use mapfile to convert the lines of
-# output into an array.
-#
-# https://stackoverflow.com/a/13825568/715866
-mapfile -t ALL_VCSH_FILES < <(vcsh list-tracked)
+  BASENAME=$(basename "$FILENAME")
 
-# Create an array of all vcsh-tracked files which are actually present on the
-# filesystem. Some might be managed by vcsh but not present because they are
-# ignored via sparse-checkout.
-ALL_PRESENT_VCSH_FILES=()
-for VCSH_FILE in "${ALL_VCSH_FILES[@]}"; do
-  if [[ -f $VCSH_FILE ]]; then
-    ALL_PRESENT_VCSH_FILES+=("$VCSH_FILE")
-  fi
-done
+  # Match based on exact basename.
+  [[ $BASENAME == '.bash_login' ]] ||
+  [[ $BASENAME == '.bash_logout' ]] ||
+  [[ $BASENAME == '.bash_profile' ]] ||
+  [[ $BASENAME == '.bashrc' ]] ||
+  [[ $BASENAME == '.kshrc' ]] ||
+  [[ $BASENAME == '.profile' ]] ||
+
+  # Match based on file extension.
+  [[ $BASENAME =~ \.(bash|dash|ksh|sh)$ ]]
+}
+
+function has-shell-script-content() {
+  local FILENAME=$1
+
+  # Test if the file has the shebang of a script type supported by ShellCheck.
+  grep --quiet --extended-regexp '#!.* (bash|dash|ksh|sh)$' "$FILENAME" ||
+
+  # Test if the file contains a ShellCheck directive.
+  grep --quiet --extended-regexp '(^|\s+)# shellcheck' "$FILENAME"
+}
 
 function is-shellcheck-file() {
   local FILENAME=$1
-  local FIRST_LINE
 
-  FIRST_LINE=$(head --lines 1 "$FILENAME")
-
-  [[ $FILENAME =~ ^\.profile ]] ||
-  [[ $FILENAME =~ ^\.bash ]] ||
-  [[ $FILENAME =~ \.sh$ ]] ||
-  [[ $FILENAME =~ \.bash$ ]] ||
-  [[ $FIRST_LINE == '#!/usr/bin/env sh' ]] ||
-  [[ $FIRST_LINE == '#!/usr/bin/env bash' ]]
+  has-shell-script-filename "$FILENAME" ||
+  has-shell-script-content "$FILENAME"
 }
 
-function run-shellcheck() {
+function main() {
+  # cd to $HOME so that "vcsh list-tracked" lists all files, not just tracked
+  # files in the current directory and its subdirectories.
+  cd "$HOME" || exit 1
+
+  # Use vcsh to list all tracked files and use mapfile to convert the lines of
+  # output into an array.
+  #
+  # https://stackoverflow.com/a/13825568/715866
+  mapfile -t ALL_VCSH_FILES < <(vcsh list-tracked)
+
+  # Create an array of all vcsh-tracked files which are actually present on the
+  # filesystem. Some might be managed by vcsh but not present because they are
+  # ignored via sparse-checkout.
+  ALL_PRESENT_VCSH_FILES=()
+  for VCSH_FILE in "${ALL_VCSH_FILES[@]}"; do
+    if [[ -f $VCSH_FILE ]]; then
+      ALL_PRESENT_VCSH_FILES+=("$VCSH_FILE")
+    fi
+  done
+
   local SHELLCHECK_FILES=()
 
   for VCSH_FILE in "${ALL_PRESENT_VCSH_FILES[@]}"; do
@@ -142,4 +160,4 @@ function run-shellcheck() {
   shellcheck --external-sources "${SHELLCHECK_FILES[@]}"
 }
 
-run-shellcheck
+main
