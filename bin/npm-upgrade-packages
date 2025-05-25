@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# npm-upgrade-packages:
+# Update package.json and package-lock.json to use latest versions.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2024, 2025 John Karahalis
@@ -64,6 +73,8 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Update package.json and package-lock.json to use latest versions.
+
 Update package.json and package-lock.json to use the latest versions of all
 packages, then run "npm install".
 

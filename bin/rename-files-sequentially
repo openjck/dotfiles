@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# rename-files-sequentially:
+# Rename files in the current directory to ordinal, sequential numbers.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2024, 2025 John Karahalis
@@ -62,9 +71,11 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Rename files in the current directory, non-recursively, to ordinal, sequential
-numbers. The first file according to \$LC_COLLATE is renamed to 1, the second
-file is renamed to 2, and so on. File extensions are preserved.
+Rename files in the current directory to ordinal, sequential numbers.
+
+The first file according to \$LC_COLLATE is renamed to 1, the second file is
+renamed to 2, and so on. File extensions are preserved, and subdirectories are
+not affected.
 
 Filenames are padded when appropriate. That is, if there are 10-99 files, the
 first file will be named 01, and if there are 100-999 files, the first file will

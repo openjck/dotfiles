@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# whomail:
+# List all email addresses that exist in a whois record.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2024, 2025 John Karahalis
@@ -63,8 +72,7 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Show all email addresses associated with a domain, according to its whois
-record.
+List all email addresses that exist in a whois record.
 
 The whois record of the provided domain is filtered by the "@" character, with
 matching lines trimmed and sorted and with duplicate lines removed.

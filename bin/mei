@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# mei:
+# Move Everything Into (MEI) a new directory with the given name.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2024, 2025 John Karahalis

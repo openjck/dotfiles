@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# serve:
+# Start a static server with DIRECTORY served at the server root.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2024, 2025 John Karahalis
@@ -63,8 +72,10 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Start a static server with DIRECTORY served at the server root. If DIRECTORY is
-not provided, the current directory will be served at the server root.
+Start a static server with DIRECTORY served at the server root.
+
+If DIRECTORY is not provided, the current directory will be served at the server
+root.
 
 Usage:
   $COMMAND_NAME [-a ADDRESS] [-p PORT] [DIRECTORY]

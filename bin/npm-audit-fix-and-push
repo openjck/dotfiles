@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# npm-audit-fix-and-push:
+# Run "npm audit fix" in a repo. Then, use Git to commit and push the result.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2024, 2025 John Karahalis

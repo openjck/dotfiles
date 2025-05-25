@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# npm-show-versions-all:
+# Show all released versions of an NPM package.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2025 John Karahalis

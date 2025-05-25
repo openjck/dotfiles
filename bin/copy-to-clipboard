@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# copy-to-clipboard:
+# Copy the contents of the given file to the clipboard.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2024, 2025 John Karahalis

@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# git-upstream:
+# Print the name of the upstream Git branch.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2025 John Karahalis
@@ -64,8 +73,9 @@ COMMAND_NAME=$(basename "$0")
 GIT_SUBCOMMAND_NAME=${COMMAND_NAME/git-/}
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Print the name of the upstream Git branch or print nothing and return with an
-error code if there is no upstream Git branch.
+Print the name of the upstream Git branch.
+
+If there is no upstream Git branch, print nothing and return with an error code.
 
 If this script exists somewhere along the \$PATH, it can be used as a Git
 subcommand, like so:

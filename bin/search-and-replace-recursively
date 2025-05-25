@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# search-and-replace-recursively:
+# Replace a string or pattern with a given string.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2024, 2025 John Karahalis
@@ -63,8 +72,10 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Recursively replace a string or pattern with a given string, modifying all files
-in the current directory and all subdirectories.
+Replace a string or pattern with a given string.
+
+The string or pattern is replaced in all matching files in the current directory
+and all subdirectories.
 
 This script uses sd to search and replace within files, so please consult the sd
 documentation for more informaiton about the regular expression style supported
