@@ -4,12 +4,14 @@
 # I would rather not disable any ShellCheck rules, but I find that the suggested
 # workarounds cause more problems than they solve.
 #
-# The first suggested workaround, providing a "shellcheck source=" directive
-# above the affected line, does work, but the provided path must be absolute
-# (.e.g., /home/john/.config/sh/utils/__command_exists.sh) and therefore depends
-# on the username having a particular value. I imagine it would not work, or
-# would necessitate an additional workaround, on any machine where my username
-# is not "john".
+# The first suggested workaround, providing a "shellcheck<busted> source="
+# directive (remove "<busted>" when reading; it is present so that a "grep"
+# command in vcsh-shellcheck doesn't match this file) above the affected line,
+# does work, but the provided path must be absolute (.e.g.,
+# /home/john/.config/sh/utils/__command_exists.sh) and therefore depends on the
+# username having a particular value. I imagine it would not work, or would
+# necessitate an additional workaround, on any machine where my username is not
+# "john".
 #
 # The second suggested workaround, using the -P or --source-path flag, does not
 # work at all for me as of 2021-05-31 and may even have the same problem of

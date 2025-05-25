@@ -76,10 +76,12 @@ eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Run ShellCheck against supported shell scripts tracked by vcsh.
 
 Usage:
-  $COMMAND_NAME
+  $COMMAND_NAME [--verbose]
   $COMMAND_NAME -h | --help
 
 Options:
+  -v, --verbose
+      Print information about which ShellCheck files are being tested.
   -h, --help
       Show this documentation
 EOF
@@ -110,7 +112,12 @@ function has-shell-script-content() {
   grep --quiet --extended-regexp '#!.* (bash|dash|ksh|sh)$' "$FILENAME" ||
 
   # Test if the file contains a ShellCheck directive.
-  grep --quiet --extended-regexp '(^|\s+)# shellcheck' "$FILENAME"
+  #
+  # Testing for the existence of the string "source-path" is redundant (testing
+  # for "source" would be enough), but I want to be explicit.
+  grep --quiet --extended-regexp \
+    'shellcheck\s+(disable|enable|external-sources|source|source-path|shell)' \
+    "$FILENAME"
 }
 
 function is-shellcheck-file() {
@@ -148,6 +155,14 @@ function main() {
       SHELLCHECK_FILES+=("$VCSH_FILE")
     fi
   done
+
+  if ${ARGS[--verbose]}; then
+    echo "${#SHELLCHECK_FILES[@]} ShellCheck files found:"
+    echo
+    for SHELLCHECK_FILE in "${SHELLCHECK_FILES[@]}"; do
+      echo "$SHELLCHECK_FILE"
+    done
+  fi
 
   # If the --external-sources flag is not provided, ShellCheck will not follow
   # even literal paths, like that paths to Bash completions in .bashrc, and will
