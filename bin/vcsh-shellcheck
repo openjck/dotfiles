@@ -76,12 +76,13 @@ eval "$(docopts --help=- -A ARGS : "$@" <<EOF
 Run ShellCheck against supported shell scripts tracked by vcsh.
 
 Usage:
-  $COMMAND_NAME [--verbose]
+  $COMMAND_NAME [--debug]
   $COMMAND_NAME -h | --help
 
 Options:
-  -v, --verbose
-      Print information about which ShellCheck files are being tested.
+  --debug
+      Print debugging information, including information about which files are
+      linted with ShellCheck.
   -h, --help
       Show this documentation
 EOF
@@ -109,7 +110,7 @@ function has-shell-script-content() {
   local FILENAME=$1
 
   # Test if the file has the shebang of a script type supported by ShellCheck.
-  grep --quiet --extended-regexp '#!.* (bash|dash|ksh|sh)$' "$FILENAME" ||
+  grep --quiet --extended-regexp '#!.*\s+(bash|dash|ksh|sh)$' "$FILENAME" ||
 
   # Test if the file contains a ShellCheck directive.
   #
@@ -128,6 +129,8 @@ function is-shellcheck-file() {
 }
 
 function main() {
+  local FILES_TO_LINT=()
+
   # cd to $HOME so that "vcsh list-tracked" lists all files, not just tracked
   # files in the current directory and its subdirectories.
   cd "$HOME" || exit 1
@@ -138,30 +141,26 @@ function main() {
   # https://stackoverflow.com/a/13825568/715866
   mapfile -t ALL_VCSH_FILES < <(vcsh list-tracked)
 
-  # Create an array of all vcsh-tracked files which are actually present on the
-  # filesystem. Some might be managed by vcsh but not present because they are
-  # ignored via sparse-checkout.
-  ALL_PRESENT_VCSH_FILES=()
-  for VCSH_FILE in "${ALL_VCSH_FILES[@]}"; do
-    if [[ -f $VCSH_FILE ]]; then
-      ALL_PRESENT_VCSH_FILES+=("$VCSH_FILE")
-    fi
-  done
-
-  local SHELLCHECK_FILES=()
-
-  for VCSH_FILE in "${ALL_PRESENT_VCSH_FILES[@]}"; do
-    if is-shellcheck-file "$VCSH_FILE"; then
-      SHELLCHECK_FILES+=("$VCSH_FILE")
-    fi
-  done
-
-  if ${ARGS[--verbose]}; then
-    echo "${#SHELLCHECK_FILES[@]} ShellCheck files found:"
+  if ${ARGS[--debug]}; then
+    echo 'Files that will be linted with ShellCheck:'
     echo
-    for SHELLCHECK_FILE in "${SHELLCHECK_FILES[@]}"; do
-      echo "$SHELLCHECK_FILE"
-    done
+  fi
+
+  for VCSH_FILE in "${ALL_VCSH_FILES[@]}"; do
+    # Some files which are tracked by vcsh might not actually be present on the
+    # filesystem. For example, they might be  ignored via sparse-checkout.
+    if [[ -f $VCSH_FILE ]] && is-shellcheck-file "$VCSH_FILE"; then
+      FILES_TO_LINT+=("$VCSH_FILE")
+      if ${ARGS[--debug]}; then
+        echo "$VCSH_FILE"
+      fi
+    fi
+  done
+
+  if ${ARGS[--debug]}; then
+    echo
+    echo 'Linting...'
+    echo
   fi
 
   # If the --external-sources flag is not provided, ShellCheck will not follow
@@ -172,7 +171,30 @@ function main() {
   # this writing, doing so is not possible.
   #
   # https://github.com/koalaman/shellcheck/issues/1818
-  shellcheck --external-sources "${SHELLCHECK_FILES[@]}"
+  #
+  # Additionally, we want to print more debugging text even if ShellCheck exits
+  # with a non-zero status, and we want to capture that status so that we can
+  # use it for our own exit status, so we need to temporarily disable the option
+  # that causes Bash to exit immediately when a command exits with a non-zero
+  # exit code.
+  #
+  # http://redsymbol.net/articles/unofficial-bash-strict-mode/#expect-nonzero-exit-status
+  set +e
+  shellcheck --external-sources "${FILES_TO_LINT[@]}"
+  SHELLCHECK_EXIT_STATUS=$?
+  set -e
+
+  if ${ARGS[--debug]}; then
+    # If ShellCheck exited with a non-zero exit code, then it printed output. If
+    # it printed output, we should show newline before the next debugging
+    # statement.
+    if (( SHELLCHECK_EXIT_STATUS != 0 )); then
+      echo
+    fi
+    echo "${#FILES_TO_LINT[@]} files were linted with ShellCheck."
+  fi
+
+  exit $SHELLCHECK_EXIT_STATUS
 }
 
 main
