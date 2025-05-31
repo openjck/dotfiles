@@ -1,3 +1,3 @@
 function rehist() {
-  history -r
+  history -n
 }
