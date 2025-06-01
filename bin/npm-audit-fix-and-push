@@ -58,8 +58,8 @@ done
 
 if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
   >&2 fold --spaces <<EOF
-FATAL ERROR: The following are not installed. They must be manually installed \
-for "$COMMAND_NAME" to function properly.
+FATAL ERROR: The following are not installed. You must install them on your \
+own for "$COMMAND_NAME" to function properly.
 
 EOF
   for DEPENDENCY in "${MISSING_DEPENDENCIES[@]}"; do
