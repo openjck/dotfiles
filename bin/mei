@@ -76,12 +76,6 @@ Move Everything Into (MEI) a new directory with the given name.
 That is, move all files and directories in the current directory into a new
 directory with the given name.
 
-To simplify the implementation and avoid some edge cases, a directory with the
-given name must not already exist. Among other things, handling that would
-require doing something to handle potential overwrites (e.g., "mei animals" when
-the "animals" directory already exists and it contains a file with the same name
-as a file in this directory).
-
 Usage:
   $COMMAND_NAME DIRECTORY
   $COMMAND_NAME -h | --help
