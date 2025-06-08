@@ -111,6 +111,22 @@ Extended example:
               ├── goldfish.png
               └── neon-tetra.png
 
+  Using the name of an existing file or directory is also supported.
+
+  $ find . -type f
+  ./matryoshka
+  $ mei matryoshka
+  $ tree --noreport
+  .
+  └── matryoshka
+      └── matryoshka
+  $ mei matryoshka
+  $ tree --noreport
+  .
+  └── matryoshka
+      └── matryoshka
+              └── matryoshka
+
 Options:
   -h, --help
       Show this documentation
