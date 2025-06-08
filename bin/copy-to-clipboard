@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # copy-to-clipboard:
-# Copy the contents of the given file to the clipboard.
+# Copy input to the clipboard.
 #
 # Installation instructions:
 # https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
@@ -75,14 +75,22 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Copy the contents of the given file to the clipboard.
+Copy input to the clipboard.
+
+If a filename is provided, the contents of the file will be copied to the
+clipboard. If stdin is provided (e.g., by using this command in a pipeline, like
+"tree | $COMMAND_NAME"), the contents of stdin will be copied to the clipboard.
 
 This script only supports systems with "xclip" installed. In the future, it
 could be extended to support Windows and other systems.
 
 Usage:
-  $COMMAND_NAME [--include-final-newline] FILE
+  $COMMAND_NAME [--include-final-newline] [FILE]
   $COMMAND_NAME -h | --help
+
+Examples:
+  $COMMAND_NAME .bashrc
+  tree | $COMMAND_NAME
 
 Options:
   -n, --include-final-newline
@@ -91,6 +99,8 @@ Options:
       Show this documentation
 EOF
 )"
+
+FILE_OR_STDIN=${ARGS[FILE]:-/dev/stdin}
 
 XCLIP_ADDITIONAL_ARGS=''
 if ! ${ARGS[--include-final-newline]}; then
@@ -101,4 +111,4 @@ fi
 # reasons I don't fully understand.
 #
 # shellcheck disable=SC2086
-xclip -selection clipboard $XCLIP_ADDITIONAL_ARGS "${ARGS[FILE]}"
+xclip -selection clipboard $XCLIP_ADDITIONAL_ARGS "$FILE_OR_STDIN"
