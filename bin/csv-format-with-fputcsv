@@ -94,6 +94,11 @@ Options:
 EOF
 )"
 
+if [[ ! -f "${ARGS[FILE]}" ]]; then
+  >&2 fold --spaces <<< "FATAL ERROR: File \"${ARGS[FILE]}\" does not exist."
+  exit 1
+fi
+
 php <<EOF
 <?php
 
@@ -105,10 +110,6 @@ function exitWithError(string \$errorMessage): void {
 }
 
 \$inputFilename = '${ARGS[FILE]}';
-
-if (!file_exists(\$inputFilename)) {
-  exitWithError("FATAL ERROR: File \"\$inputFilename\" does not exist.");
-}
 
 \$inputHandle = fopen(\$inputFilename, 'r');
 \$outputHandle = tmpfile();

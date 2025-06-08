@@ -87,6 +87,13 @@ Options:
 EOF
 )"
 
-FILE_OR_STDIN=${ARGS[FILE]:-/dev/stdin}
+if [[ -z "${ARGS[FILE]}" ]]; then
+  INPUT=/dev/stdin
+elif [[ ! -f "${ARGS[FILE]}" ]]; then
+  >&2 fold --spaces <<< "FATAL ERROR: File \"${ARGS[FILE]}\" does not exist."
+  exit 1
+else
+  INPUT=${ARGS[FILE]}
+fi
 
-awk "{print \$${ARGS[WORD_NUMBER]}}" "$FILE_OR_STDIN"
+awk "{print \$${ARGS[WORD_NUMBER]}}" "$INPUT"

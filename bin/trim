@@ -90,7 +90,14 @@ Options:
 EOF
 )"
 
-FILE_OR_STDIN=${ARGS[FILE]:-/dev/stdin}
+if [[ -z "${ARGS[FILE]}" ]]; then
+  INPUT=/dev/stdin
+elif [[ ! -f "${ARGS[FILE]}" ]]; then
+  >&2 fold --spaces <<< "FATAL ERROR: File \"${ARGS[FILE]}\" does not exist."
+  exit 1
+else
+  INPUT=${ARGS[FILE]}
+fi
 
 # https://stackoverflow.com/a/3232433
-sed -e 's/^\s*//' -e 's/\s*$//' "$FILE_OR_STDIN"
+sed -e 's/^\s*//' -e 's/\s*$//' "$INPUT"

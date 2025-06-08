@@ -96,6 +96,15 @@ Options:
 EOF
 )"
 
+if [[ -z "${ARGS[FILE]}" ]]; then
+  INPUT=/dev/stdin
+elif [[ ! -f "${ARGS[FILE]}" ]]; then
+  >&2 fold --spaces <<< "FATAL ERROR: File \"${ARGS[FILE]}\" does not exist."
+  exit 1
+else
+  INPUT=${ARGS[FILE]}
+fi
+
 if [[ ! ${ARGS[--size]} =~ ^[0-9]+$ ]]; then
   >&2 echo 'FATAL ERROR: Indent size must be a non-negative integer.'
   exit 1
@@ -106,7 +115,5 @@ for (( I=1; I <= ${ARGS[--size]}; I++ )); do
   SPACES+=' '
 done
 
-FILE_OR_STDIN=${ARGS[FILE]:-/dev/stdin}
-
 # https://unix.stackexchange.com/a/148111
-sed "s/^/$SPACES/" "$FILE_OR_STDIN"
+sed "s/^/$SPACES/" "$INPUT"

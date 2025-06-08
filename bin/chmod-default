@@ -89,6 +89,8 @@ if [[ -f ${ARGS[FILE]} ]]; then
 elif [[ -d ${ARGS[FILE]} ]]; then
   chmod '=rwx' "${ARGS[FILE]}"
 else
-  >&2 echo 'FATAL ERROR: inode type is not supported.'
+  >&2 fold --spaces <<EOF
+FATAL ERROR: ${ARGS[FILE]} does not exist or inode type is not supported.
+EOF
   exit 1
 fi

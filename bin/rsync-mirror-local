@@ -99,7 +99,8 @@ SOURCE_WITH_TRAILING_SLASH=$SOURCE_WITH_NO_TRAILING_SLASH/
 TARGET_WITH_TRAILING_SLASH=$TARGET_WITH_NO_TRAILING_SLASH/
 
 if [[ ! -d "$SOURCE_WITH_TRAILING_SLASH" ]]; then
-    >&2 echo "FATAL ERROR: \"$SOURCE_WITH_TRAILING_SLASH\" does not exist."
+    >&2 fold --spaces \
+      <<< "FATAL ERROR: \"$SOURCE_WITH_TRAILING_SLASH\" does not exist."
     exit 1
 fi
 
@@ -113,7 +114,8 @@ fi
 # Perhaps this behavior, checking whether the destination directory exists, can
 # be made an option in the future, disabled by default.
 if [[ ! -d "$TARGET_WITH_TRAILING_SLASH" ]]; then
-    >&2 echo "FATAL ERROR: \"$TARGET_WITH_TRAILING_SLASH\" does not exist."
+    >&2 fold --spaces \
+      <<< "FATAL ERROR: \"$TARGET_WITH_TRAILING_SLASH\" does not exist."
     exit 1
 fi
 

@@ -86,6 +86,11 @@ Options:
 EOF
 )"
 
+if [[ ! -f "${ARGS[FILE]}" ]]; then
+  >&2 fold --spaces <<< "FATAL ERROR: File \"${ARGS[FILE]}\" does not exist."
+  exit 1
+fi
+
 OUTPUT_FILE=$(mktemp)
 
 # Use Ruby to correctly handle CSV files that already double-quote values, CSV

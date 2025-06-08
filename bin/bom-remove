@@ -89,6 +89,11 @@ Options:
 EOF
 )"
 
+if [[ -n "${ARGS[FILE]}" && ! -f "${ARGS[FILE]}" ]]; then
+  >&2 fold --spaces <<< "FATAL ERROR: File \"${ARGS[FILE]}\" does not exist."
+  exit 1
+fi
+
 # https://unix.stackexchange.com/a/381263/410447
 SED_EXPRESSION='1s/^\xef\xbb\xbf//'
 
