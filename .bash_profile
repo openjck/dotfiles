@@ -21,3 +21,6 @@
 
 source "$HOME/.profile"
 source "$HOME/.bashrc"
+
+# Source private, non-pushed, local configurations, if any.
+__source_if_file_exists "$HOME/.bash_profile.local"
