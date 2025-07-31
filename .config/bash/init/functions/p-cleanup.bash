@@ -1,5 +1,5 @@
 function p-cleanup() {
-  if [[ $DISTRO == "Ubuntu" ]]; then
+  if [[ $DISTRO == Ubuntu || $DISTRO == Debian ]]; then
     sudo apt autoremove "$@"
   else
     __print-unsupported-err

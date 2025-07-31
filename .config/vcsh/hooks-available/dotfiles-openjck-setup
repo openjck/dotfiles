@@ -133,13 +133,12 @@ function run_set_up_function() {
   esac
 }
 
-function set_up_packages_ubuntu() {
+function set_up_packages_apt() {
   declare PACKAGES_TO_INSTALL=()
 
   local PACKAGES=(
     'bat'
     'fd-find'
-    'fzf'
     'git'
     'moreutils'
     'pwgen'
@@ -167,7 +166,7 @@ function set_up_packages_ubuntu() {
   else
     echo
 
-    sudo apt-get install --yes "${PACKAGES_TO_INSTALL[@]}"
+    sudo apt install --yes "${PACKAGES_TO_INSTALL[@]}"
     return $RETURN_CODE_DONE
   fi
 }
@@ -175,7 +174,10 @@ function set_up_packages_ubuntu() {
 function set_up_packages() {
   case $DISTRO in
     Ubuntu)
-      set_up_packages_ubuntu
+      set_up_packages_apt
+      ;;
+    Debian)
+      set_up_packages_apt
       ;;
     *)
       return $RETURN_CODE_UNSUPPORTED
