@@ -38,8 +38,7 @@ source "$XDG_CONFIG_HOME/bash/init/npm.bash"
 source "$XDG_CONFIG_HOME/bash/init/functions.bash"
 
 # For some reason, if `eval "$(fzf --bash)"` is run before functions.bash is
-# loaded, autocomplete does not work with the "c" function. It must be
-# conflicting with something.
+# loaded, autocomplete for the "c" function will not work.
 source "$XDG_CONFIG_HOME/bash/init/fzf.bash"
 
 # Intentionally disabled configurations.
