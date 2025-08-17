@@ -47,10 +47,11 @@ Follow these steps to install _all_ of these files:
     the files from this project, move them somewhere else for now, then run this
     command again. If you don't care about the existing files, remove them, then
     run this command again.
-7. Run `"${XDG_CONFIG_HOME:-~/.config}/vcsh/hooks-available/dotfiles-openjck-setup"`.
-  * This is supposed to be run automatically at certain times, using vcsh hooks
-    (see _.config/vcsh/hooks-*_), but for some reason, it isn't. I must be
-    doing something wrong.
+7. Run `vcsh upgrade dotfiles-openjck`.
+  * This runs the dotfiles-openjck setup script. The setup script will also run
+    when `vcsh pull` is run, but _not_ when `vcsh dotfiles-openjck pull` is run.
+    I don't believe it's possible to configure vcsh to run any hook like this
+    when `vcsh dotfiles-openjck [subcommand]` is run.
 
 ### Single shell script
 
