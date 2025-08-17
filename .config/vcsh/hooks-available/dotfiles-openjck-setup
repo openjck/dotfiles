@@ -224,6 +224,11 @@ function set_up_snaps() {
 function set_up_vcsh() {
   local MODIFIED_CONFIG=false
 
+  if [[ $(vcsh dotfiles-openjck config status.showUntrackedFiles) != 'no' ]]; then
+    vcsh dotfiles-openjck config status.showUntrackedFiles no
+    MODIFIED_CONFIG=true
+  fi
+
   if [[ $(vcsh dotfiles-openjck config core.sparseCheckout) != 'true' ]]; then
     vcsh dotfiles-openjck config core.sparseCheckout true
     MODIFIED_CONFIG=true
