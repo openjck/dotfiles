@@ -9,11 +9,10 @@ source "$XDG_CONFIG_HOME/bash/bootstrap/source_utils.bash"
 source "$XDG_CONFIG_HOME/bash/init/homebrew.bash"
 
 # Source configurations.
-source "$XDG_CONFIG_HOME/bash/init/asdf.bash"
+# source "$XDG_CONFIG_HOME/bash/init/asdf.bash"
 source "$XDG_CONFIG_HOME/bash/init/bash-completion.bash"
 source "$XDG_CONFIG_HOME/bash/init/directories.bash"
 source "$XDG_CONFIG_HOME/bash/init/files.bash"
-source "$XDG_CONFIG_HOME/bash/init/fzf.bash"
 source "$XDG_CONFIG_HOME/bash/init/gpg.bash"
 source "$XDG_CONFIG_HOME/bash/init/history.bash"
 source "$XDG_CONFIG_HOME/bash/init/less.bash"
@@ -37,6 +36,11 @@ source "$XDG_CONFIG_HOME/bash/init/npm.bash"
 # "c" function reuses "cd" completion, which is altered when "cdable_vars" is
 # enabled.
 source "$XDG_CONFIG_HOME/bash/init/functions.bash"
+
+# For some reason, if `eval "$(fzf --bash)"` is run before functions.bash is
+# loaded, autocomplete does not work with the "c" function. It must be
+# conflicting with something.
+source "$XDG_CONFIG_HOME/bash/init/fzf.bash"
 
 # Intentionally disabled configurations.
 #
