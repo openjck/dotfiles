@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# dotfiles-openjck-setup:
+# Set up dotfile dependencies used across machines.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
 # MIT License
 #
 # Copyright (c) 2023, 2024, 2025 John Karahalis
