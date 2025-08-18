@@ -47,11 +47,15 @@ Follow these steps to install _all_ of these files:
     the files from this project, move them somewhere else for now, then run this
     command again. If you don't care about the existing files, remove them, then
     run this command again.
-7. Run `vcsh upgrade dotfiles-openjck`.
-  * This runs the dotfiles-openjck setup script. The setup script will also run
-    when `vcsh pull` is run, but _not_ when `vcsh dotfiles-openjck pull` is run.
-    I don't believe it's possible to configure vcsh to run any hook like this
-    when `vcsh dotfiles-openjck [subcommand]` is run.
+7. Log out, then log back in.
+  * This will cause the new _.profile_ file to take effect. There are faster
+    ways to accomplish this, but logging out and logging back in is the easiest
+    and most comprehensive.
+8. Run `vcsh upgrade dotfiles-openjck`.
+  * This runs this project's setup script. The setup script will also run when
+    `vcsh pull` is run, but _not_ when `vcsh dotfiles-openjck pull` is run. I
+    don't think it's possible to configure vcsh to run any hook like this when
+    `vcsh dotfiles-openjck [subcommand]` is run.
 
 ### Single shell script
 
