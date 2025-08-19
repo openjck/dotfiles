@@ -15,13 +15,15 @@ methods of organizing aliases and functions, but this method, inspired by
 [fish](https://github.com/fish-shell/fish-shell), feels the most natural. No
 aliases are used. Everything is a function, and every function has its own file.
 
-One weakness of my Bash setup is that loading an interactive shell is pretty
-slow, taking about 1-2 seconds on my laptop. That poor performance probably has
-a lot to do with how many files need to be read. Some day, if it becomes a real
-problem, I could look into adding a build step for my Bash setup which
-concatenates and/or minifies all text into a single _.bashrc_ file. For now,
-it's not worth the effort. Waiting two seconds for a Bash shell to load is never
-a meaningful bottleneck in my work.
+One weakness with the organization of my Bash configuration is that loading an
+interactive shell is pretty slow, relative to loading an unconfigured Bash
+session, taking about 1-2 seconds on my laptop. That poor performance may have
+something to do with how many files need to be read, although a quick experiment
+in concatenating the files did not seem to speed things up dramatically. Some
+day, if it becomes a real problem, I could look into adding a build step for the
+Bash configuration that concatenates and/or minifies all text into a single
+_.bashrc_ file. For now, it's not worth the effort. Waiting two seconds for
+a Bash shell to load is never a meaningful bottleneck for me.
 
 To ask questions or discuss these files, please use the
 [Discussions](https://github.com/openjck/dotfiles/discussions) page.
