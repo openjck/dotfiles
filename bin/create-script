@@ -79,7 +79,7 @@ with the default editor.
 If the editor exits with an error code, the file that was created and opened
 with the editor will be removed. This can be helpful if the name of FILE is
 accidentally misspelled. Simply exit the editor with an error code (e.g., by
-running ":cq" in Vim), and the file will be removed.
+running ":cq" if using Vim), and the file will be removed.
 
 Usage:
   $COMMAND_NAME [-s SHEBANG] FILE
