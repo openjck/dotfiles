@@ -194,6 +194,39 @@ function set_up_packages() {
   esac
 }
 
+function set_up_flatpaks() {
+  declare FLATPAKS_TO_INSTALL=()
+
+  local FLATPAKS=(
+    'org.mozilla.firefox'
+    'org.gnu.liquidwar6'
+  )
+
+  local FLATPAK
+  for FLATPAK in "${FLATPAKS[@]}"; do
+    # If the flatpak is not already installed, add it to the
+    # $FLATPAKS_TO_INSTALL array.
+    if ! flatpak info "$FLATPAK" &> /dev/null; then
+      FLATPAKS_TO_INSTALL+=("$FLATPAK")
+    fi
+  done
+
+  # already done. Otherwise, install the flatpaks.
+  # If there are no flatpaks to install, return with a code indicating that this is
+  if [[ ${#FLATPAKS_TO_INSTALL[@]} -eq 0 ]]; then
+    return $RETURN_CODE_ALREADY_DONE
+  else
+    echo
+
+    local FLATPAK
+    for FLATPAK in "${FLATPAKS_TO_INSTALL[@]}"; do
+      flatpak install "$FLATPAK"
+    done
+
+    return $RETURN_CODE_DONE
+  fi
+}
+
 function set_up_snaps() {
   declare SNAPS_TO_INSTALL=()
 
@@ -313,10 +346,12 @@ declare -A STEPS
 
 STEPS[0,name]=packages
 STEPS[0,own_output_on_success]=true
-STEPS[1,name]=snaps
+STEPS[1,name]=flatpaks
 STEPS[1,own_output_on_success]=true
-STEPS[2,name]=vcsh
-STEPS[3,name]=directories
-STEPS[4,name]=tmux
+STEPS[2,name]=snaps
+STEPS[2,own_output_on_success]=true
+STEPS[3,name]=vcsh
+STEPS[4,name]=directories
+STEPS[5,name]=tmux
 
 run_set_up_functions "${STEPS[@]}"
