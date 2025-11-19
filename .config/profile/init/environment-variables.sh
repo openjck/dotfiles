@@ -12,5 +12,8 @@ export HOSTNAME
 KERNEL=$(uname)
 export KERNEL
 
+BROWSER=firefox
+export BROWSER
+
 # Exit the shell when Zellij exits.
 export ZELLIJ_AUTO_EXIT=true
