@@ -82,10 +82,12 @@ accidentally misspelled. Simply exit the editor with an error code (e.g., by
 running ":cq" in Vim), and the file will be removed.
 
 Usage:
-  $COMMAND_NAME FILE
+  $COMMAND_NAME [-s SHEBANG] FILE
   $COMMAND_NAME -h | --help
 
 Options:
+  -s SHEBANG, --shebang SHEBANG
+      The shebang to use in the shell script [default: #!/usr/bin/env bash]
   -h, --help
       Show this documentation
 EOF
@@ -96,7 +98,7 @@ if [[ -f "${ARGS[FILE]}" ]]; then
   exit 1
 fi
 
-touch "${ARGS[FILE]}"
+echo "${ARGS[--shebang]}" > "${ARGS[FILE]}"
 chmod u+x "${ARGS[FILE]}"
 
 if ! $EDITOR "${ARGS[FILE]}"; then
