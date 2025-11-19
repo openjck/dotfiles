@@ -148,6 +148,7 @@ function set_up_packages_apt() {
   local PACKAGES=(
     'bat'
     'fd-find'
+    'flatpak'
     'git'
     'moreutils'
     'pwgen'
@@ -195,34 +196,67 @@ function set_up_packages() {
 }
 
 function set_up_flatpaks() {
-  declare FLATPAKS_TO_INSTALL=()
+  local INSTALLED_A_FLATPAK=false
 
-  local FLATPAKS=(
+  # Set up remotes, including one remote for flathub and one remote for verified
+  # flatpaks on flathub.
+  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  flatpak remote-add --if-not-exists --subset=verified flathub-verified https://flathub.org/repo/flathub.flatpakrepo
+
+  declare UNVERIFIED_FLATPAKS_TO_INSTALL=()
+  declare VERIFIED_FLATPAKS_TO_INSTALL=()
+
+  local UNVERIFIED_FLATPAKS=(
+  )
+
+  local VERIFIED_FLATPAKS=(
     'org.mozilla.firefox'
   )
 
-  local FLATPAK
-  for FLATPAK in "${FLATPAKS[@]}"; do
+  local UNVERIFIED_FLATPAK
+  for UNVERIFIED_FLATPAK in "${UNVERIFIED_FLATPAKS[@]}"; do
     # If the flatpak is not already installed, add it to the
-    # $FLATPAKS_TO_INSTALL array.
-    if ! flatpak info "$FLATPAK" &> /dev/null; then
-      FLATPAKS_TO_INSTALL+=("$FLATPAK")
+    # $UNVERIFIED_FLATPAKS_TO_INSTALL array.
+    if ! flatpak info "$UNVERIFIED_FLATPAK" &> /dev/null; then
+      UNVERIFIED_FLATPAKS_TO_INSTALL+=("$UNVERIFIED_FLATPAK")
     fi
   done
 
-  # already done. Otherwise, install the flatpaks.
-  # If there are no flatpaks to install, return with a code indicating that this is
-  if [[ ${#FLATPAKS_TO_INSTALL[@]} -eq 0 ]]; then
-    return $RETURN_CODE_ALREADY_DONE
-  else
+  local VERIFIED_FLATPAK
+  for VERIFIED_FLATPAK in "${VERIFIED_FLATPAKS[@]}"; do
+    # If the flatpak is not already installed, add it to the
+    # $VERIFIED_FLATPAKS_TO_INSTALL array.
+    if ! flatpak info "$VERIFIED_FLATPAK" &> /dev/null; then
+      VERIFIED_FLATPAKS_TO_INSTALL+=("$VERIFIED_FLATPAK")
+    fi
+  done
+
+  if [[ ${#UNVERIFIED_FLATPAKS_TO_INSTALL[@]} -ne 0 ]]; then
     echo
 
-    local FLATPAK
-    for FLATPAK in "${FLATPAKS_TO_INSTALL[@]}"; do
-      flatpak install "$FLATPAK"
+    local UNVERIFIED_FLATPAK
+    for UNVERIFIED_FLATPAK in "${UNVERIFIED_FLATPAKS_TO_INSTALL[@]}"; do
+      flatpak install --noninteractive flathub "$UNVERIFIED_FLATPAK"
     done
 
+    INSTALLED_A_FLATPAK=true
+  fi
+
+  if [[ ${#VERIFIED_FLATPAKS_TO_INSTALL[@]} -ne 0 ]]; then
+    echo
+
+    local VERIFIED_FLATPAK
+    for VERIFIED_FLATPAK in "${VERIFIED_FLATPAKS_TO_INSTALL[@]}"; do
+      flatpak install --noninteractive flathub-verified "$VERIFIED_FLATPAK"
+    done
+
+    INSTALLED_A_FLATPAK=true
+  fi
+
+  if [[ $INSTALLED_A_FLATPAK == true ]]; then
     return $RETURN_CODE_DONE
+  else
+    return $RETURN_CODE_ALREADY_DONE
   fi
 }
 
