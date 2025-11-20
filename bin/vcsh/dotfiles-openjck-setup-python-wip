@@ -87,12 +87,12 @@ def set_up_flatpaks():
     # Set up remotes, including one remote for Flathub and one remote for
     # verified flatpaks on Flathub.
     run_silently_on_success(
-        """flatpak remote-add --if-not-exists flathub
-           https://dl.flathub.org/repo/flathub.flatpakrepo"""
+        'flatpak remote-add --if-not-exists flathub ' +
+        'https://dl.flathub.org/repo/flathub.flatpakrepo'
     )
     run_silently_on_success(
-        """flatpak remote-add --if-not-exists --subset=verified
-           flathub-verified https://flathub.org/repo/flathub.flatpakrepo"""
+        'flatpak remote-add --if-not-exists --subset=verified ' +
+        'flathub-verified https://flathub.org/repo/flathub.flatpakrepo'
     )
 
     flatpaks_to_install = {
