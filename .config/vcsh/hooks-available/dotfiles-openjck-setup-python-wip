@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
 import os
 
 # dotfiles-openjck-setup:
@@ -47,9 +48,11 @@ class Result(Enum):
 
 term_suffix = '... '
 
+
 def set_up_packages_apt():
     # Just an example
     return Result.DONE
+
 
 def set_up_packages():
     match os.environ['DISTRO']:
@@ -58,31 +61,62 @@ def set_up_packages():
         case _:
             return Result.UNSUPPORTED
 
+
 def set_up_flatpaks():
     # Just an example
     return Result.ALREADY_DONE
+
 
 def set_up_snaps():
     # Just an example
     return Result.UNSUPPORTED
 
+
 def set_up_vcsh():
     # Just an example
     return Result.DONE
 
+
 def set_up_directories():
-    # Just an example
-    return Result.ALREADY_DONE
+    created_any = False
+
+    home = Path.home()
+    xdg_config_home = os.environ['XDG_CONFIG_HOME']
+
+    paths_to_create = [
+        Path(f'{home}/LGTD/inboxes/main'),
+        Path(f'{home}/apps/repos/git'),
+        Path(f'{home}/apps/appimage'),
+        Path(f'{home}/bin/local'),
+        Path(f'{home}/bin/local/downloaded'),
+        Path(f'{home}/bin/local/temporary'),
+        Path(f'{home}/devel'),
+        Path(f'{home}/devel/repos'),
+        Path(f'{xdg_config_home}/bash/init/functions/local'),
+    ]
+
+    for path in paths_to_create:
+        if not path.is_dir():
+            path.mkdir(parents=True)
+            created_any = True
+
+    if created_any:
+        return Result.DONE
+    else:
+        return Result.ALREADY_DONE
+
 
 def set_up_tmux():
     # Just an example
     return Result.UNSUPPORTED
+
 
 def run_steps(steps):
     longest_term_length = max(map(lambda s: len(s.term), steps))
 
     for step in steps:
         run_step(step, longest_term_length)
+
 
 def run_step(step, longest_term_length):
     pad_length = longest_term_length + len(term_suffix)
@@ -100,6 +134,7 @@ def run_step(step, longest_term_length):
             print('already done.')
         case Result.UNSUPPORTED:
             print('unsupported.')
+
 
 # TODO: Put this into something like a main function.
 steps = [
