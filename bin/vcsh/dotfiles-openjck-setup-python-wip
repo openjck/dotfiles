@@ -3,7 +3,9 @@
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+
 import os
+import subprocess
 
 # dotfiles-openjck-setup:
 # Set up dotfile dependencies.
@@ -39,7 +41,7 @@ import os
 @dataclass
 class Step():
     term: str
-    own_output: bool = False
+    own_activity_output: bool = False
 
 class Result(Enum):
     DONE = 1
@@ -49,9 +51,21 @@ class Result(Enum):
 term_suffix = '... '
 
 
+def run(cmd):
+    return subprocess.run(cmd, shell=True)
+
+
+def run_silently(cmd):
+    return subprocess.run(
+        cmd,
+        shell=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
 def set_up_packages_apt():
     # Just an example
-    return Result.DONE
+    return Result.ALREADY_DONE
 
 
 def set_up_packages():
@@ -65,23 +79,44 @@ def set_up_packages():
 def set_up_flatpaks():
     installed_any = False
 
+    # Set up remotes, including one remote for Flathub and one remote for
+    # verified flatpaks on Flathub.
+    run_silently('flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo')
+    run_silently('flatpak remote-add --if-not-exists --subset=verified flathub-verified https://flathub.org/repo/flathub.flatpakrepo')
+
     flatpaks_to_install = {
         'verified': [
             'org.mozilla.firefox'
         ],
         'unverified': [
+            'io.neovim.nvim'
         ],
     }
+
+    for verification_type, flatpaks in flatpaks_to_install.items():
+        if verification_type == 'verified':
+            remote = 'flathub-verified'
+        else:
+            remote = 'flathub'
+
+        for flatpak in flatpaks:
+            proc = run_silently(f'flatpak info {flatpak}')
+
+            if proc.returncode != 0:
+                # Print a newline before the first flatpak to be installed so
+                # that any output appears below "Setting up flatpaks...". Also
+                # ensure the newline is printed _only_ for the first flatpak to
+                # be installed so that subsequent installation output is not
+                # separated by newlines.
+                if not installed_any:
+                    print()
+                run(f'flatpak install --noninteractive {remote} {flatpak}')
+                installed_any = True
 
     if installed_any:
         return Result.DONE
     else:
         return Result.ALREADY_DONE
-
-
-def set_up_snaps():
-    # Just an example
-    return Result.UNSUPPORTED
 
 
 def set_up_vcsh():
@@ -134,14 +169,15 @@ def run_step(step, longest_term_length):
     pad_length = longest_term_length + len(term_suffix)
     padded_term_and_suffix = (step.term + term_suffix).ljust(pad_length)
 
-    print(f'Setting up {padded_term_and_suffix}', end='')
+    print(f'Setting up {padded_term_and_suffix}', end='', flush=True)
 
     setup_fn_name = f'set_up_{step.term}'
     result = globals()[setup_fn_name]()
 
     match result:
         case Result.DONE:
-            print('done.')
+            if not step.own_activity_output:
+                print('done.')
         case Result.ALREADY_DONE:
             print('already done.')
         case Result.UNSUPPORTED:
@@ -150,9 +186,8 @@ def run_step(step, longest_term_length):
 
 # TODO: Put this into something like a main function.
 steps = [
-    Step('packages', own_output=True),
-    Step('flatpaks', own_output=True),
-    Step('snaps', own_output=True),
+    Step('packages', own_activity_output=True),
+    Step('flatpaks', own_activity_output=True),
     Step('vcsh'),
     Step('directories'),
     Step('tmux'),
