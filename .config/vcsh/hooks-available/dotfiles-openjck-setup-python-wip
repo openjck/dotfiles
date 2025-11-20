@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+
+from dataclasses import dataclass
+from enum import Enum
+import os
+
+# dotfiles-openjck-setup:
+# Set up dotfile dependencies.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
+# MIT License
+#
+# Copyright (c) 2023, 2024, 2025 John Karahalis
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+@dataclass
+class Step():
+    term: str
+    own_output: bool = False
+
+class Result(Enum):
+    DONE = 1
+    ALREADY_DONE = 2
+    UNSUPPORTED = 3
+
+term_suffix = '... '
+
+def set_up_packages_apt():
+    # Just an example
+    return Result.DONE
+
+def set_up_packages():
+    match os.environ['DISTRO']:
+        case 'Ubuntu' | 'Debian':
+            return set_up_packages_apt()
+        case _:
+            return Result.UNSUPPORTED
+
+def set_up_flatpaks():
+    # Just an example
+    return Result.ALREADY_DONE
+
+def set_up_snaps():
+    # Just an example
+    return Result.UNSUPPORTED
+
+def set_up_vcsh():
+    # Just an example
+    return Result.DONE
+
+def set_up_directories():
+    # Just an example
+    return Result.ALREADY_DONE
+
+def set_up_tmux():
+    # Just an example
+    return Result.UNSUPPORTED
+
+def run_steps(steps):
+    longest_term_length = max(map(lambda s: len(s.term), steps))
+
+    for step in steps:
+        run_step(step, longest_term_length)
+
+def run_step(step, longest_term_length):
+    pad_length = longest_term_length + len(term_suffix)
+    padded_term_and_suffix = (step.term + term_suffix).ljust(pad_length)
+
+    print(f'Setting up {padded_term_and_suffix}', end='')
+
+    setup_fn_name = f'set_up_{step.term}'
+    result = globals()[setup_fn_name]()
+
+    match result:
+        case Result.DONE:
+            print('done.')
+        case Result.ALREADY_DONE:
+            print('already done.')
+        case Result.UNSUPPORTED:
+            print('unsupported.')
+
+# TODO: Put this into something like a main function.
+steps = [
+    Step('packages', own_output=True),
+    Step('flatpaks', own_output=True),
+    Step('snaps', own_output=True),
+    Step('vcsh'),
+    Step('directories'),
+    Step('tmux'),
+]
+
+run_steps(steps)
