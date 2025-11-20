@@ -63,8 +63,20 @@ def set_up_packages():
 
 
 def set_up_flatpaks():
-    # Just an example
-    return Result.ALREADY_DONE
+    installed_any = False
+
+    flatpaks_to_install = {
+        'verified': [
+            'org.mozilla.firefox'
+        ],
+        'unverified': [
+        ],
+    }
+
+    if installed_any:
+        return Result.DONE
+    else:
+        return Result.ALREADY_DONE
 
 
 def set_up_snaps():
