@@ -37,6 +37,49 @@ import sys
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+config = {
+    'packages': {
+        'debian': [
+            'bat',
+            'fd-find',
+            'flatpak',
+            'git',
+            'moreutils',
+            'pwgen',
+            'ripgrep',
+            'sd',
+            'toilet',
+            'vcsh',
+        ],
+    },
+    'flatpaks': {
+        'flathub-verified': [
+            'org.mozilla.firefox',
+        ],
+        'flathub': [
+        ],
+    },
+    'snaps': [
+        {
+            'name': 'nvim',
+            'flags': [
+                '--classic',
+            ],
+        },
+    ],
+    'directories': [
+        '~/LGTD/inboxes/main',
+        '~/apps/repos/git',
+        '~/apps/appimage',
+        '~/bin/local',
+        '~/bin/local/downloaded',
+        '~/bin/local/temporary',
+        '~/devel',
+        '~/devel/repos',
+        f'{os.environ['XDG_CONFIG_HOME']}/bash/init/functions/local',
+    ],
+}
+
 @dataclass
 class Step():
     term: str
@@ -46,9 +89,6 @@ class Result(Enum):
     DONE = 1
     ALREADY_DONE = 2
     UNSUPPORTED = 3
-
-home = Path.home()
-xdg_config_home = os.environ['XDG_CONFIG_HOME']
 
 
 # Run a command and print both stdout and stderr.
@@ -72,22 +112,9 @@ def run_silently(cmd):
 
 
 def set_up_packages_debian():
-    required_packages = [
-        'bat',
-        'fd-find',
-        'flatpak',
-        'git',
-        'moreutils',
-        'pwgen',
-        'ripgrep',
-        'sd',
-        'toilet',
-        'vcsh',
-    ]
-
     packages_to_install = []
 
-    for package in required_packages:
+    for package in config['packages']['debian']:
         if run_silently(f'dpkg -s {package}').returncode != 0:
             packages_to_install.append(package)
 
@@ -121,31 +148,26 @@ def set_up_flatpaks():
         'flathub-verified https://flathub.org/repo/flathub.flatpakrepo'
     )
 
-    flatpaks_to_install = {
-        'verified': [
-            'org.mozilla.firefox'
-        ],
-        'unverified': [
-        ],
-    }
-
-    for verification_type, flatpaks in flatpaks_to_install.items():
-        if verification_type == 'verified':
-            remote = 'flathub-verified'
-        else:
-            remote = 'flathub'
+    for remote, flatpaks in config['flatpaks'].items():
+        flatpaks_to_install = []
 
         for flatpak in flatpaks:
             if run_silently(f'flatpak info {flatpak}').returncode != 0:
-                # Print a newline before the first flatpak to be installed so
-                # that any output appears below "Setting up flatpaks...". Also
-                # ensure the newline is printed _only_ for the first flatpak to
-                # be installed so that subsequent installation output is not
-                # separated by newlines.
-                if not installed_any:
-                    print()
-                run(f'flatpak install --noninteractive {remote} {flatpak}')
-                installed_any = True
+                flatpaks_to_install.append(flatpak)
+
+        if len(flatpaks_to_install) > 0:
+            # Print a newline before the first set of flatpaks to be installed
+            # so that any output appears below "Setting up flatpaks...". Also
+            # ensure the newline is printed _only_ for the first set of
+            # flatpaks to be installed so that subsequent installation output
+            # is not separated by newlines.
+            if not installed_any:
+                print()
+            run(
+                f'flatpak install --noninteractive {remote} ' +
+                ' '.join(flatpaks_to_install)
+            )
+            installed_any = True
 
     if installed_any:
         return Result.DONE
@@ -159,24 +181,15 @@ def set_up_snaps():
 
     installed_any = False
 
-    @dataclass
-    class Snap():
-        name: str
-        flags: List[str]
-
-    snaps_to_install = [
-        Snap('nvim', ['--classic'])
-    ]
-
-    for snap in snaps_to_install:
-        if run_silently(f'snap list {snap.name}').returncode != 0:
+    for snap in config['snaps']:
+        if run_silently(f'snap list {snap['name']}').returncode != 0:
             # Print a newline before the first snap to be installed so that any
             # output appears below "Setting up snaps...". Also ensure the
             # newline is printed _only_ for the first snap to be installed so
             # that subsequent installation output is not separated by newlines.
             if not installed_any:
                 print()
-            run(f'sudo snap install {snap.name} {" ".join(snap.flags)}')
+            run(f'sudo snap install {snap['name']} {" ".join(snap['flags'])}')
             installed_any = True
 
     if installed_any:
@@ -194,19 +207,8 @@ def set_up_vcsh():
 def set_up_directories():
     created_any = False
 
-    paths_to_create = [
-        Path(f'{home}/LGTD/inboxes/main'),
-        Path(f'{home}/apps/repos/git'),
-        Path(f'{home}/apps/appimage'),
-        Path(f'{home}/bin/local'),
-        Path(f'{home}/bin/local/downloaded'),
-        Path(f'{home}/bin/local/temporary'),
-        Path(f'{home}/devel'),
-        Path(f'{home}/devel/repos'),
-        Path(f'{xdg_config_home}/bash/init/functions/local'),
-    ]
-
-    for path in paths_to_create:
+    for directory in config['directories']:
+        path = Path(directory).expanduser()
         if not path.is_dir():
             path.mkdir(parents=True)
             created_any = True
@@ -218,7 +220,7 @@ def set_up_directories():
 
 
 def set_up_tmux():
-    tpm_path = Path(f'{home}/.tmux/plugins/tpm')
+    tpm_path = Path('~/.tmux/plugins/tpm').expanduser()
     tpm_path_str = tpm_path.absolute().as_posix()
 
     if tpm_path.is_dir():
@@ -229,7 +231,7 @@ def set_up_tmux():
         # Install tpm.
         run(f'git clone --quiet https://github.com/tmux-plugins/tpm {tpm_path_str}')
 
-        # Install plugins
+        # Install plugins.
         run(f'{tpm_path_str}/bin/install_plugins')
 
         return Result.DONE
