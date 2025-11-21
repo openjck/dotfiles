@@ -131,6 +131,9 @@ def set_up_flatpaks():
 
 
 def set_up_snaps():
+    if os.environ['DISTRO'] != 'Ubuntu':
+        return Result.UNSUPPORTED
+
     installed_any = False
 
     @dataclass
