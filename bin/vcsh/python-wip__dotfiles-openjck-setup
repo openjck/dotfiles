@@ -12,11 +12,8 @@ import sys
 # dotfiles-openjck-setup:
 # Set up dotfile dependencies.
 #
-# Installation instructions:
-# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
-#
 # Usage instructions:
-# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+# Simply run this script (e.g., ./dotfiles-openjck-setup).
 
 # MIT License
 #
@@ -245,18 +242,43 @@ def run_step(step, longest_term_length):
         case Result.UNSUPPORTED:
             print('unsupported.')
 
+def print_help(filename: str):
+    help_text = f"""
+Set up the packages, directories, plugin managers, and other dotfile
+dependencies used across machines.
+
+This script is idempotent and can therefore be run multiple times without
+affecting the result, assuming the script's implementation does not change
+between invocations. It should be rerun occasionally or whenever important
+details change, like configured packages or configured directories.
+
+Usage:
+  {filename}
+  {filename} -h | --help
+
+Options:
+  -h, --help
+      Show this documentation
+""".strip()
+
+    print(help_text)
+    return 0
 
 def main():
-    steps = [
-        Step('packages', own_activity_output=True),
-        Step('flatpaks', own_activity_output=True),
-        Step('snaps', own_activity_output=True),
-        Step('vcsh'),
-        Step('directories'),
-        Step('tmux', own_activity_output=True),
-    ]
+    if len(sys.argv) > 1 and sys.argv[1] in ('-h', '--help'):
+        filename = os.path.basename(__file__)
+        print_help(filename)
+    else:
+        steps = [
+            Step('packages', own_activity_output=True),
+            Step('flatpaks', own_activity_output=True),
+            Step('snaps', own_activity_output=True),
+            Step('vcsh'),
+            Step('directories'),
+            Step('tmux', own_activity_output=True),
+        ]
 
-    run_steps(steps)
+        run_steps(steps)
 
 
 if __name__ == '__main__':

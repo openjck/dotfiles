@@ -1,26 +1,5 @@
 #!/usr/bin/env bash
 
-COMMAND_NAME=$(basename "$0")
-
-eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Set up the packages, directories, plugin managers, and other dotfile
-dependencies used across machines.
-
-This script is idempotent and can therefore be run multiple times without
-affecting the result, assuming the script's implementation does not change
-between invocations. It should be rerun occasionally or whenever important
-details change, like configured packages or configured directories.
-
-Usage:
-  $COMMAND_NAME
-  $COMMAND_NAME -h | --help
-
-Options:
-  -h, --help
-      Show this documentation
-EOF
-)"
-
 # Manually source the ".profile" file, since we need to use some of the
 # environment variables that it sets and this script might be running before the
 # ".profile" file is applied.
