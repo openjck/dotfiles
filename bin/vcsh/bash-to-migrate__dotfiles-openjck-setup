@@ -5,45 +5,6 @@
 # ".profile" file is applied.
 source "$HOME/.profile"
 
-function set_up_packages_apt() {
-  declare PACKAGES_TO_INSTALL=()
-
-  local PACKAGES=(
-    'bat'
-    'fd-find'
-    'flatpak'
-    'git'
-    'moreutils'
-    'pwgen'
-    'ripgrep'
-    'sd'
-    'toilet'
-    'vcsh'
-  )
-
-  local PACKAGE
-  for PACKAGE in "${PACKAGES[@]}"; do
-    # If the package is not already installed, add it to the
-    # $PACKAGES_TO_INSTALL array.
-    #
-    # https://askubuntu.com/a/1393059
-    if [[ $(dpkg-query --show --showformat='${db:Status-Status}\n' "$PACKAGE" 2>/dev/null) != 'installed' ]]; then
-      PACKAGES_TO_INSTALL+=("$PACKAGE")
-    fi
-  done
-
-  # If there are no packages to install, return with a code indicating that
-  # this is already done. Otherwise, install the packages.
-  if [[ ${#PACKAGES_TO_INSTALL[@]} -eq 0 ]]; then
-    return $RETURN_CODE_ALREADY_DONE
-  else
-    echo
-
-    sudo apt install --yes "${PACKAGES_TO_INSTALL[@]}"
-    return $RETURN_CODE_DONE
-  fi
-}
-
 function set_up_vcsh() {
   local MODIFIED_CONFIG=false
 

@@ -56,7 +56,7 @@ def run(cmd):
     return subprocess.run(cmd, shell=True)
 
 
-# Run a command, but do not print stdout. DO print stderr, if any.
+# Run a command, but do not print stdout. Do print stderr, if any.
 def run_quietly(cmd):
     return subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
 
@@ -71,15 +71,38 @@ def run_silently(cmd):
     )
 
 
-def set_up_packages_apt():
-    # Just an example
-    return Result.ALREADY_DONE
+def set_up_packages_debian():
+    required_packages = [
+        'bat',
+        'fd-find',
+        'flatpak',
+        'git',
+        'moreutils',
+        'pwgen',
+        'ripgrep',
+        'sd',
+        'toilet',
+        'vcsh',
+    ]
+
+    packages_to_install = []
+
+    for package in required_packages:
+        if run_silently(f'dpkg -s {package}').returncode != 0:
+            packages_to_install.append(package)
+
+    if len(packages_to_install) == 0:
+        return Result.ALREADY_DONE
+    else:
+        run(f'sudo apt install --yes {" ".join(packages_to_install)}')
+        return Result.DONE
+
 
 
 def set_up_packages():
     match os.environ['DISTRO']:
         case 'Ubuntu' | 'Debian':
-            return set_up_packages_apt()
+            return set_up_packages_debian()
         case _:
             return Result.UNSUPPORTED
 
@@ -113,9 +136,7 @@ def set_up_flatpaks():
             remote = 'flathub'
 
         for flatpak in flatpaks:
-            proc = run_silently(f'flatpak info {flatpak}')
-
-            if proc.returncode != 0:
+            if run_silently(f'flatpak info {flatpak}').returncode != 0:
                 # Print a newline before the first flatpak to be installed so
                 # that any output appears below "Setting up flatpaks...". Also
                 # ensure the newline is printed _only_ for the first flatpak to
@@ -148,9 +169,7 @@ def set_up_snaps():
     ]
 
     for snap in snaps_to_install:
-        proc = run_silently(f'snap list {snap.name}')
-
-        if proc.returncode != 0:
+        if run_silently(f'snap list {snap.name}').returncode != 0:
             # Print a newline before the first snap to be installed so that any
             # output appears below "Setting up snaps...". Also ensure the
             # newline is printed _only_ for the first snap to be installed so
