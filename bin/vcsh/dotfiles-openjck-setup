@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 
-from dataclasses import dataclass
-from enum import Enum
-from pathlib import Path
-from typing import List
-
 import os
 import subprocess
 import sys
+from dataclasses import dataclass
+from enum import Enum
+from pathlib import Path
 
 # dotfiles-openjck-setup:
 # Set up dotfile dependencies.
@@ -37,60 +35,63 @@ import sys
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-xdg_config_home = os.environ['XDG_CONFIG_HOME']
+xdg_config_home = os.environ["XDG_CONFIG_HOME"]
+distro = os.environ["DISTRO"]
 
 config = {
-    'packages': {
-        'debian': [
-            'bat',
-            'fd-find',
-            'flatpak',
-            'git',
-            'moreutils',
-            'pwgen',
-            'ripgrep',
-            'sd',
-            'toilet',
-            'vcsh',
+    "packages": {
+        "debian": [
+            "bat",
+            "fd-find",
+            "flatpak",
+            "git",
+            "moreutils",
+            "pwgen",
+            "ripgrep",
+            "sd",
+            "toilet",
+            "vcsh",
         ],
     },
-    'flatpaks': {
-        'flathub-verified': [
-            'org.mozilla.firefox',
+    "flatpaks": {
+        "flathub-verified": [
+            "org.mozilla.firefox",
         ],
-        'flathub': [
-        ],
+        "flathub": [],
     },
-    'snaps': [
+    "snaps": [
         {
-            'name': 'nvim',
-            'flags': [
-                '--classic',
+            "name": "nvim",
+            "flags": [
+                "--classic",
             ],
         },
     ],
-    'directories': [
-        '~/LGTD/inboxes/main',
-        '~/apps/repos/git',
-        '~/apps/appimage',
-        '~/bin/local',
-        '~/bin/local/downloaded',
-        '~/bin/local/temporary',
-        '~/devel',
-        '~/devel/repos',
-        f'{xdg_config_home}/bash/init/functions/local',
+    "directories": [
+        "~/LGTD/inboxes/main",
+        "~/apps/repos/git",
+        "~/apps/appimage",
+        "~/bin/local",
+        "~/bin/local/downloaded",
+        "~/bin/local/temporary",
+        "~/devel",
+        "~/devel/repos",
+        f"{xdg_config_home}/bash/init/functions/local",
     ],
 }
 
+
 @dataclass
-class Step():
+class Step:
     term: str
     own_activity_output: bool = False
+
 
 class Result(Enum):
     DONE = 1
     ALREADY_DONE = 2
     UNSUPPORTED = 3
+
 
 class VcshConfigResult(Enum):
     MODIFIED = 1
@@ -112,7 +113,11 @@ def run_quietly(cmd: str):
 # Run a command, capturing stdout and allowing stderr to be printed to the
 # console.
 def run_and_capture(cmd: str):
-    return subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+    return (
+        subprocess.run(cmd, shell=True, stdout=subprocess.PIPE)
+        .stdout.decode("utf-8")
+        .strip()
+    )
 
 
 # Run a command, discarding both stdout and stderr.
@@ -124,21 +129,22 @@ def run_silently(cmd: str):
         stderr=subprocess.DEVNULL,
     )
 
+
 def set_vcsh_config(config: str, desired_value: str):
-    value = run_and_capture(f'vcsh dotfiles-openjck config {config}')
+    value = run_and_capture(f"vcsh dotfiles-openjck config {config}")
 
     if value == desired_value:
         return VcshConfigResult.UNMODIFIED
     else:
-        run_quietly(f'vcsh dotfiles-openjck config {config} {desired_value}')
+        run_quietly(f"vcsh dotfiles-openjck config {config} {desired_value}")
         return VcshConfigResult.MODIFIED
 
 
 def set_up_packages_debian():
     packages_to_install = []
 
-    for package in config['packages']['debian']:
-        if run_silently(f'dpkg -s {package}').returncode != 0:
+    for package in config["packages"]["debian"]:
+        if run_silently(f"dpkg -s {package}").returncode != 0:
             packages_to_install.append(package)
 
     if len(packages_to_install) == 0:
@@ -149,8 +155,8 @@ def set_up_packages_debian():
 
 
 def set_up_packages():
-    match os.environ['DISTRO']:
-        case 'Ubuntu' | 'Debian':
+    match distro:
+        case "Ubuntu" | "Debian":
             return set_up_packages_debian()
         case _:
             return Result.UNSUPPORTED
@@ -162,19 +168,19 @@ def set_up_flatpaks():
     # Set up remotes, including one remote for Flathub and one remote for
     # verified flatpaks on Flathub.
     run_quietly(
-        'flatpak remote-add --if-not-exists flathub ' +
-        'https://dl.flathub.org/repo/flathub.flatpakrepo'
+        "flatpak remote-add --if-not-exists flathub "
+        + "https://dl.flathub.org/repo/flathub.flatpakrepo"
     )
     run_quietly(
-        'flatpak remote-add --if-not-exists --subset=verified ' +
-        'flathub-verified https://flathub.org/repo/flathub.flatpakrepo'
+        "flatpak remote-add --if-not-exists --subset=verified "
+        + "flathub-verified https://flathub.org/repo/flathub.flatpakrepo"
     )
 
-    for remote, flatpaks in config['flatpaks'].items():
+    for remote, flatpaks in config["flatpaks"].items():
         flatpaks_to_install = []
 
         for flatpak in flatpaks:
-            if run_silently(f'flatpak info {flatpak}').returncode != 0:
+            if run_silently(f"flatpak info {flatpak}").returncode != 0:
                 flatpaks_to_install.append(flatpak)
 
         if len(flatpaks_to_install) > 0:
@@ -186,8 +192,8 @@ def set_up_flatpaks():
             if not installed_any:
                 print()
             run(
-                f'flatpak install --noninteractive {remote} ' +
-                ' '.join(flatpaks_to_install)
+                f"flatpak install --noninteractive {remote} "
+                + " ".join(flatpaks_to_install)
             )
             installed_any = True
 
@@ -198,13 +204,13 @@ def set_up_flatpaks():
 
 
 def set_up_snaps():
-    if os.environ['DISTRO'] != 'Ubuntu':
+    if distro != "Ubuntu":
         return Result.UNSUPPORTED
 
     installed_any = False
 
-    for snap in config['snaps']:
-        if run_silently(f'snap list {snap['name']}').returncode != 0:
+    for snap in config["snaps"]:
+        if run_silently(f"snap list {snap['name']}").returncode != 0:
             # Print a newline before the first snap to be installed so that any
             # output appears below "Setting up snaps...". Also ensure the
             # newline is printed _only_ for the first snap to be installed so
@@ -223,11 +229,11 @@ def set_up_snaps():
 def set_up_vcsh():
     modified_config = False
 
-    show_untracked_result = set_vcsh_config('status.showUntrackedFiles', 'no')
+    show_untracked_result = set_vcsh_config("status.showUntrackedFiles", "no")
     if show_untracked_result == VcshConfigResult.MODIFIED:
         modified_config = True
 
-    sparse_checkout_result = set_vcsh_config('core.sparseCheckout', 'true')
+    sparse_checkout_result = set_vcsh_config("core.sparseCheckout", "true")
     if sparse_checkout_result == VcshConfigResult.MODIFIED:
         modified_config = True
 
@@ -240,11 +246,14 @@ def set_up_vcsh():
 !/docs/**
 """
 
-    sc_filename = (xdg_config_home +
-        '/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout')
+    sc_filename = (
+        f"{xdg_config_home}/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout"
+    )
 
-    if (not os.path.isfile(sc_filename)) or open(sc_filename, mode='r').read() != sc_file_contents:
-        sc_file = open(sc_filename, mode='w')
+    if (not os.path.isfile(sc_filename)) or open(
+        sc_filename, mode="r"
+    ).read() != sc_file_contents:
+        sc_file = open(sc_filename, mode="w")
         sc_file.write(sc_file_contents)
         sc_file.close()
         modified_config = True
@@ -258,7 +267,7 @@ def set_up_vcsh():
 def set_up_directories():
     created_any = False
 
-    for directory in config['directories']:
+    for directory in config["directories"]:
         path = Path(directory).expanduser()
         if not path.is_dir():
             path.mkdir(parents=True)
@@ -271,7 +280,7 @@ def set_up_directories():
 
 
 def set_up_tmux():
-    tpm_path = Path('~/.tmux/plugins/tpm').expanduser()
+    tpm_path = Path("~/.tmux/plugins/tpm").expanduser()
     tpm_path_str = tpm_path.absolute().as_posix()
 
     if tpm_path.is_dir():
@@ -280,10 +289,10 @@ def set_up_tmux():
         print()
 
         # Install tpm.
-        run(f'git clone --quiet https://github.com/tmux-plugins/tpm {tpm_path_str}')
+        run(f"git clone --quiet https://github.com/tmux-plugins/tpm {tpm_path_str}")
 
         # Install plugins.
-        run(f'{tpm_path_str}/bin/install_plugins')
+        run(f"{tpm_path_str}/bin/install_plugins")
 
         return Result.DONE
 
@@ -298,23 +307,24 @@ def run_steps(steps):
 
 
 def run_step(step, longest_term_length):
-    term_suffix = '... '
+    term_suffix = "... "
     pad_length = longest_term_length + len(term_suffix)
     padded_term_and_suffix = (step.term + term_suffix).ljust(pad_length)
 
-    print(f'Setting up {padded_term_and_suffix}', end='', flush=True)
+    print(f"Setting up {padded_term_and_suffix}", end="", flush=True)
 
-    setup_fn_name = f'set_up_{step.term}'
+    setup_fn_name = f"set_up_{step.term}"
     result = globals()[setup_fn_name]()
 
     match result:
         case Result.DONE:
             if not step.own_activity_output:
-                print('done.')
+                print("done.")
         case Result.ALREADY_DONE:
-            print('already done.')
+            print("already done.")
         case Result.UNSUPPORTED:
-            print('unsupported.')
+            print("unsupported.")
+
 
 def print_help(filename: str):
     help_text = f"""
@@ -338,22 +348,23 @@ Options:
     print(help_text)
     return 0
 
+
 def main():
-    if len(sys.argv) > 1 and sys.argv[1] in ('-h', '--help'):
+    if len(sys.argv) > 1 and sys.argv[1] in ("-h", "--help"):
         filename = os.path.basename(__file__)
         return print_help(filename)
     else:
         steps = [
-            # Step('packages', own_activity_output=True),
-            # Step('flatpaks', own_activity_output=True),
-            # Step('snaps', own_activity_output=True),
-            Step('vcsh'),
-            # Step('directories'),
-            # Step('tmux', own_activity_output=True),
+            Step("packages", own_activity_output=True),
+            Step("flatpaks", own_activity_output=True),
+            Step("snaps", own_activity_output=True),
+            Step("vcsh"),
+            Step("directories"),
+            Step("tmux", own_activity_output=True),
         ]
 
         return run_steps(steps)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
