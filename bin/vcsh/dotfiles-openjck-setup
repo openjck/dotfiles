@@ -1,13 +1,19 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
+
+from dataclasses import dataclass
+from enum import Enum
+from pathlib import Path
+from typing import List
+
+import os
+import subprocess
+import sys
 
 # dotfiles-openjck-setup:
-# Set up dotfile dependencies used across machines.
-#
-# Installation instructions:
-# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+# Set up dotfile dependencies.
 #
 # Usage instructions:
-# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+# Simply run this script (e.g., ./dotfiles-openjck-setup).
 
 # MIT License
 #
@@ -31,14 +37,287 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Use "strict mode."
-#
-# http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
+xdg_config_home = os.environ['XDG_CONFIG_HOME']
 
-COMMAND_NAME=$(basename "$0")
+config = {
+    'packages': {
+        'debian': [
+            'bat',
+            'fd-find',
+            'flatpak',
+            'git',
+            'moreutils',
+            'pwgen',
+            'ripgrep',
+            'sd',
+            'toilet',
+            'vcsh',
+        ],
+    },
+    'flatpaks': {
+        'flathub-verified': [
+            'org.mozilla.firefox',
+        ],
+        'flathub': [
+        ],
+    },
+    'snaps': [
+        {
+            'name': 'nvim',
+            'flags': [
+                '--classic',
+            ],
+        },
+    ],
+    'directories': [
+        '~/LGTD/inboxes/main',
+        '~/apps/repos/git',
+        '~/apps/appimage',
+        '~/bin/local',
+        '~/bin/local/downloaded',
+        '~/bin/local/temporary',
+        '~/devel',
+        '~/devel/repos',
+        f'{xdg_config_home}/bash/init/functions/local',
+    ],
+}
 
-eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+@dataclass
+class Step():
+    term: str
+    own_activity_output: bool = False
+
+class Result(Enum):
+    DONE = 1
+    ALREADY_DONE = 2
+    UNSUPPORTED = 3
+
+class VcshConfigResult(Enum):
+    MODIFIED = 1
+    UNMODIFIED = 2
+
+
+# Run a command, allowing stdout and stderr to be printed to the console.
+def run(cmd: str):
+    return subprocess.run(cmd, shell=True)
+
+
+# Run a command, allowing stderr to be printed to the console, but discarding
+# stdout (i.e., not allowing it to print on the console and not capturing it
+# for use in this script).
+def run_quietly(cmd: str):
+    return subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
+
+
+# Run a command, capturing stdout and allowing stderr to be printed to the
+# console.
+def run_and_capture(cmd: str):
+    return subprocess.run(cmd, shell=True, stdout=subprocess.PIPE).stdout.decode('utf-8').strip()
+
+
+# Run a command, discarding both stdout and stderr.
+def run_silently(cmd: str):
+    return subprocess.run(
+        cmd,
+        shell=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+def set_vcsh_config(config: str, desired_value: str):
+    value = run_and_capture(f'vcsh dotfiles-openjck config {config}')
+
+    if value == desired_value:
+        return VcshConfigResult.UNMODIFIED
+    else:
+        run_quietly(f'vcsh dotfiles-openjck config {config} {desired_value}')
+        return VcshConfigResult.MODIFIED
+
+
+def set_up_packages_debian():
+    packages_to_install = []
+
+    for package in config['packages']['debian']:
+        if run_silently(f'dpkg -s {package}').returncode != 0:
+            packages_to_install.append(package)
+
+    if len(packages_to_install) == 0:
+        return Result.ALREADY_DONE
+    else:
+        run(f'sudo apt install --yes {" ".join(packages_to_install)}')
+        return Result.DONE
+
+
+def set_up_packages():
+    match os.environ['DISTRO']:
+        case 'Ubuntu' | 'Debian':
+            return set_up_packages_debian()
+        case _:
+            return Result.UNSUPPORTED
+
+
+def set_up_flatpaks():
+    installed_any = False
+
+    # Set up remotes, including one remote for Flathub and one remote for
+    # verified flatpaks on Flathub.
+    run_quietly(
+        'flatpak remote-add --if-not-exists flathub ' +
+        'https://dl.flathub.org/repo/flathub.flatpakrepo'
+    )
+    run_quietly(
+        'flatpak remote-add --if-not-exists --subset=verified ' +
+        'flathub-verified https://flathub.org/repo/flathub.flatpakrepo'
+    )
+
+    for remote, flatpaks in config['flatpaks'].items():
+        flatpaks_to_install = []
+
+        for flatpak in flatpaks:
+            if run_silently(f'flatpak info {flatpak}').returncode != 0:
+                flatpaks_to_install.append(flatpak)
+
+        if len(flatpaks_to_install) > 0:
+            # Print a newline before the first set of flatpaks to be installed
+            # so that any output appears below "Setting up flatpaks...". Also
+            # ensure the newline is printed _only_ for the first set of
+            # flatpaks to be installed so that subsequent installation output
+            # is not separated by newlines.
+            if not installed_any:
+                print()
+            run(
+                f'flatpak install --noninteractive {remote} ' +
+                ' '.join(flatpaks_to_install)
+            )
+            installed_any = True
+
+    if installed_any:
+        return Result.DONE
+    else:
+        return Result.ALREADY_DONE
+
+
+def set_up_snaps():
+    if os.environ['DISTRO'] != 'Ubuntu':
+        return Result.UNSUPPORTED
+
+    installed_any = False
+
+    for snap in config['snaps']:
+        if run_silently(f'snap list {snap['name']}').returncode != 0:
+            # Print a newline before the first snap to be installed so that any
+            # output appears below "Setting up snaps...". Also ensure the
+            # newline is printed _only_ for the first snap to be installed so
+            # that subsequent installation output is not separated by newlines.
+            if not installed_any:
+                print()
+            run(f'sudo snap install {snap['name']} {" ".join(snap['flags'])}')
+            installed_any = True
+
+    if installed_any:
+        return Result.DONE
+    else:
+        return Result.ALREADY_DONE
+
+
+def set_up_vcsh():
+    modified_config = False
+
+    show_untracked_result = set_vcsh_config('status.showUntrackedFiles', 'no')
+    if show_untracked_result == VcshConfigResult.MODIFIED:
+        modified_config = True
+
+    sparse_checkout_result = set_vcsh_config('core.sparseCheckout', 'true')
+    if sparse_checkout_result == VcshConfigResult.MODIFIED:
+        modified_config = True
+
+    # Note that the final newline (the newline after the last line of text) is
+    # not a mistake, and it's not required by Python syntactically. It's there
+    # so that the file ends with a newline, as Unix conventions require.
+    sc_file_contents = """*
+!/README.md
+!/LICENSE
+!/docs/**
+"""
+
+    sc_filename = (xdg_config_home +
+        '/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout')
+
+    if (not os.path.isfile(sc_filename)) or open(sc_filename, mode='r').read() != sc_file_contents:
+        sc_file = open(sc_filename, mode='w')
+        sc_file.write(sc_file_contents)
+        sc_file.close()
+        modified_config = True
+
+    if modified_config:
+        return Result.DONE
+    else:
+        return Result.ALREADY_DONE
+
+
+def set_up_directories():
+    created_any = False
+
+    for directory in config['directories']:
+        path = Path(directory).expanduser()
+        if not path.is_dir():
+            path.mkdir(parents=True)
+            created_any = True
+
+    if created_any:
+        return Result.DONE
+    else:
+        return Result.ALREADY_DONE
+
+
+def set_up_tmux():
+    tpm_path = Path('~/.tmux/plugins/tpm').expanduser()
+    tpm_path_str = tpm_path.absolute().as_posix()
+
+    if tpm_path.is_dir():
+        return Result.ALREADY_DONE
+    else:
+        print()
+
+        # Install tpm.
+        run(f'git clone --quiet https://github.com/tmux-plugins/tpm {tpm_path_str}')
+
+        # Install plugins.
+        run(f'{tpm_path_str}/bin/install_plugins')
+
+        return Result.DONE
+
+
+def run_steps(steps):
+    longest_term_length = max(map(lambda s: len(s.term), steps))
+
+    for step in steps:
+        run_step(step, longest_term_length)
+
+    return 0
+
+
+def run_step(step, longest_term_length):
+    term_suffix = '... '
+    pad_length = longest_term_length + len(term_suffix)
+    padded_term_and_suffix = (step.term + term_suffix).ljust(pad_length)
+
+    print(f'Setting up {padded_term_and_suffix}', end='', flush=True)
+
+    setup_fn_name = f'set_up_{step.term}'
+    result = globals()[setup_fn_name]()
+
+    match result:
+        case Result.DONE:
+            if not step.own_activity_output:
+                print('done.')
+        case Result.ALREADY_DONE:
+            print('already done.')
+        case Result.UNSUPPORTED:
+            print('unsupported.')
+
+def print_help(filename: str):
+    help_text = f"""
 Set up the packages, directories, plugin managers, and other dotfile
 dependencies used across machines.
 
@@ -48,343 +327,33 @@ between invocations. It should be rerun occasionally or whenever important
 details change, like configured packages or configured directories.
 
 Usage:
-  $COMMAND_NAME
-  $COMMAND_NAME -h | --help
+  {filename}
+  {filename} -h | --help
 
 Options:
   -h, --help
       Show this documentation
-EOF
-)"
-
-RETURN_CODE_DONE=0
-RETURN_CODE_ALREADY_DONE=1
-RETURN_CODE_UNSUPPORTED=2
-
-# Manually source the ".profile" file, since we need to use some of the
-# environment variables that it sets and this script might be running before the
-# ".profile" file is applied.
-source "$HOME/.profile"
-
-function run_set_up_functions() {
-  STEPS=$1
-
-  LONGEST_NAME_LENGTH=0
-
-  I=0
-  while true; do
-    NAME=${STEPS[$I,name]:-}
-
-    # Break if we've passed the end of the associative array.
-    [[ -z "$NAME" ]] && break;
-
-    NAME_LENGTH=$(echo -n "$NAME" | wc --chars)
-    if (( NAME_LENGTH > LONGEST_NAME_LENGTH )); then
-      LONGEST_NAME_LENGTH=$NAME_LENGTH
-    fi
-
-    I=$((I + 1))
-  done
-
-  I=0
-  while true; do
-    NAME=${STEPS[$I,name]:-}
-
-    # Break if we've passed the end of the associative array.
-    [[ -z "$NAME" ]] && break;
-
-    run_set_up_function \
-      "$NAME" \
-      "${STEPS[$I,own_output_on_success]:-false}" \
-      "$LONGEST_NAME_LENGTH"
-
-    I=$((I + 1))
-  done
-}
-
-function run_set_up_function() {
-  local NAME=$1
-  local OWN_OUTPUT_ON_SUCCESS=${2:-false}
-  local LONGEST_NAME_LENGTH=$3
-
-  local NAME_SUFFIX='... '
-  local NAME_SUFFIX_LENGTH
-  NAME_SUFFIX_LENGTH=$(echo -n "$NAME_SUFFIX" | wc --chars)
-
-  local PAD_LENGTH=$(( LONGEST_NAME_LENGTH + NAME_SUFFIX_LENGTH ))
-
-  local PADDED_NAME_AND_ELLIPSES
-  PADDED_NAME_AND_ELLIPSES=$(
-    printf "%-${PAD_LENGTH}s" "${NAME}${NAME_SUFFIX}"
-  )
-
-  echo -n "Set up $PADDED_NAME_AND_ELLIPSES"
-
-  set +e
-  "set_up_$NAME"
-  RETURN_CODE=$?
-  set -e
-
-  case $RETURN_CODE in
-    "$RETURN_CODE_DONE")
-      if [[ $OWN_OUTPUT_ON_SUCCESS == true ]]; then
-        echo
-      else
-        echo 'done.'
-      fi
-      ;;
-    "$RETURN_CODE_ALREADY_DONE")
-      echo 'already done.'
-      ;;
-    "$RETURN_CODE_UNSUPPORTED")
-      echo 'unsupported.'
-      ;;
-  esac
-}
-
-function set_up_packages_apt() {
-  declare PACKAGES_TO_INSTALL=()
-
-  local PACKAGES=(
-    'bat'
-    'fd-find'
-    'flatpak'
-    'git'
-    'moreutils'
-    'pwgen'
-    'ripgrep'
-    'sd'
-    'toilet'
-    'vcsh'
-  )
-
-  local PACKAGE
-  for PACKAGE in "${PACKAGES[@]}"; do
-    # If the package is not already installed, add it to the
-    # $PACKAGES_TO_INSTALL array.
-    #
-    # https://askubuntu.com/a/1393059
-    if [[ $(dpkg-query --show --showformat='${db:Status-Status}\n' "$PACKAGE" 2>/dev/null) != 'installed' ]]; then
-      PACKAGES_TO_INSTALL+=("$PACKAGE")
-    fi
-  done
-
-  # If there are no packages to install, return with a code indicating that
-  # this is already done. Otherwise, install the packages.
-  if [[ ${#PACKAGES_TO_INSTALL[@]} -eq 0 ]]; then
-    return $RETURN_CODE_ALREADY_DONE
-  else
-    echo
-
-    sudo apt install --yes "${PACKAGES_TO_INSTALL[@]}"
-    return $RETURN_CODE_DONE
-  fi
-}
-
-function set_up_packages() {
-  case $DISTRO in
-    Ubuntu)
-      set_up_packages_apt
-      ;;
-    Debian)
-      set_up_packages_apt
-      ;;
-    *)
-      return $RETURN_CODE_UNSUPPORTED
-      ;;
-  esac
-}
-
-function set_up_flatpaks() {
-  local INSTALLED_A_FLATPAK=false
-
-  # Set up remotes, including one remote for flathub and one remote for verified
-  # flatpaks on flathub.
-  flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-  flatpak remote-add --if-not-exists --subset=verified flathub-verified https://flathub.org/repo/flathub.flatpakrepo
-
-  declare UNVERIFIED_FLATPAKS_TO_INSTALL=()
-  declare VERIFIED_FLATPAKS_TO_INSTALL=()
-
-  local UNVERIFIED_FLATPAKS=(
-  )
-
-  local VERIFIED_FLATPAKS=(
-    'org.mozilla.firefox'
-  )
-
-  local UNVERIFIED_FLATPAK
-  for UNVERIFIED_FLATPAK in "${UNVERIFIED_FLATPAKS[@]}"; do
-    # If the flatpak is not already installed, add it to the
-    # $UNVERIFIED_FLATPAKS_TO_INSTALL array.
-    if ! flatpak info "$UNVERIFIED_FLATPAK" &> /dev/null; then
-      UNVERIFIED_FLATPAKS_TO_INSTALL+=("$UNVERIFIED_FLATPAK")
-    fi
-  done
-
-  local VERIFIED_FLATPAK
-  for VERIFIED_FLATPAK in "${VERIFIED_FLATPAKS[@]}"; do
-    # If the flatpak is not already installed, add it to the
-    # $VERIFIED_FLATPAKS_TO_INSTALL array.
-    if ! flatpak info "$VERIFIED_FLATPAK" &> /dev/null; then
-      VERIFIED_FLATPAKS_TO_INSTALL+=("$VERIFIED_FLATPAK")
-    fi
-  done
-
-  if [[ ${#UNVERIFIED_FLATPAKS_TO_INSTALL[@]} -ne 0 ]]; then
-    echo
-
-    local UNVERIFIED_FLATPAK
-    for UNVERIFIED_FLATPAK in "${UNVERIFIED_FLATPAKS_TO_INSTALL[@]}"; do
-      flatpak install --noninteractive flathub "$UNVERIFIED_FLATPAK"
-    done
-
-    INSTALLED_A_FLATPAK=true
-  fi
-
-  if [[ ${#VERIFIED_FLATPAKS_TO_INSTALL[@]} -ne 0 ]]; then
-    echo
-
-    local VERIFIED_FLATPAK
-    for VERIFIED_FLATPAK in "${VERIFIED_FLATPAKS_TO_INSTALL[@]}"; do
-      flatpak install --noninteractive flathub-verified "$VERIFIED_FLATPAK"
-    done
-
-    INSTALLED_A_FLATPAK=true
-  fi
-
-  if [[ $INSTALLED_A_FLATPAK == true ]]; then
-    return $RETURN_CODE_DONE
-  else
-    return $RETURN_CODE_ALREADY_DONE
-  fi
-}
-
-function set_up_snaps() {
-  declare SNAPS_TO_INSTALL=()
-
-  local SNAPS=(
-    'nvim'
-  )
-
-  declare -A SNAP_INSTALL_ARGUMENTS=(
-    [nvim]='--classic'
-  )
-
-  local SNAP
-  for SNAP in "${SNAPS[@]}"; do
-    # If the snap is not already installed, add it to the $SNAPS_TO_INSTALL
-    # array.
-    if ! snap list "$SNAP" &> /dev/null; then
-      SNAPS_TO_INSTALL+=("$SNAP")
-    fi
-  done
-
-  # If there are no snaps to install, return with a code indicating that this is
-  # already done. Otherwise, install the snaps.
-  if [[ ${#SNAPS_TO_INSTALL[@]} -eq 0 ]]; then
-    return $RETURN_CODE_ALREADY_DONE
-  else
-    echo
-
-    local SNAP
-    for SNAP in "${SNAPS_TO_INSTALL[@]}"; do
-      sudo snap install "$SNAP" "${SNAP_INSTALL_ARGUMENTS[$SNAP]}"
-    done
-
-    return $RETURN_CODE_DONE
-  fi
-}
-
-function set_up_vcsh() {
-  local MODIFIED_CONFIG=false
-
-  if [[ $(vcsh dotfiles-openjck config status.showUntrackedFiles) != 'no' ]]; then
-    vcsh dotfiles-openjck config status.showUntrackedFiles no
-    MODIFIED_CONFIG=true
-  fi
-
-  if [[ $(vcsh dotfiles-openjck config core.sparseCheckout) != 'true' ]]; then
-    vcsh dotfiles-openjck config core.sparseCheckout true
-    MODIFIED_CONFIG=true
-  fi
-
-  local SC_CONTENTS="*
-!/README.md
-!/LICENSE
-!/docs/**"
-
-  local SC_FILE=$XDG_CONFIG_HOME/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout
-
-  if [[ ! -f "$SC_FILE" || ($(cat "$SC_FILE") != "$SC_CONTENTS") ]]; then
-    echo "$SC_CONTENTS" > "$SC_FILE"
-    MODIFIED_CONFIG=true
-  fi
-
-  if [[ $MODIFIED_CONFIG == true ]]; then
-    vcsh dotfiles-openjck checkout --quiet
-    return $RETURN_CODE_DONE
-  else
-    return $RETURN_CODE_ALREADY_DONE
-  fi
-}
-
-function set_up_directories() {
-  local CREATED_ANY=false
-
-  local DIRECTORIES=(
-    "$HOME/LGTD/inboxes/main"
-    "$HOME/apps/repos/git"
-    "$HOME/apps/appimage"
-    "$HOME/bin/local"
-    "$HOME/bin/local/downloaded"
-    "$HOME/bin/local/temporary"
-    "$HOME/devel"
-    "$HOME/devel/repos"
-    "$XDG_CONFIG_HOME/bash/init/functions/local"
-  )
-
-  local DIRECTORY
-  for DIRECTORY in "${DIRECTORIES[@]}"; do
-    if [[ ! -d "$DIRECTORY" ]]; then
-      mkdir --parents "$DIRECTORY"
-      CREATED_ANY=true
-    fi
-  done
-
-  if [[ $CREATED_ANY == true ]]; then
-    return $RETURN_CODE_DONE
-  else
-    return $RETURN_CODE_ALREADY_DONE
-  fi
-}
-
-function set_up_tmux() {
-  local PLUGIN_MANAGER_DIR=$HOME/.tmux/plugins/tpm
-
-  if [[ -d "$PLUGIN_MANAGER_DIR" ]]; then
-    return $RETURN_CODE_ALREADY_DONE
-  else
-    # Install tpm.
-    git clone --quiet https://github.com/tmux-plugins/tpm "$PLUGIN_MANAGER_DIR"
-
-    # Install plugins.
-    "$HOME/.tmux/plugins/tpm/bin/install_plugins" > /dev/null
-
-    return $RETURN_CODE_DONE
-  fi
-}
-
-declare -A STEPS
-
-STEPS[0,name]=packages
-STEPS[0,own_output_on_success]=true
-STEPS[1,name]=flatpaks
-STEPS[1,own_output_on_success]=true
-STEPS[2,name]=snaps
-STEPS[2,own_output_on_success]=true
-STEPS[3,name]=vcsh
-STEPS[4,name]=directories
-STEPS[5,name]=tmux
-
-run_set_up_functions "${STEPS[@]}"
+""".strip()
+
+    print(help_text)
+    return 0
+
+def main():
+    if len(sys.argv) > 1 and sys.argv[1] in ('-h', '--help'):
+        filename = os.path.basename(__file__)
+        return print_help(filename)
+    else:
+        steps = [
+            # Step('packages', own_activity_output=True),
+            # Step('flatpaks', own_activity_output=True),
+            # Step('snaps', own_activity_output=True),
+            Step('vcsh'),
+            # Step('directories'),
+            # Step('tmux', own_activity_output=True),
+        ]
+
+        return run_steps(steps)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
