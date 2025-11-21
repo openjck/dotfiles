@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-# Manually source the ".profile" file, since we need to use some of the
-# environment variables that it sets and this script might be running before the
-# ".profile" file is applied.
-source "$HOME/.profile"
-
 function set_up_vcsh() {
   local MODIFIED_CONFIG=false
 
