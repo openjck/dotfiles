@@ -49,17 +49,21 @@ class Result(Enum):
     ALREADY_DONE = 2
     UNSUPPORTED = 3
 
-term_suffix = '... '
+home = Path.home()
+xdg_config_home = os.environ['XDG_CONFIG_HOME']
 
 
+# Run a command and print both stdout and stderr.
 def run(cmd):
     return subprocess.run(cmd, shell=True)
 
 
-def run_silently_on_success(cmd):
+# Run a command, but do not print stdout. DO print stderr, if any.
+def run_quietly(cmd):
     return subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
 
 
+# Run a command and print nothing, not even stderr.
 def run_silently(cmd):
     return subprocess.run(
         cmd,
@@ -87,11 +91,11 @@ def set_up_flatpaks():
 
     # Set up remotes, including one remote for Flathub and one remote for
     # verified flatpaks on Flathub.
-    run_silently_on_success(
+    run_quietly(
         'flatpak remote-add --if-not-exists flathub ' +
         'https://dl.flathub.org/repo/flathub.flatpakrepo'
     )
-    run_silently_on_success(
+    run_quietly(
         'flatpak remote-add --if-not-exists --subset=verified ' +
         'flathub-verified https://flathub.org/repo/flathub.flatpakrepo'
     )
@@ -173,9 +177,6 @@ def set_up_vcsh():
 def set_up_directories():
     created_any = False
 
-    home = Path.home()
-    xdg_config_home = os.environ['XDG_CONFIG_HOME']
-
     paths_to_create = [
         Path(f'{home}/LGTD/inboxes/main'),
         Path(f'{home}/apps/repos/git'),
@@ -200,8 +201,20 @@ def set_up_directories():
 
 
 def set_up_tmux():
-    # Just an example
-    return Result.UNSUPPORTED
+    tpm_dir = Path(f'{home}/.tmux/plugins/tpm')
+
+    if tpm_dir.is_dir():
+        return Result.ALREADY_DONE
+    else:
+        print()
+
+        # Install tpm.
+        run(f'git clone --quiet https://github.com/tmux-plugins/tpm {tpm_dir}')
+
+        # Install plugins
+        run(f'{tpm_dir}/bin/install_plugins')
+
+        return Result.DONE
 
 
 def run_steps(steps):
@@ -212,6 +225,7 @@ def run_steps(steps):
 
 
 def run_step(step, longest_term_length):
+    term_suffix = '... '
     pad_length = longest_term_length + len(term_suffix)
     padded_term_and_suffix = (step.term + term_suffix).ljust(pad_length)
 
@@ -237,7 +251,7 @@ steps = [
     Step('snaps', own_activity_output=True),
     Step('vcsh'),
     Step('directories'),
-    Step('tmux'),
+    Step('tmux', own_activity_output=True),
 ]
 
 run_steps(steps)

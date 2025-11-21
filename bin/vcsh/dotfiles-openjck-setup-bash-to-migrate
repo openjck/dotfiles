@@ -97,19 +97,3 @@ function set_up_vcsh() {
     return $RETURN_CODE_ALREADY_DONE
   fi
 }
-
-function set_up_tmux() {
-  local PLUGIN_MANAGER_DIR=$HOME/.tmux/plugins/tpm
-
-  if [[ -d "$PLUGIN_MANAGER_DIR" ]]; then
-    return $RETURN_CODE_ALREADY_DONE
-  else
-    # Install tpm.
-    git clone --quiet https://github.com/tmux-plugins/tpm "$PLUGIN_MANAGER_DIR"
-
-    # Install plugins.
-    "$HOME/.tmux/plugins/tpm/bin/install_plugins" > /dev/null
-
-    return $RETURN_CODE_DONE
-  fi
-}
