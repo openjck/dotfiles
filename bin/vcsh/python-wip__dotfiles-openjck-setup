@@ -201,18 +201,19 @@ def set_up_directories():
 
 
 def set_up_tmux():
-    tpm_dir = Path(f'{home}/.tmux/plugins/tpm')
+    tpm_path = Path(f'{home}/.tmux/plugins/tpm')
+    tpm_path_str = tpm_path.absolute().as_posix()
 
-    if tpm_dir.is_dir():
+    if tpm_path.is_dir():
         return Result.ALREADY_DONE
     else:
         print()
 
         # Install tpm.
-        run(f'git clone --quiet https://github.com/tmux-plugins/tpm {tpm_dir}')
+        run(f'git clone --quiet https://github.com/tmux-plugins/tpm {tpm_path_str}')
 
         # Install plugins
-        run(f'{tpm_dir}/bin/install_plugins')
+        run(f'{tpm_path_str}/bin/install_plugins')
 
         return Result.DONE
 
