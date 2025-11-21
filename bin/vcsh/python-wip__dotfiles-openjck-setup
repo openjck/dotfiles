@@ -7,6 +7,7 @@ from typing import List
 
 import os
 import subprocess
+import sys
 
 # dotfiles-openjck-setup:
 # Set up dotfile dependencies.
@@ -245,14 +246,18 @@ def run_step(step, longest_term_length):
             print('unsupported.')
 
 
-# TODO: Put this into something like a main function.
-steps = [
-    Step('packages', own_activity_output=True),
-    Step('flatpaks', own_activity_output=True),
-    Step('snaps', own_activity_output=True),
-    Step('vcsh'),
-    Step('directories'),
-    Step('tmux', own_activity_output=True),
-]
+def main():
+    steps = [
+        Step('packages', own_activity_output=True),
+        Step('flatpaks', own_activity_output=True),
+        Step('snaps', own_activity_output=True),
+        Step('vcsh'),
+        Step('directories'),
+        Step('tmux', own_activity_output=True),
+    ]
 
-run_steps(steps)
+    run_steps(steps)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
