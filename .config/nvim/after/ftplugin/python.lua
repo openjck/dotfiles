@@ -1,2 +1,2 @@
--- flake8 enforces a maximum line length of 79.
-vim.opt.textwidth = 79
+-- black uses a maximum line length of 88.
+vim.opt.textwidth = 88
