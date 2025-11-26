@@ -11,7 +11,15 @@ from pathlib import Path
 # Set up dotfile dependencies.
 #
 # Usage instructions:
-# Simply run this script (e.g., ./dotfiles-openjck-setup).
+# Ensure you have a Python version >= 3.12 installed, then simply run this script (e.g.,
+# ./dotfiles-openjck-setup).
+#
+# Alternatively, if you would like to use Poetry, complete the following steps:
+#
+#   1. Install pipx. Consult the pipx documentation for installation instructions.
+#   2. Run "pipx install poetry".
+#   3. Run "poetry install".
+#   4. Run "poetry run dotfiles-openjck-setup".
 
 # MIT License
 #
