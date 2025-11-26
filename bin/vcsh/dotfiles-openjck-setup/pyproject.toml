@@ -1,0 +1,12 @@
+[project]
+name = "dotfiles-openjck-setup"
+version = "1.0.0"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "black>=25.11.0",
+    "flake8>=7.3.0",
+    "isort>=7.0.0",
+]
