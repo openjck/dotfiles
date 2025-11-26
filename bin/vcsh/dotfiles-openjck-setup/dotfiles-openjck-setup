@@ -53,6 +53,7 @@ config = {
             "flatpak",
             "git",
             "moreutils",
+            "pipx",
             "pwgen",
             "ripgrep",
             "sd",
@@ -73,6 +74,33 @@ config = {
                 "--classic",
             ],
         },
+    ],
+    # I'm not actually setting up Homebrew or installing these Homebrew packages right
+    # now because it's kind of annoying to set Homebrew up, and I'd rather avoid
+    # Homebrew if at all possible. However, maybe in the future I will automate its
+    # setup and package installation in this script. For now, this list serves as
+    # a reminder of which packages I use.
+    "brew_packages": [
+        # I think gcc needs to be installed before fzf.
+        "gcc",
+
+        # Not conveniently available elsewhere as of 2025-11.
+        "fpp",
+
+        # fzf is available elsewhere, but I'd like the latest version. I forget which
+        # feature from a recent version I'm relying on, but it might be Bash integration
+        # (fzf --bash).
+        "fzf",
+
+        # Not conveniently available elsewhere as of 2025-11.
+        "jj",
+    ],
+    # Similarly, I'm not actually automating the installation of pipx packages now,
+    # mostly because I don't feel like writing it at the time of this writing (all these
+    # package managers are making me angry!), but these are the packages I use.
+    "pipx_packages": [
+        "git-fzf",
+        "uv",
     ],
     "directories": [
         "~/LGTD/inboxes/main",
