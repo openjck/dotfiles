@@ -9,4 +9,8 @@ dev = [
     "black>=25.11.0",
     "flake8>=7.3.0",
     "isort>=7.0.0",
+    "pyright>=1.1.407",
 ]
+
+[tool.pyright]
+typeCheckingMode = "strict"

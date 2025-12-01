@@ -8,6 +8,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+from typing import Dict, List, Literal, TypedDict
 
 # dotfiles-openjck-setup:
 # Set up dotfile dependencies.
@@ -47,7 +48,16 @@ from pathlib import Path
 xdg_config_home = os.environ["XDG_CONFIG_HOME"]
 distro = os.environ["DISTRO"]
 
-config = {
+
+class Config(TypedDict):
+    system_packages: Dict[Literal["debian"], List[str]]
+    flatpaks: Dict[Literal["flathub-verified", "flathub"], List[str]]
+    homebrew_formulae: List[str]
+    pipx_packages: List[str]
+    directories: List[str]
+
+
+config: Config = {
     "system_packages": {
         "debian": [
             "bat",
@@ -96,17 +106,17 @@ config = {
 }
 
 
-@dataclass
-class Step:
-    term: str
-    setup_fn: Callable
-    own_activity_output: bool = False
-
-
 class Result(Enum):
     DONE = 1
     ALREADY_DONE = 2
     UNSUPPORTED = 3
+
+
+@dataclass
+class Step:
+    term: str
+    setup_fn: Callable[[], Result]
+    own_activity_output: bool = False
 
 
 class VcshConfigResult(Enum):
@@ -155,7 +165,7 @@ def set_vcsh_config(config: str, desired_value: str):
 
 
 def set_up_system_packages_debian():
-    to_install = []
+    to_install: List[str] = []
 
     for package in config["system_packages"]["debian"]:
         if run_silently(f"dpkg -s {package}").returncode != 0:
@@ -193,7 +203,7 @@ def set_up_flatpak_apps():
     )
 
     for remote, flatpaks in config["flatpaks"].items():
-        to_install = []
+        to_install: List[str] = []
 
         for flatpak in flatpaks:
             if run_silently(f"flatpak info {flatpak}").returncode != 0:
@@ -213,7 +223,7 @@ def set_up_flatpak_apps():
 
 
 def set_up_homebrew_formulae():
-    to_install = []
+    to_install: List[str] = []
 
     # Install Homebrew itself, if necessary.
     homebrew_install_path = Path("/home/linuxbrew/.linuxbrew")
@@ -236,7 +246,7 @@ def set_up_homebrew_formulae():
 
 
 def set_up_pipx_packages():
-    to_install = []
+    to_install: List[str] = []
 
     pipx_list = json.loads(run_and_capture("pipx list --json"))
 
@@ -325,7 +335,7 @@ def set_up_tmux():
         return Result.DONE
 
 
-def run_steps(steps):
+def run_steps(steps: List[Step]):
     longest_term_length = max(map(lambda s: len(s.term), steps))
 
     for step in steps:
@@ -334,7 +344,7 @@ def run_steps(steps):
     return 0
 
 
-def run_step(step, longest_term_length):
+def run_step(step: Step, longest_term_length: int):
     min_dots = 3  # Always show at least 3 dots after a term, even the longest term.
     pad_length = longest_term_length + min_dots
     term_and_dots = step.term.ljust(pad_length, ".")
