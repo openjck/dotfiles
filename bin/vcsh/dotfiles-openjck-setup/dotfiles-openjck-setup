@@ -68,7 +68,6 @@ config = {
         ],
         "flathub": [],
     },
-    "snaps": [],
     "homebrew_formulae": [
         # gcc needs to be installed before fzf and perhaps some other formulae.
         "gcc",
@@ -239,26 +238,6 @@ def set_up_homebrew_formulae():
         return Result.DONE
 
 
-def set_up_snaps():
-    if distro != "Ubuntu":
-        return Result.UNSUPPORTED
-
-    installed_any = False
-
-    for snap in config["snaps"]:
-        if run_silently(f"snap list {snap['name']}").returncode != 0:
-            # Do not print output on the same line as "Setting up [step name]...".
-            if not installed_any:
-                print()
-            run(f'sudo snap install {snap['name']} {" ".join(snap['flags'])}')
-            installed_any = True
-
-    if installed_any:
-        return Result.DONE
-    else:
-        return Result.ALREADY_DONE
-
-
 def set_up_vcsh():
     modified_config = False
 
@@ -391,7 +370,6 @@ def main():
             Step("system packages", set_up_system_packages, True),
             Step("Flatpak apps", set_up_flatpak_apps, True),
             Step("Homebrew formulae", set_up_homebrew_formulae, True),
-            Step("snaps", set_up_snaps, True),
             Step("vcsh", set_up_vcsh),
             Step("directories", set_up_directories),
             Step("tmux", set_up_tmux, True),
