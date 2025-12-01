@@ -3,6 +3,7 @@
 import os
 import subprocess
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -46,7 +47,7 @@ xdg_config_home = os.environ["XDG_CONFIG_HOME"]
 distro = os.environ["DISTRO"]
 
 config = {
-    "packages": {
+    "system_packages": {
         "debian": [
             "bat",
             "fd-find",
@@ -67,37 +68,18 @@ config = {
         ],
         "flathub": [],
     },
-    "snaps": [
-        {
-            "name": "nvim",
-            "flags": [
-                "--classic",
-            ],
-        },
-    ],
-    # I'm not actually setting up Homebrew or installing these Homebrew packages right
-    # now because it's kind of annoying to set Homebrew up, and I'd rather avoid
-    # Homebrew if at all possible. However, maybe in the future I will automate its
-    # setup and package installation in this script. For now, this list serves as
-    # a reminder of which packages I use.
-    "brew_packages": [
-        # I think gcc needs to be installed before fzf.
+    "snaps": [],
+    "homebrew_formulae": [
+        # gcc needs to be installed before fzf and perhaps some other formulae.
         "gcc",
-
-        # Not conveniently available elsewhere as of 2025-11.
         "fpp",
-
-        # fzf is available elsewhere, but I'd like the latest version. I forget which
-        # feature from a recent version I'm relying on, but it might be Bash integration
-        # (fzf --bash).
         "fzf",
-
-        # Not conveniently available elsewhere as of 2025-11.
         "jj",
+        "nvim",
     ],
-    # Similarly, I'm not actually automating the installation of pipx packages now,
-    # mostly because I don't feel like writing it at the time of this writing (all these
-    # package managers are making me angry!), but these are the packages I use.
+    # TODO: Actually write the code that automatically installs pipx packages.
+    #
+    # For now, this is the list of packages I use.
     "pipx_packages": [
         "git-fzf",
         "uv",
@@ -119,6 +101,7 @@ config = {
 @dataclass
 class Step:
     term: str
+    setup_fn: Callable
     own_activity_output: bool = False
 
 
@@ -175,29 +158,31 @@ def set_vcsh_config(config: str, desired_value: str):
         return VcshConfigResult.MODIFIED
 
 
-def set_up_packages_debian():
-    packages_to_install = []
+def set_up_system_packages_debian():
+    to_install = []
 
-    for package in config["packages"]["debian"]:
+    for package in config["system_packages"]["debian"]:
         if run_silently(f"dpkg -s {package}").returncode != 0:
-            packages_to_install.append(package)
+            to_install.append(package)
 
-    if len(packages_to_install) == 0:
+    if len(to_install) == 0:
         return Result.ALREADY_DONE
     else:
-        run(f'sudo apt install --yes {" ".join(packages_to_install)}')
+        # Do not print output on the same line as "Setting up [step name]...".
+        print()
+        run(f'sudo apt install --yes {" ".join(to_install)}')
         return Result.DONE
 
 
-def set_up_packages():
+def set_up_system_packages():
     match distro:
         case "Ubuntu" | "Debian":
-            return set_up_packages_debian()
+            return set_up_system_packages_debian()
         case _:
             return Result.UNSUPPORTED
 
 
-def set_up_flatpaks():
+def set_up_flatpak_apps():
     installed_any = False
 
     # Set up remotes, including one remote for Flathub and one remote for
@@ -212,30 +197,46 @@ def set_up_flatpaks():
     )
 
     for remote, flatpaks in config["flatpaks"].items():
-        flatpaks_to_install = []
+        to_install = []
 
         for flatpak in flatpaks:
             if run_silently(f"flatpak info {flatpak}").returncode != 0:
-                flatpaks_to_install.append(flatpak)
+                to_install.append(flatpak)
 
-        if len(flatpaks_to_install) > 0:
-            # Print a newline before the first set of flatpaks to be installed
-            # so that any output appears below "Setting up flatpaks...". Also
-            # ensure the newline is printed _only_ for the first set of
-            # flatpaks to be installed so that subsequent installation output
-            # is not separated by newlines.
+        if len(to_install) > 0:
+            # Do not print output on the same line as "Setting up [step name]...".
             if not installed_any:
                 print()
-            run(
-                f"flatpak install --noninteractive {remote} "
-                + " ".join(flatpaks_to_install)
-            )
+            run(f"flatpak install --noninteractive {remote} " + " ".join(to_install))
             installed_any = True
 
     if installed_any:
         return Result.DONE
     else:
         return Result.ALREADY_DONE
+
+
+def set_up_homebrew_formulae():
+    to_install = []
+
+    # Install Homebrew itself, if necessary.
+    homebrew_install_path = Path("/home/linuxbrew/.linuxbrew")
+    if not homebrew_install_path.is_dir():
+        run_quietly(
+            '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'  # noqa: E501
+        )
+
+    for homebrew_formula in config["homebrew_formulae"]:
+        if run_silently(f"brew list {homebrew_formula}").returncode != 0:
+            to_install.append(homebrew_formula)
+
+    if len(to_install) == 0:
+        return Result.ALREADY_DONE
+    else:
+        # Do not print output on the same line as "Setting up [step name]...".
+        print()
+        run(f'brew install {" ".join(to_install)}')
+        return Result.DONE
 
 
 def set_up_snaps():
@@ -246,10 +247,7 @@ def set_up_snaps():
 
     for snap in config["snaps"]:
         if run_silently(f"snap list {snap['name']}").returncode != 0:
-            # Print a newline before the first snap to be installed so that any
-            # output appears below "Setting up snaps...". Also ensure the
-            # newline is printed _only_ for the first snap to be installed so
-            # that subsequent installation output is not separated by newlines.
+            # Do not print output on the same line as "Setting up [step name]...".
             if not installed_any:
                 print()
             run(f'sudo snap install {snap['name']} {" ".join(snap['flags'])}')
@@ -321,6 +319,7 @@ def set_up_tmux():
     if tpm_path.is_dir():
         return Result.ALREADY_DONE
     else:
+        # Do not print output on the same line as "Setting up [step name]...".
         print()
 
         # Install tpm.
@@ -348,8 +347,7 @@ def run_step(step, longest_term_length):
 
     print(f"Setting up {padded_term_and_suffix}", end="", flush=True)
 
-    setup_fn_name = f"set_up_{step.term}"
-    result = globals()[setup_fn_name]()
+    result = step.setup_fn()
 
     match result:
         case Result.DONE:
@@ -390,12 +388,13 @@ def main():
         return print_help(filename)
     else:
         steps = [
-            Step("packages", own_activity_output=True),
-            Step("flatpaks", own_activity_output=True),
-            Step("snaps", own_activity_output=True),
-            Step("vcsh"),
-            Step("directories"),
-            Step("tmux", own_activity_output=True),
+            Step("system packages", set_up_system_packages, True),
+            Step("Flatpak apps", set_up_flatpak_apps, True),
+            Step("Homebrew formulae", set_up_homebrew_formulae, True),
+            Step("snaps", set_up_snaps, True),
+            Step("vcsh", set_up_vcsh),
+            Step("directories", set_up_directories),
+            Step("tmux", set_up_tmux, True),
         ]
 
         return run_steps(steps)
