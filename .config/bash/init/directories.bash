@@ -10,6 +10,7 @@ export D_BIN_LOCAL=$HOME/bin/local
 export D_BIN_DOWNLOADED=$HOME/bin/local/downloaded
 export D_BIN_TEMPORARY=$HOME/bin/local/temporary
 export D_BIN_VCSH=$HOME/bin/vcsh
+export D_BIN_VCSH=$HOME/bin/vcsh/dotfiles-openjck-setup
 export D_DEVEL=$HOME/devel
 export D_REPOS=$HOME/devel/repos
 export D_NVIM=$XDG_CONFIG_HOME/nvim
