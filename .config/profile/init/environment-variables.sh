@@ -17,3 +17,6 @@ export BROWSER
 
 # Exit the shell when Zellij exits.
 export ZELLIJ_AUTO_EXIT=true
+
+# Disable various telemetry.
+export HOMEBREW_NO_ANALYTICS=1
