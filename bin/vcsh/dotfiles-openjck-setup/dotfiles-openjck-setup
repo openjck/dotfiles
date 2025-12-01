@@ -321,11 +321,11 @@ def run_steps(steps):
 
 
 def run_step(step, longest_term_length):
-    term_suffix = "... "
-    pad_length = longest_term_length + len(term_suffix)
-    padded_term_and_suffix = (step.term + term_suffix).ljust(pad_length)
+    min_dots = 3 # Always show at least 3 dots after a term, even the longest term.
+    pad_length = longest_term_length + min_dots
+    term_and_dots = step.term.ljust(pad_length, '.')
 
-    print(f"Setting up {padded_term_and_suffix}", end="", flush=True)
+    print(f"Setting up {term_and_dots} ", end="", flush=True)
 
     result = step.setup_fn()
 
