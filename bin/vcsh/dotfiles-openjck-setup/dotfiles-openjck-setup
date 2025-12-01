@@ -75,6 +75,7 @@ config = {
         "fzf",
         "jj",
         "nvim",
+        "topgrade",
     ],
     # TODO: Actually write the code that automatically installs pipx packages.
     #
