@@ -130,7 +130,7 @@ def run_quietly(cmd: str):
 # console.
 def run_and_capture(cmd: str):
     return subprocess.run(
-        cmd, shell=True, check=True, stdout=subprocess.PIPE
+        cmd, shell=True, check=True, text=True, stdout=subprocess.PIPE
     ).stdout.strip()
 
 
