@@ -51,7 +51,7 @@ distro = os.environ["DISTRO"]
 
 class Config(TypedDict):
     system_packages: Dict[Literal["debian"], List[str]]
-    flatpaks: Dict[Literal["flathub-verified", "flathub"], List[str]]
+    flatpak_apps: Dict[Literal["flathub-verified", "flathub"], List[str]]
     homebrew_formulae: List[str]
     pipx_packages: List[str]
     directories: List[str]
@@ -73,7 +73,7 @@ config: Config = {
             "vcsh",
         ],
     },
-    "flatpaks": {
+    "flatpak_apps": {
         "flathub-verified": [
             "org.mozilla.firefox",
         ],
@@ -202,12 +202,12 @@ def set_up_flatpak_apps():
         + "flathub-verified https://flathub.org/repo/flathub.flatpakrepo"
     )
 
-    for remote, flatpaks in config["flatpaks"].items():
+    for remote, flatpak_apps in config["flatpak_apps"].items():
         to_install: List[str] = []
 
-        for flatpak in flatpaks:
-            if run_silently(f"flatpak info {flatpak}").returncode != 0:
-                to_install.append(flatpak)
+        for flatpak_app in flatpak_apps:
+            if run_silently(f"flatpak info {flatpak_app}").returncode != 0:
+                to_install.append(flatpak_app)
 
         if len(to_install) > 0:
             # Do not print output on the same line as "Setting up [step name]...".
