@@ -211,8 +211,7 @@ def set_up_flatpak_apps():
 
         if len(to_install) > 0:
             # Do not print output on the same line as "Setting up [step name]...".
-            if not installed_any:
-                print()
+            print()
             run(f"flatpak install --noninteractive {remote} " + " ".join(to_install))
             installed_any = True
 
