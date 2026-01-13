@@ -182,24 +182,6 @@ leader_map(
   'Supertypes'
 )
 
-----------------------
--- System clipboard --
-----------------------
-
--- These are the only leader maps that don't share a namespace (e.g., s), only
--- because it's more convenient to type two characters (e.g., <Leader>y) than
--- three (e.g., <Leader>sy), and these maps are used often. The built-in motions
--- (e.g., "+y) use three characters, so it wouldn't be much of an improvement to
--- use a leader map that requires typing three characters. (It might be a slight
--- improvement because typing motions like "+y is awkward, in part because they
--- require the hand to take such a strange shape and in part because they
--- require the use of the shift key.)
-
-leader_map('n', 'P', '"+P', 'Paste above from system clipboard')
-leader_map('n', 'p', '"+p', 'Paste below from system clipboard')
-leader_map('x', 'd', '"+d', 'Delete (cut) to system clipboard')
-leader_map('x', 'y', '"+y', 'Yank (copy) to system clipboard')
-
 ---------
 -- Tab --
 ---------
