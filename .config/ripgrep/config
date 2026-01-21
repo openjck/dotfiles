@@ -1,0 +1,8 @@
+# Set options which should apply during interactive **and** non-interactive
+# usage, including usage through the ripgrep Neovim plugin. To change only
+# interactive options, modify the options in the rg.bash function.
+
+--hidden
+
+# --glob=!.git/ tells rg to ignore files within ".git/" directories themselves.
+--glob=!.git/
