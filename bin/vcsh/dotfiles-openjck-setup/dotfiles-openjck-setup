@@ -162,6 +162,7 @@ def set_vcsh_config(config: str, desired_value: str):
         run_quietly(f"vcsh dotfiles-openjck config {config} {desired_value}")
         return VcshConfigResult.MODIFIED
 
+
 # https://unix.stackexchange.com/a/46086/410447
 def os_is_debian_based() -> bool:
     if os.path.isfile("/etc/debian_version"):
