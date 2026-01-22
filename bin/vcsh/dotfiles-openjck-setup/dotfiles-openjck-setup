@@ -181,8 +181,13 @@ def set_up_system_packages_debian():
         return Result.ALREADY_DONE
     else:
         # Do not print output on the same line as "Setting up [step name]...".
+        #
+        # Additionally, remember: "apt" is not meant to be used in scripting. (In this
+        # case, I'm sure it doesn't matter, since we're not parsing the output, but
+        # strictly speaking, apt-get and friends are recommended for use in scripts
+        # instead.)
         print()
-        run(f'sudo apt install --yes {" ".join(to_install)}')
+        run(f'sudo apt-get install --yes {" ".join(to_install)}')
         return Result.DONE
 
 
