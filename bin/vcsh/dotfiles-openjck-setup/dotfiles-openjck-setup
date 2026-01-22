@@ -84,7 +84,6 @@ config: Config = {
         "gcc",
         "fpp",
         "fzf",
-        "jj",
         "nvim",
         "topgrade",
     ],
