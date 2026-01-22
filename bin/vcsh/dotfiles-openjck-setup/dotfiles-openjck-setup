@@ -25,7 +25,7 @@ from typing import Dict, List, Literal, TypedDict
 
 # MIT License
 #
-# Copyright (c) 2023, 2024, 2025 John Karahalis
+# Copyright (c) 2023, 2024, 2025, 2026 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -163,6 +163,12 @@ def set_vcsh_config(config: str, desired_value: str):
         run_quietly(f"vcsh dotfiles-openjck config {config} {desired_value}")
         return VcshConfigResult.MODIFIED
 
+# https://unix.stackexchange.com/a/46086/410447
+def os_is_debian_based() -> bool:
+    if os.path.isfile("/etc/debian_version"):
+        return True
+    return False
+
 
 def set_up_system_packages_debian():
     to_install: List[str] = []
@@ -181,11 +187,10 @@ def set_up_system_packages_debian():
 
 
 def set_up_system_packages():
-    match distro:
-        case "Ubuntu" | "Debian":
-            return set_up_system_packages_debian()
-        case _:
-            return Result.UNSUPPORTED
+    if os_is_debian_based():
+        return set_up_system_packages_debian()
+    else:
+        return Result.UNSUPPORTED
 
 
 def set_up_flatpak_apps():
