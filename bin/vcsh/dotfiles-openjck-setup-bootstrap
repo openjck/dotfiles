@@ -47,6 +47,9 @@ function os_is_debian_based() {
 if ! command -v pipx > /dev/null; then
   if os_is_debian_based; then
     sudo apt-get install --assume-yes pipx
+  else
+    >&2 echo 'This distro is not supported.'
+    exit 1
   fi
 fi
 
@@ -65,6 +68,9 @@ fi
 if ! command -v pipx > /dev/null; then
   if os_is_debian_based; then
     sudo apt-get install --assume-yes git
+  else
+    >&2 echo 'This distro is not supported.'
+    exit 1
   fi
 fi
 
