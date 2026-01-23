@@ -10,7 +10,7 @@ function p-search-all() {
 
   declare -A SEARCHERS
 
-  if [[ $DISTRO == Ubuntu ]]; then
+  if [[ "$(__distro_base)" == debian ]]; then
     # Bash doesn't support multi-dimensional arrays, so these try to emulate
     # multi-dimensional arrays. This approach takes inspiration from docopts.
     SEARCHERS[0,name]=apt

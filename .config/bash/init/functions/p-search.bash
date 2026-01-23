@@ -1,5 +1,5 @@
 function p-search() {
-  if [[ $DISTRO == Ubuntu || $DISTRO == Debian ]]; then
+  if [[ "$(__distro_base)" == debian ]]; then
     apt-cache search "$@"
   else
     __print-unsupported-err

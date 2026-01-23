@@ -1,5 +1,5 @@
 function p-info() {
-  if [[ $DISTRO == Ubuntu || $DISTRO == Debian ]]; then
+  if [[ "$(__distro_base)" == debian ]]; then
     apt show "$@"
   else
     __print-unsupported-err

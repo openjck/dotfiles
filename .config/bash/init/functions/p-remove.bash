@@ -1,5 +1,5 @@
 function p-remove() {
-  if [[ $DISTRO == Ubuntu || $DISTRO == Debian ]]; then
+  if [[ "$(__distro_base)" == debian ]]; then
     sudo apt remove --auto-remove "$@"
   else
     __print-unsupported-err

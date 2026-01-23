@@ -1,5 +1,5 @@
 function p-reinstall() {
-  if [[ $DISTRO == Ubuntu || $DISTRO == Debian ]]; then
+  if [[ "$(__distro_base)" == debian ]]; then
     sudo apt reinstall --assume-yes "$@"
   else
     __print-unsupported-err

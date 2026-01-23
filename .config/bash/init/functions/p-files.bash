@@ -1,5 +1,5 @@
 function p-files() {
-  if [[ $DISTRO == Ubuntu || $DISTRO == Debian ]]; then
+  if [[ "$(__distro_base)" == debian ]]; then
     dpkg-query --listfiles "$@"
   else
     __print-unsupported-err

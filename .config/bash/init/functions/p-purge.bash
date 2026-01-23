@@ -1,5 +1,5 @@
 function p-purge() {
-  if [[ $DISTRO == Ubuntu || $DISTRO == Debian ]]; then
+  if [[ "$(__distro_base)" == debian ]]; then
     sudo apt purge --auto-remove "$@"
   else
     __print-unsupported-err
