@@ -1,14 +1,23 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+#
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["docopt==0.6.2"]
+# ///
 
 import json
 import os
+import shutil
 import subprocess
 import sys
+import tempfile
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Literal, TypedDict
+
+from docopt import docopt
 
 # dotfiles-openjck-setup:
 # Set up dotfile dependencies.
@@ -46,7 +55,7 @@ from typing import Dict, List, Literal, TypedDict
 # SOFTWARE.
 
 xdg_config_home = os.environ["XDG_CONFIG_HOME"]
-distro = os.environ["DISTRO"]
+directory_bin_downloaded = "~/bin/local/downloaded"
 
 
 class Config(TypedDict):
@@ -96,7 +105,7 @@ config: Config = {
         "~/apps/repos/git",
         "~/apps/appimage",
         "~/bin/local",
-        "~/bin/local/downloaded",
+        directory_bin_downloaded,
         "~/bin/local/temporary",
         "~/devel",
         "~/devel/repos",
@@ -109,6 +118,16 @@ class Result(Enum):
     DONE = 1
     ALREADY_DONE = 2
     UNSUPPORTED = 3
+
+
+class BaseDistro(Enum):
+    UNKNOWN = 1
+    ALPINE = 2
+    ARCH = 3
+    DEBIAN = 4
+    GENTOO = 5
+    REDHAT = 6
+    SUSE = 7
 
 
 @dataclass
@@ -153,7 +172,7 @@ def run_silently(cmd: str):
     )
 
 
-def set_vcsh_config(config: str, desired_value: str):
+def set_vcsh_config(config: str, desired_value: str) -> VcshConfigResult:
     value = run_and_capture(f"vcsh dotfiles-openjck config {config}")
 
     if value == desired_value:
@@ -164,13 +183,39 @@ def set_vcsh_config(config: str, desired_value: str):
 
 
 # https://unix.stackexchange.com/a/46086/410447
-def os_is_debian_based() -> bool:
-    if os.path.isfile("/etc/debian_version"):
-        return True
-    return False
+def get_base_distro() -> BaseDistro:
+    distro_markers = {
+        "/etc/redhat-release": BaseDistro.REDHAT,
+        "/etc/arch-release": BaseDistro.ARCH,
+        "/etc/gentoo-release": BaseDistro.GENTOO,
+        "/etc/SuSE-release": BaseDistro.SUSE,
+        "/etc/debian_version": BaseDistro.DEBIAN,
+        "/etc/alpine-release": BaseDistro.ALPINE,
+    }
+
+    for filename, base_distro in distro_markers.items():
+        if os.path.isfile(filename):
+            return base_distro
+
+    return BaseDistro.UNKNOWN
 
 
-def set_up_system_packages_debian():
+def set_up_directories() -> Result:
+    created_any = False
+
+    for directory in config["directories"]:
+        path = Path(directory).expanduser()
+        if not path.is_dir():
+            path.mkdir(parents=True)
+            created_any = True
+
+    if created_any:
+        return Result.DONE
+    else:
+        return Result.ALREADY_DONE
+
+
+def set_up_system_packages_debian() -> Result:
     to_install: List[str] = []
 
     for package in config["system_packages"]["debian"]:
@@ -191,14 +236,16 @@ def set_up_system_packages_debian():
         return Result.DONE
 
 
-def set_up_system_packages():
-    if os_is_debian_based():
+def set_up_system_packages() -> Result:
+    base_distro = get_base_distro()
+
+    if base_distro == BaseDistro.DEBIAN:
         return set_up_system_packages_debian()
     else:
         return Result.UNSUPPORTED
 
 
-def set_up_flatpak_apps():
+def set_up_flatpak_apps() -> Result:
     installed_any = False
 
     # Set up remotes, including one remote for Flathub and one remote for
@@ -231,7 +278,7 @@ def set_up_flatpak_apps():
         return Result.ALREADY_DONE
 
 
-def set_up_homebrew_formulae():
+def set_up_homebrew_formulae() -> Result:
     to_install: List[str] = []
 
     # Install Homebrew itself, if necessary.
@@ -254,7 +301,7 @@ def set_up_homebrew_formulae():
         return Result.DONE
 
 
-def set_up_pipx_packages():
+def set_up_pipx_packages() -> Result:
     to_install: List[str] = []
 
     pipx_list = json.loads(run_and_capture("pipx list --json"))
@@ -272,7 +319,34 @@ def set_up_pipx_packages():
         return Result.DONE
 
 
-def set_up_vcsh():
+# This installs docopts. Note the s at the end of the word.
+#
+# This installs docopts (notice the s at the end) not docopt (no s).
+#
+# docopt (no s), which is used by this script itself, is a Python package that helps
+# with writing help text and makes parsing arguments very easy. docopts (with the s)
+# does the same thing for shell scripts, and it's used by all of my shell scripts except
+# the bootstrap script.
+def set_up_docopts() -> Result:
+    if shutil.which("docopts") is not None:
+        return Result.ALREADY_DONE
+    else:
+        with tempfile.TemporaryDirectory(delete=False) as tmp_dir:
+            # Do not print output on the same line as "Setting up [step name]...".
+            print()
+            run(f"git clone https://github.com/docopt/docopts.git {tmp_dir}/docopts")
+
+            # For some reason, running `{tmp_dir}/docopts` directly does not work. You
+            # really do need to cd into the directory first.
+            run(f"cd {tmp_dir}/docopts && ./get_docopts.sh")
+
+            docopts_bin_destination = Path(directory_bin_downloaded).expanduser()
+            shutil.copy(f"{tmp_dir}/docopts/docopts", docopts_bin_destination)
+
+            return Result.DONE
+
+
+def set_up_vcsh() -> Result:
     modified_config = False
 
     show_untracked_result = set_vcsh_config("status.showUntrackedFiles", "no")
@@ -310,22 +384,7 @@ def set_up_vcsh():
         return Result.ALREADY_DONE
 
 
-def set_up_directories():
-    created_any = False
-
-    for directory in config["directories"]:
-        path = Path(directory).expanduser()
-        if not path.is_dir():
-            path.mkdir(parents=True)
-            created_any = True
-
-    if created_any:
-        return Result.DONE
-    else:
-        return Result.ALREADY_DONE
-
-
-def set_up_tmux():
+def set_up_tmux() -> Result:
     tpm_path = Path("~/.tmux/plugins/tpm").expanduser()
     tpm_path_str = tpm_path.absolute().as_posix()
 
@@ -372,7 +431,8 @@ def run_step(step: Step, longest_term_length: int):
             print("unsupported.")
 
 
-def print_help(filename: str):
+def main():
+    filename = os.path.basename(__file__)
     help_text = f"""
 Set up the packages, directories, plugin managers, and other dotfile
 dependencies used across machines.
@@ -391,26 +451,22 @@ Options:
       Show this documentation
 """.strip()
 
-    print(help_text)
-    return 0
+    docopt(help_text)
 
+    steps = [
+        # Set up directories before anything else because set_up_docopts requires one of
+        # these directories to exist.
+        Step("directories", set_up_directories),
+        Step("system packages", set_up_system_packages, True),
+        Step("Flatpak apps", set_up_flatpak_apps, True),
+        Step("Homebrew formulae", set_up_homebrew_formulae, True),
+        Step("pipx packages", set_up_pipx_packages, True),
+        Step("docopts", set_up_docopts, True),
+        Step("vcsh", set_up_vcsh),
+        Step("tmux", set_up_tmux, True),
+    ]
 
-def main():
-    if len(sys.argv) > 1 and sys.argv[1] in ("-h", "--help"):
-        filename = os.path.basename(__file__)
-        return print_help(filename)
-    else:
-        steps = [
-            Step("system packages", set_up_system_packages, True),
-            Step("Flatpak apps", set_up_flatpak_apps, True),
-            Step("Homebrew formulae", set_up_homebrew_formulae, True),
-            Step("pipx packages", set_up_pipx_packages, True),
-            Step("vcsh", set_up_vcsh),
-            Step("directories", set_up_directories),
-            Step("tmux", set_up_tmux, True),
-        ]
-
-        return run_steps(steps)
+    return run_steps(steps)
 
 
 if __name__ == "__main__":

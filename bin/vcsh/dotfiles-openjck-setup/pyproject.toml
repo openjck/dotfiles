@@ -2,7 +2,9 @@
 name = "dotfiles-openjck-setup"
 version = "1.0.0"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "docopt==0.6.2",
+]
 
 [dependency-groups]
 dev = [
@@ -10,6 +12,7 @@ dev = [
     "flake8>=7.3.0",
     "isort>=7.0.0",
     "pyright>=1.1.407",
+    "types-docopt>=0.6.11.20241107",
 ]
 
 [tool.pyright]
