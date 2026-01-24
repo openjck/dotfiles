@@ -6,8 +6,8 @@
 # ///
 
 import json
-import platform
 import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -391,6 +391,7 @@ def set_up_vcsh() -> Result:
         sc_file = open(sc_filename, mode="w")
         sc_file.write(sc_file_contents)
         sc_file.close()
+        run("vcsh dotfiles-openjck checkout")
         modified_config = True
 
     if modified_config:
