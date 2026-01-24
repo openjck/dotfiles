@@ -250,6 +250,8 @@ def set_up_flatpak_apps() -> Result:
 
     # Set up remotes, including one remote for Flathub and one remote for
     # verified flatpaks on Flathub.
+    #
+    # Using --user ensures that no password is required to add these remotes.
     run_quietly(
         "flatpak remote-add --user --if-not-exists flathub "
         + "https://dl.flathub.org/repo/flathub.flatpakrepo"
