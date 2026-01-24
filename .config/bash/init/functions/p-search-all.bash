@@ -11,22 +11,28 @@ function p-search-all() {
   declare -A SEARCHERS
 
   if [[ "$(__distro_base)" == debian ]]; then
-    # Bash doesn't support multi-dimensional arrays, so these try to emulate
-    # multi-dimensional arrays. This approach takes inspiration from docopts.
     SEARCHERS[0,name]=apt
     SEARCHERS[0,command]=apt-cache
     SEARCHERS[0,args]=search
-
-    SEARCHERS[1,name]=flatpak
-    SEARCHERS[1,command]=flatpak
-    SEARCHERS[1,args]=search
-
-    SEARCHERS[2,name]=snap
-    SEARCHERS[2,command]=snap
-    SEARCHERS[2,args]=search
   else
-    __print-unsupported-err
+    __print_unsupported_err
     return 1
+  fi
+
+  # Bash doesn't support multi-dimensional arrays, so these try to emulate
+  # multi-dimensional arrays. This approach takes inspiration from docopts.
+  SEARCHERS[1,name]=flatpak
+  SEARCHERS[1,command]=flatpak
+  SEARCHERS[1,args]=search
+
+  SEARCHERS[2,name]=homebrew
+  SEARCHERS[2,command]=brew
+  SEARCHERS[2,args]=search
+
+  if __command_exists snap; then
+    SEARCHERS[3,name]=snap
+    SEARCHERS[3,command]=snap
+    SEARCHERS[3,args]=search
   fi
 
   local QUERY=$1
