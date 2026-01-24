@@ -101,6 +101,7 @@ config: Config = {
     "pipx_packages": [
         "git-fzf",
         "uv",
+        "yq",
     ],
     "directories": [
         "~/LGTD/inboxes/main",
