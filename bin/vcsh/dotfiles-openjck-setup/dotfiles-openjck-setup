@@ -78,6 +78,7 @@ config: Config = {
             "pwgen",
             "ripgrep",
             "sd",
+            "tmux",
             "toilet",
             "vcsh",
         ],
