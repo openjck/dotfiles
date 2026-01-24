@@ -6,6 +6,7 @@
 # ///
 
 import json
+import platform
 import os
 import shutil
 import subprocess
@@ -336,6 +337,12 @@ def set_up_pipx_packages() -> Result:
 # does the same thing for shell scripts, and it's used by all of my shell scripts except
 # the bootstrap script.
 def set_up_docopts() -> Result:
+    architecture = platform.machine()
+
+    # As of 2026-01-23, docopts does not support aarch64.
+    if architecture == "aarch64":
+        return Result.UNSUPPORTED
+
     if shutil.which("docopts") is not None:
         return Result.ALREADY_DONE
     else:
