@@ -157,9 +157,12 @@ def run_quietly(cmd: str):
 
 # Run a command, capturing stdout and allowing stderr to be printed to the
 # console.
-def run_and_capture(cmd: str):
+#
+# Pass "check=False" to ignore, rather than raise an error, when a command exits with
+# a non-zero exit code.
+def run_and_capture(cmd: str, check: bool = True):
     return subprocess.run(
-        cmd, shell=True, check=True, text=True, stdout=subprocess.PIPE
+        cmd, shell=True, check=check, text=True, stdout=subprocess.PIPE
     ).stdout.strip()
 
 
@@ -174,7 +177,9 @@ def run_silently(cmd: str):
 
 
 def set_vcsh_config(config: str, desired_value: str) -> VcshConfigResult:
-    value = run_and_capture(f"vcsh dotfiles-openjck config {config}")
+    # If the configuration option is not set, the command will exit with a non-zero exit
+    # code, so pass check=False to ignore that.
+    value = run_and_capture(f"vcsh dotfiles-openjck config {config}", check=False)
 
     if value == desired_value:
         return VcshConfigResult.UNMODIFIED
