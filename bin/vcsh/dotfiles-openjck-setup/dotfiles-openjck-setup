@@ -110,7 +110,6 @@ config: Config = {
         directory_bin_downloaded,
         "~/bin/local/temporary",
         "~/devel",
-        "~/devel/repos",
         f"{xdg_config_home}/bash/init/functions/local",
     ],
 }
