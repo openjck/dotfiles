@@ -251,11 +251,11 @@ def set_up_flatpak_apps() -> Result:
     # Set up remotes, including one remote for Flathub and one remote for
     # verified flatpaks on Flathub.
     run_quietly(
-        "flatpak remote-add --if-not-exists flathub "
+        "flatpak remote-add --user --if-not-exists flathub "
         + "https://dl.flathub.org/repo/flathub.flatpakrepo"
     )
     run_quietly(
-        "flatpak remote-add --if-not-exists --subset=verified "
+        "flatpak remote-add --user --if-not-exists --subset=verified "
         + "flathub-verified https://flathub.org/repo/flathub.flatpakrepo"
     )
 
