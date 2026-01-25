@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+# Exit if not running interactively.
+if [[ $- != *i* ]]; then
+  return
+fi
+
 # Source all Bash and POSIX sh utilities so that they can be used in this file
 # and files that are sourced from this file.
 source "$XDG_CONFIG_HOME/bash/bootstrap/source_utils.bash"
