@@ -8,4 +8,8 @@ export FZF_DEFAULT_COMMAND='find .'
 export FZF_HISTORY_FILE=$XDG_DATA_HOME/history
 
 # Enable Bash integration.
-eval "$(fzf --bash)"
+#
+# Use `command fzf` so that the fzf alias is not used when doing this. I don't
+# think using the alias does any harm at the time of this writing, but depending
+# on what options are set, it theoretically could in the future.
+eval "$(command fzf --bash)"
