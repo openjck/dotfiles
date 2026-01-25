@@ -22,7 +22,13 @@ function jump() {
     } | sort --unique
   })
 
-  if SELECTION=$(fzf <<< "$CHOICES"); then
+  # Use the "end" tiebreaker because it helps fzf match the desired result much
+  # more consistently when one knows the exact name of the directory they want
+  # to jump to, even if they don't know or don't want to type the path leading
+  # up to it. When I'm using "jump", I _do_ almost always know the exact name of
+  # the directory I want to jump to, even though I don't want to type the whole
+  # path leading up to it.
+  if SELECTION=$(fzf --tiebreak=end <<< "$CHOICES"); then
     cdv "$SELECTION"
   fi
 }
