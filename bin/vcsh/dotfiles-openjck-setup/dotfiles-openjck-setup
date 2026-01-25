@@ -55,6 +55,8 @@ from docopt import docopt
 # SOFTWARE.
 
 xdg_config_home = os.environ["XDG_CONFIG_HOME"]
+xdg_data_home = os.environ["XDG_DATA_HOME"]
+
 directory_bin_downloaded = "~/bin/local/downloaded"
 
 
@@ -103,14 +105,15 @@ config: Config = {
         "yq",
     ],
     "directories": [
-        "~/LGTD/inboxes/main",
-        "~/apps/repos/git",
         "~/apps/appimage",
+        "~/apps/repos/git",
         "~/bin/local",
-        directory_bin_downloaded,
         "~/bin/local/temporary",
         "~/devel",
+        directory_bin_downloaded,
         f"{xdg_config_home}/bash/init/functions/local",
+        f"{xdg_data_home}/fzf",
+        "~/LGTD/inboxes/main",
     ],
 }
 
