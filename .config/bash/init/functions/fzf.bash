@@ -5,5 +5,5 @@
 # With the history option set, CTRL-P can be used to quickly access past search
 # terms, and CTRL-N can be used to move forward in history.
 function fzf() {
-  fzf-tmux -- --history="$XDG_DATA_HOME/fzf/history" "$@"
+  fzf-tmux -- --history="$FZF_HISTORY_FILE" "$@"
 }

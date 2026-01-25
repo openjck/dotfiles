@@ -5,7 +5,7 @@ export FZF_DEFAULT_COMMAND='find .'
 
 # This environment variable is not used by fzf itself, but rather by the "fzf"
 # function with the --history option.
-export FZF_HISTORY_FILE=$XDG_DATA_HOME/history
+export FZF_HISTORY_FILE=$XDG_DATA_HOME/fzf/history
 
 # Enable Bash integration.
 #
