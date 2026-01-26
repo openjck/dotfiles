@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# rsync-mirror-local:
-# Update TARGET directory to perfectly match SOURCE directory.
+# rsync-mirror:
+# Update TARGET to perfectly match SOURCE.
 #
 # Installation instructions:
 # https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
@@ -11,7 +11,7 @@
 
 # MIT License
 #
-# Copyright (c) 2023, 2024, 2025 John Karahalis
+# Copyright (c) 2023, 2024, 2025, 2026 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -72,19 +72,20 @@ fi
 ########################
 
 eval "$(docopts --help=- -A ARGS : "$@" <<EOF
-Update TARGET directory to perfectly match SOURCE directory.
+Update TARGET to perfectly match SOURCE.
 
-Files in SOURCE are deleted if they do not exist in SOURCE.
+Files in TARGET are deleted if they do not exist in SOURCE.
 
-SOURCE and TARGET must be local directories. They may be specified with or
-without trailing slashes without affecting the result.
+SOURCE and TARGET may be specified with or without trailing slashes without
+affecting the result.
 
 Usage:
   $COMMAND_NAME SOURCE TARGET
   $COMMAND_NAME -h | --help
 
 Examples:
-  $COMMAND_NAME /media/john/drive/ /media/john/some-other-drive/
+  $COMMAND_NAME /media/john/drive /media/john/some-other-drive
+  $COMMAND_NAME john@example.com:/home/john /media/john/backup/example.com
 
 Options:
   -h, --help
@@ -98,24 +99,24 @@ TARGET_WITH_NO_TRAILING_SLASH=${ARGS[TARGET]%/}
 SOURCE_WITH_TRAILING_SLASH=$SOURCE_WITH_NO_TRAILING_SLASH/
 TARGET_WITH_TRAILING_SLASH=$TARGET_WITH_NO_TRAILING_SLASH/
 
-if [[ ! -d "$SOURCE_WITH_TRAILING_SLASH" ]]; then
-    >&2 fold --spaces \
-      <<< "FATAL ERROR: \"$SOURCE_WITH_TRAILING_SLASH\" does not exist."
-    exit 1
-fi
-
 # rsync will create the destination directory if it does not already exist.
 # That's often fine, but it's not what I'd like this script to do. Rather, I'd
 # like this script to exit with an error message if the destination directory
-# cannot be found, as it does here. I often use this script to synchronize two
-# backup drives, and I don't want a new copy of a backup to be made on the local
-# disk if the destination disk cannot be found.
+# cannot be found. I often use this script to synchronize two external backup
+# drives, and I don't want a new copy of a backup to be made on the _local_ disk
+# if the external disk cannot be found.
 #
 # Perhaps this behavior, checking whether the destination directory exists, can
-# be made an option in the future, disabled by default.
-if [[ ! -d "$TARGET_WITH_TRAILING_SLASH" ]]; then
+# be made an option in the future, perhaps disabled by default.
+#
+# ${ARGS[TARGET]} is used so that the path that appears in the error message has
+# the same format as the argument provided as TARGET, whether TARGET was written
+# _with_ a trailing slash or _without_ a trailing slash. That just adds a bit of
+# clarity, so that the user doesn't wonder if the path that was _checked_ was
+# any different from the path they _provided_.
+if [[ ! -d "${ARGS[TARGET]}" ]]; then
     >&2 fold --spaces \
-      <<< "FATAL ERROR: \"$TARGET_WITH_TRAILING_SLASH\" does not exist."
+      <<< "FATAL ERROR: \"${ARGS[TARGET]}\" does not exist."
     exit 1
 fi
 
@@ -123,6 +124,8 @@ fi
 # the destination to have the same _contents_ as the source, rather than
 # updating the destination to have a directory with the same name and same
 # contents as the source directory.
+#
+# https://stackoverflow.com/a/31278462/715866
 rsync \
   --archive \
   --delete \
