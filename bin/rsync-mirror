@@ -80,7 +80,7 @@ SOURCE and TARGET may be specified with or without trailing slashes without
 affecting the result.
 
 Usage:
-  $COMMAND_NAME SOURCE TARGET
+  $COMMAND_NAME [--read-source-with-sudo] SOURCE TARGET
   $COMMAND_NAME -h | --help
 
 Examples:
@@ -88,6 +88,12 @@ Examples:
   $COMMAND_NAME john@example.com:/home/john /media/john/backup/example.com
 
 Options:
+  -s, --read-source-with-sudo
+      Use "sudo" on the SOURCE machine when reading files from SOURCE. This can
+      be helpful when, among other things, mirroring the root directory of
+      a remote machine. If this option were not passed when doing so, some files
+      would not be able to be mirrored from the remote machine because they had
+      restrictive permissions.
   -h, --help
       Show this documentation
 EOF
@@ -120,6 +126,19 @@ if [[ ! -d "${ARGS[TARGET]}" ]]; then
     exit 1
 fi
 
+RSYNC_OPTIONS=(
+  --archive
+  --delete
+  --hard-links
+  --acls
+  --xattrs
+  --verbose
+)
+
+if [[ ${ARGS[--read-source-with-sudo]} ]]; then
+  RSYNC_OPTIONS+=(--rsync-path='sudo rsync')
+fi
+
 # When both the source and the destination have a trailing slash, rsync updates
 # the destination to have the same _contents_ as the source, rather than
 # updating the destination to have a directory with the same name and same
@@ -127,11 +146,6 @@ fi
 #
 # https://stackoverflow.com/a/31278462/715866
 rsync \
-  --archive \
-  --delete \
-  --hard-links \
-  --acls \
-  --xattrs \
-  --verbose \
+  "${RSYNC_OPTIONS[@]}" \
   "$SOURCE_WITH_TRAILING_SLASH" \
   "$TARGET_WITH_TRAILING_SLASH"
