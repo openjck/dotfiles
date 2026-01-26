@@ -57,7 +57,7 @@ from docopt import docopt
 xdg_config_home = os.environ["XDG_CONFIG_HOME"]
 xdg_data_home = os.environ["XDG_DATA_HOME"]
 
-directory_bin_downloaded = "~/bin/local/downloaded"
+directory_bin_local_downloaded = "~/bin/local/downloaded"
 
 
 class Config(TypedDict):
@@ -109,8 +109,7 @@ config: Config = {
         "~/apps/repos/git",
         "~/bin/local",
         "~/bin/local/temporary",
-        "~/devel",
-        directory_bin_downloaded,
+        directory_bin_local_downloaded,
         f"{xdg_config_home}/bash/init/functions/local",
         f"{xdg_data_home}/fzf",
         "~/LGTD/inboxes/main",
@@ -351,7 +350,7 @@ def set_up_docopts() -> Result:
             # really do need to cd into the directory first.
             run(f"cd {tmp_dir}/docopts && ./get_docopts.sh")
 
-            docopts_bin_destination = Path(directory_bin_downloaded).expanduser()
+            docopts_bin_destination = Path(directory_bin_local_downloaded).expanduser()
             shutil.copy(f"{tmp_dir}/docopts/docopts", docopts_bin_destination)
 
             return Result.DONE
