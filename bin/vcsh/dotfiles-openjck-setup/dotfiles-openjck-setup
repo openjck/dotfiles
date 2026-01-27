@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import warnings
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
@@ -53,6 +54,11 @@ from docopt import docopt
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+# Show deprecation warnings.
+#
+# https://hypirion.com/musings/use-python-for-scripting
+warnings.simplefilter("default", DeprecationWarning)
 
 xdg_config_home = os.environ["XDG_CONFIG_HOME"]
 xdg_data_home = os.environ["XDG_DATA_HOME"]
