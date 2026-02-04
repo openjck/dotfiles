@@ -80,7 +80,7 @@ SOURCE and TARGET may be specified with or without trailing slashes without
 affecting the result.
 
 Usage:
-  $COMMAND_NAME [--read-source-with-sudo] SOURCE TARGET
+  $COMMAND_NAME [--read-source-with-sudo] [--exclude=PATTERN...] SOURCE TARGET
   $COMMAND_NAME -h | --help
 
 Examples:
@@ -94,6 +94,9 @@ Options:
       a remote machine. If this option were not passed when doing so, some files
       would not be able to be mirrored from the remote machine because they had
       restrictive permissions.
+  --exclude=PATTERN
+      Exclude files matching PATTERN. These work exactly as they do in rsync.
+      One or more of these options can be passed.
   -h, --help
       Show this documentation
 EOF
@@ -138,6 +141,13 @@ RSYNC_OPTIONS=(
 if [[ ${ARGS[--read-source-with-sudo]} ]]; then
   RSYNC_OPTIONS+=(--rsync-path='sudo rsync')
 fi
+
+I=0
+while (( I < ${ARGS[--exclude,#]} )); do
+  EXCLUDE_VALUE=${ARGS[--exclude,$I]}
+  RSYNC_OPTIONS+=(--exclude="$EXCLUDE_VALUE")
+  I=$((I + 1))
+done
 
 # When both the source and the destination have a trailing slash, rsync updates
 # the destination to have the same _contents_ as the source, rather than
