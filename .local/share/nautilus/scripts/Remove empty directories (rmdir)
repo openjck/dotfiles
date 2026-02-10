@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+NOT_DIRECTORIES=()
+NOT_EMPTY=()
+FAILED=()
+
+NUM_SELECTIONS=0
+
+# The last line of $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS is a newline, so this
+# pattern of looping is needed to avoid running the body of the loop one extra
+# time where "$DIRECTORY" is the empty string.
+#
+# We could just check if "$DIRECTORY" is the empty string at the beginning of
+# the body of the loop, but this pattern is more general-purpose, and it works
+# in cases where the body truly shouldn't be run at all for that final newline.
+#
+# https://superuser.com/a/284226
+while IFS= read -r DIRECTORY || [[ -n $DIRECTORY ]]; do
+  NUM_SELECTIONS=$((NUM_SELECTIONS + 1))
+
+  if [[ ! -d "$DIRECTORY" ]]; then
+    NOT_DIRECTORIES+=("$DIRECTORY")
+    continue
+  fi
+
+  if [[ -n "$( ls --almost-all "$DIRECTORY" )" ]]; then
+    NOT_EMPTY+=("$DIRECTORY")
+    continue
+  fi
+
+  if ! rmdir "$DIRECTORY"; then
+    FAILED+=("$DIRECTORY")
+    continue
+  fi
+done < <(printf '%s' "$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS")
+
+ERROR_MESSAGE=''
+
+function build_error_message_section() {
+  local -n ARRAY=$1
+  local SINGLE_SELECTION_MESSAGE=$2
+  local MULTIPLE_SELECTIONS_HEADER=$3
+
+  if (( ${#ARRAY[@]} == 0 )); then
+    return
+  fi
+
+  if (( NUM_SELECTIONS == 1 )); then
+    ERROR_MESSAGE=$SINGLE_SELECTION_MESSAGE
+  else
+    if [[ -n $ERROR_MESSAGE ]]; then
+      ERROR_MESSAGE+=$'\n\n'
+    fi
+
+    ERROR_MESSAGE+="${MULTIPLE_SELECTIONS_HEADER}:"$'\n\n'
+
+    for ELEMENT in "${ARRAY[@]}"; do
+      ERROR_MESSAGE+="    $ELEMENT"$'\n'
+    done
+  fi
+}
+
+build_error_message_section \
+  NOT_EMPTY \
+  'Directory is not empty.' \
+  'The following directories are not empty'
+
+build_error_message_section \
+  NOT_DIRECTORIES \
+  'Item is not a directory.' \
+  'The following items are not directories'
+
+build_error_message_section \
+  FAILED \
+  'Unknown failure.' \
+  'The following items failed to be removed for unknown reasons'
+
+if [[ -n $ERROR_MESSAGE ]]; then
+  zenity --error --text "$ERROR_MESSAGE"
+fi
