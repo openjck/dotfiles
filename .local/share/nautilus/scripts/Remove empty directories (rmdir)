@@ -105,7 +105,7 @@ build_error_message_section \
 
 build_error_message_section \
   FAILED \
-  'Unknown failure.' \
+  'Item failed to be removed for unknown reason.' \
   'The following items failed to be removed for unknown reasons'
 
 if [[ -n $ERROR_MESSAGE ]]; then
