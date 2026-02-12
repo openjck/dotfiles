@@ -86,6 +86,7 @@ config: Config = {
             "pwgen",
             "ripgrep",
             "sd",
+            "sudo",  # Not installed by default on normal Debian.
             "tmux",
             "toilet",
             "vcsh",
