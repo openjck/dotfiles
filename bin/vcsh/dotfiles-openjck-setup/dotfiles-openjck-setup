@@ -84,6 +84,7 @@ config: Config = {
             "moreutils",
             "pipx",
             "pwgen",
+            "renameutils",
             "ripgrep",
             "sd",
             "sudo",  # Not installed by default on normal Debian.
