@@ -5,10 +5,11 @@ My shell scripts are well-documented, and readers may also be interested in my
 methods of organization, my Bash functions, my Neovim configuration, my tmux
 configuration, and my Git configuration, among other things.
 
-In general, shell scripts that might be useful to others are stored in the
-[bin](bin) directory, whereas Bash utilities that are specific to my setup or
-reflect my personal preferences are written as Bash functions and stored in the
-[.config/bash/init/functions](.config/bash/init/functions) directory.
+Shell scripts that might be useful to others are stored in the
+[bin/general](bin/general) directory, whereas shell scripts and other utilities
+that are specific to my setup are stored in the [bin/personal](bin/personal)
+directory and the [.config/bash/init/functions](.config/bash/init/functions)
+directory.
 
 I'm very pleased with the organization of my Bash functions. I've tried many
 methods of organizing aliases and functions, but this method, inspired by
