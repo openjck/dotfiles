@@ -70,10 +70,3 @@ mason_lspconfig.setup({
     'ts_ls',
   },
 })
-
--- Set up language servers automatically.
-mason_lspconfig.setup_handlers({
-  function (server_name)
-    lspconfig[server_name].setup({})
-  end,
-})
