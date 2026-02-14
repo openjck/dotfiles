@@ -6,12 +6,18 @@ methods of organization, my Bash functions, my Neovim configuration, my tmux
 configuration, and my Git configuration, among other things.
 
 Shell scripts that might be useful to others are stored in the
-[bin/general](bin/general) directory, whereas shell scripts and other utilities
-that are specific to my setup are stored in the [bin/personal](bin/personal)
-directory and the [.config/bash/init/functions](.config/bash/init/functions)
-directory.
+[_bin/general_](bin/general) directory, whereas shell scripts that reflect my
+personal needs are stored in the [_bin/personal_](bin/personal) directory. The
+[_.config/bash/init/functions_](.config/bash/init/functions) directory contains
+little utilities that are also unlikely to be of direct use to others, as well
+as utilities that cannot realistically be implemented as shell scripts. (Some
+things, like shadowing another command or navigating with `cd`, are difficult or
+impossible in to achieve in a shell script.) That said, some of the utilities in
+[_.config/bash/init/functions_](.config/bash/init/functions) could be
+re-implemented as shell scripts, and they may be more useful to others if they
+were. I hope to rewrite those utilities as shell scripts in the future.
 
-I'm very pleased with the organization of my Bash functions. I've tried many
+I'm very pleased with the organization of those utilities. I've tried many
 methods of organizing aliases and functions, but this method, inspired by
 [fish](https://github.com/fish-shell/fish-shell), feels the most natural. No
 aliases are used. Everything is a function, and every function has its own file.
@@ -37,26 +43,33 @@ Follow these steps to install _all_ of these files:
 
 1. Install [vcsh](https://github.com/RichiH/vcsh).
 2. Run `vcsh clone https://github.com/openjck/dotfiles.git dotfiles-openjck`.
-  * A warning will appear, but it can be safely ignored.
-  * If you prefer cloning over SSH for any reason, you can alternatively run
-    `vcsh clone git@github.com:openjck/dotfiles.git dotfiles-openjck`.
+
+- A warning will appear, but it can be safely ignored.
+- If you prefer cloning over SSH for any reason, you can alternatively run
+  `vcsh clone git@github.com:openjck/dotfiles.git dotfiles-openjck`.
+
 3. Run `rm -f "${XDG_CONFIG_HOME:-~/.config}/vcsh/repo.d/dotfiles-openjck.git/info/exclude"`.
 4. Run `vcsh dotfiles-openjck fetch`.
 5. Run `vcsh dotfiles-openjck switch main`.
-  * A warning about conflicting files may appear. If you'd like to keep the
-    existing files that are named, either to use them as-is or merge them with
-    the files from this project, move them somewhere else for now, then run this
-    command again. If you don't care about the existing files, remove them, then
-    run this command again.
+
+- A warning about conflicting files may appear. If you'd like to keep the
+  existing files that are named, either to use them as-is or merge them with
+  the files from this project, move them somewhere else for now, then run this
+  command again. If you don't care about the existing files, remove them, then
+  run this command again.
+
 6. Log out, then log back in.
-  * This will cause the new _.profile_ file to take effect. There are faster
-    ways to accomplish this, but logging out and logging back in is the easiest
-    and most comprehensive.
+
+- This will cause the new _.profile_ file to take effect. There are faster
+  ways to accomplish this, but logging out and logging back in is the easiest
+  and most comprehensive.
+
 7. Run `vcsh upgrade dotfiles-openjck`.
-  * This runs this project's setup script. The setup script will also run when
-    `vcsh pull` is run, but _not_ when `vcsh dotfiles-openjck pull` is run. I
-    don't think it's possible to configure vcsh to run any hook like this when
-    `vcsh dotfiles-openjck [subcommand]` is run.
+
+- This runs this project's setup script. The setup script will also run when
+  `vcsh pull` is run, but _not_ when `vcsh dotfiles-openjck pull` is run. I
+  don't think it's possible to configure vcsh to run any hook like this when
+  `vcsh dotfiles-openjck [subcommand]` is run.
 
 ### Single shell script
 
