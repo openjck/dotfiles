@@ -5,7 +5,8 @@
 Follow these steps to install a single shell script:
 
 1. Install [docopts](https://github.com/docopt/docopts). My shell scripts
-   require docopts and will not function without it.
+   require docopts and will not function without it. The _docopts.sh_ helper
+   library is _not_ needed.
 2. Save the shell script somewhere along your `$PATH`.
     1. If that sounds confusing, just do the following:
         1. Run `mkdir -p "$HOME/bin"`

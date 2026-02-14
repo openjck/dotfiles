@@ -13,8 +13,9 @@ It's important to note that _all_ of these scripts have a hard dependency on
 [docopts](https://github.com/docopt/docopts). They will only work if docopts is
 installed. For that reason, you **must** [install
 docopts](https://github.com/docopt/docopts?tab=readme-ov-file#install) to use
-these scripts. Conveniently, if you run a script and docopts is not installed,
-you'll get an error message telling you to install docopts.
+these scripts. The _docopts.sh_ helper library, however, is _not_ needed.
+Conveniently, if you run a script and docopts is not installed, you'll get an
+error message telling you to install docopts.
 
 Additionally, it's important to mention that these scripts were written for use
 on Linux, with GNU versions of `grep`, `find`, and other programs. The versions
