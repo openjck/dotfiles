@@ -1,5 +1,8 @@
-These are my public configuration files, shell scripts, and more. I'm sharing
-them for the benefit of others, and I sincerely hope others find them useful.
+These are my public configuration files, shell scripts, and more. Nothing here
+is especially groundbreaking or innovative, but I take pleasure in crafting
+small, useful, beautiful tools with great love and care and with great attention
+to detail. I'm sharing these things for the benefit of others, and I sincerely
+hope others find them useful.
 
 My shell scripts are well-documented, and readers may also be interested in my
 methods of organization, my Bash functions, my Neovim configuration, my tmux
