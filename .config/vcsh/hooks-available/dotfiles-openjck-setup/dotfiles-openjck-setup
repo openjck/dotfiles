@@ -24,14 +24,7 @@ from docopt import docopt
 # Set up dotfile dependencies.
 #
 # Usage instructions:
-# Ensure you have a Python version >= 3.12 installed, then simply run this script (e.g.,
-# ./dotfiles-openjck-setup).
-#
-# Alternatively, if you would like to use uv, complete the following steps:
-#
-#   1. Install uv. Consult the uv documentation for installation instructions.
-#   3. Run "uv sync".
-#   4. Run "uv run dotfiles-openjck-setup".
+# Install "uv", then run this script.
 
 # MIT License
 #
@@ -66,65 +59,6 @@ xdg_data_home = os.environ["XDG_DATA_HOME"]
 directory_bin_local_downloaded = "~/bin/personal/local/downloaded"
 
 
-class Config(TypedDict):
-    system_packages: Dict[Literal["debian"], List[str]]
-    flatpak_apps: Dict[Literal["flathub-verified", "flathub"], List[str]]
-    homebrew_formulae: List[str]
-    pipx_packages: List[str]
-    directories: List[str]
-
-
-config: Config = {
-    "system_packages": {
-        "debian": [
-            "bat",
-            "fd-find",
-            "flatpak",
-            "git",
-            "moreutils",
-            "pipx",
-            "pwgen",
-            "renameutils",
-            "ripgrep",
-            "sd",
-            "sudo",  # Not installed by default on normal Debian.
-            "tmux",
-            "toilet",
-            "vcsh",
-        ],
-    },
-    "flatpak_apps": {
-        "flathub-verified": [
-            "org.mozilla.firefox",
-        ],
-        "flathub": [],
-    },
-    "homebrew_formulae": [
-        # gcc needs to be installed before fzf and perhaps some other formulae.
-        "gcc",
-        "fpp",
-        "fzf",
-        "nvim",
-        "topgrade",
-    ],
-    "pipx_packages": [
-        "git-fzf",
-        "uv",
-        "yq",
-    ],
-    "directories": [
-        "~/apps/appimage",
-        "~/apps/repos/git",
-        "~/bin/personal/local",
-        "~/bin/personal/local/temporary",
-        directory_bin_local_downloaded,
-        f"{xdg_config_home}/bash/init/functions/local",
-        f"{xdg_data_home}/fzf",
-        "~/LGTD/inboxes/main",
-    ],
-}
-
-
 class Result(Enum):
     DONE = 1
     ALREADY_DONE = 2
@@ -151,6 +85,70 @@ class Step:
 class VcshConfigResult(Enum):
     MODIFIED = 1
     UNMODIFIED = 2
+
+
+class Packages(TypedDict):
+    system: List[str]
+    flatpak: Dict[Literal["flathub-verified", "flathub"], List[str]]
+    homebrew: List[str]
+    pipx: List[str]
+
+
+class Config(TypedDict):
+    packages: Dict[BaseDistro, Packages]
+    directories: List[str]
+
+
+config: Config = {
+    "packages": {
+        BaseDistro.DEBIAN: {
+            "system": [
+                "bat",
+                "fd-find",
+                "flatpak",
+                "git",
+                "moreutils",
+                "pipx",
+                "pwgen",
+                "renameutils",
+                "ripgrep",
+                "sd",
+                "tmux",
+                "toilet",
+                "vcsh",
+            ],
+            "flatpak": {
+                "flathub-verified": [
+                    "org.mozilla.firefox",
+                ],
+                "flathub": [],
+            },
+            "homebrew": [
+                # gcc needs to be installed before fzf and perhaps some other formulae.
+                "gcc",
+                "fpp",
+                "fzf",
+                "nvim",
+                "topgrade",
+            ],
+            "pipx": [
+                "git-fzf",
+                "uv",
+                "yq",
+            ],
+        },
+    },
+    "directories": [
+        "~/apps/appimage",
+        "~/apps/repos/git",
+        "~/bin/personal/local",
+        "~/bin/personal/local/temporary",
+        directory_bin_local_downloaded,
+        f"{xdg_config_home}/bash/init/functions/local",
+        f"{xdg_data_home}/fzf",
+        "~/LGTD/inboxes/main",
+    ],
+}
 
 
 # Run a command, allowing stdout and stderr to be printed to the console.
@@ -216,25 +214,10 @@ def get_base_distro() -> BaseDistro:
     return BaseDistro.UNKNOWN
 
 
-def set_up_directories() -> Result:
-    created_any = False
-
-    for directory in config["directories"]:
-        path = Path(directory).expanduser()
-        if not path.is_dir():
-            path.mkdir(parents=True)
-            created_any = True
-
-    if created_any:
-        return Result.DONE
-    else:
-        return Result.ALREADY_DONE
-
-
-def set_up_system_packages_debian() -> Result:
+def set_up_packages_system_debian() -> Result:
     to_install: List[str] = []
 
-    for package in config["system_packages"]["debian"]:
+    for package in config["packages"][BaseDistro.DEBIAN]["system"]:
         if run_silently(f"dpkg -s {package}").returncode != 0:
             to_install.append(package)
 
@@ -252,31 +235,31 @@ def set_up_system_packages_debian() -> Result:
         return Result.DONE
 
 
-def set_up_system_packages() -> Result:
-    base_distro = get_base_distro()
-
+def set_up_packages_system(base_distro: BaseDistro) -> Result:
     if base_distro == BaseDistro.DEBIAN:
-        return set_up_system_packages_debian()
+        return set_up_packages_system_debian()
     else:
         return Result.UNSUPPORTED
 
 
-def set_up_flatpak_apps() -> Result:
+def set_up_packages_flatpak(base_distro: BaseDistro) -> Result:
     installed_any = False
 
     # Set up remotes, including one remote for Flathub and one remote for
     # verified flatpaks on Flathub.
-    print("Prompting for password to add system-wide flatpak remotes...")
-    run_quietly(
+    #
+    # The system will prompt for the sudo password when doing this, so we can't run
+    # these commands quietly.
+    run(
         "flatpak remote-add --if-not-exists flathub "
         + "https://dl.flathub.org/repo/flathub.flatpakrepo"
     )
-    run_quietly(
+    run(
         "flatpak remote-add --if-not-exists --subset=verified "
         + "flathub-verified https://flathub.org/repo/flathub.flatpakrepo"
     )
 
-    for remote, flatpak_apps in config["flatpak_apps"].items():
+    for remote, flatpak_apps in config["packages"][base_distro]["flatpak"].items():
         to_install: List[str] = []
 
         for flatpak_app in flatpak_apps:
@@ -295,7 +278,7 @@ def set_up_flatpak_apps() -> Result:
         return Result.ALREADY_DONE
 
 
-def set_up_homebrew_formulae() -> Result:
+def set_up_packages_homebrew(base_distro: BaseDistro) -> Result:
     to_install: List[str] = []
 
     # Install Homebrew itself, if necessary.
@@ -305,7 +288,7 @@ def set_up_homebrew_formulae() -> Result:
             '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'  # noqa: E501
         )
 
-    for homebrew_formula in config["homebrew_formulae"]:
+    for homebrew_formula in config["packages"][base_distro]["homebrew"]:
         if run_silently(f"brew list {homebrew_formula}").returncode != 0:
             to_install.append(homebrew_formula)
 
@@ -318,12 +301,12 @@ def set_up_homebrew_formulae() -> Result:
         return Result.DONE
 
 
-def set_up_pipx_packages() -> Result:
+def set_up_packages_pipx(base_distro: BaseDistro) -> Result:
     to_install: List[str] = []
 
     pipx_list = json.loads(run_and_capture("pipx list --json"))
 
-    for pipx_package in config["pipx_packages"]:
+    for pipx_package in config["packages"][base_distro]["pipx"]:
         if pipx_package not in pipx_list["venvs"]:
             to_install.append(pipx_package)
 
@@ -334,6 +317,21 @@ def set_up_pipx_packages() -> Result:
         print()
         run(f'pipx install {" ".join(to_install)}')
         return Result.DONE
+
+
+def set_up_directories() -> Result:
+    created_any = False
+
+    for directory in config["directories"]:
+        path = Path(directory).expanduser()
+        if not path.is_dir():
+            path.mkdir(parents=True)
+            created_any = True
+
+    if created_any:
+        return Result.DONE
+    else:
+        return Result.ALREADY_DONE
 
 
 # This installs docopts. Note the s at the end of the word.
@@ -471,14 +469,18 @@ Options:
 
     docopt(help_text)
 
+    base_distro = get_base_distro()
+
     steps = [
-        # Set up directories before anything else because set_up_docopts requires one of
-        # these directories to exist.
+        Step("packages (system)", lambda: set_up_packages_system(base_distro), True),
+        Step("packages (flatpak)", lambda: set_up_packages_flatpak(base_distro), True),
+        Step(
+            "packages (homebrew)", lambda: set_up_packages_homebrew(base_distro), True
+        ),
+        Step("packages (pipx)", lambda: set_up_packages_pipx(base_distro), True),
+        # Set up directories before docopts else because set_up_docopts requires one of
+        # those directories to exist.
         Step("directories", set_up_directories),
-        Step("system packages", set_up_system_packages, True),
-        Step("Flatpak apps", set_up_flatpak_apps, True),
-        Step("Homebrew formulae", set_up_homebrew_formulae, True),
-        Step("pipx packages", set_up_pipx_packages, True),
         Step("docopts", set_up_docopts, True),
         Step("vcsh", set_up_vcsh),
         Step("tmux", set_up_tmux, True),
