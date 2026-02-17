@@ -41,15 +41,31 @@ function os_is_debian_based() {
   [[ -f /etc/debian_version ]]
 }
 
+if ! os_is_debian_based; then
+  >&2 echo 'FATAL ERROR: This distro is not supported.'
+  exit 1
+fi
+
+# Require sudo.
+#
+# Debian doesn't ship with "sudo" by default, but it's used in these setup
+# scripts to install packages. If "sudo" were not installed and these scripts
+# were run as root instead, special care would need to be taken to ensure the
+# directories that are created have the correct permissions, among other things.
+# For that reason, it's just easier to require that "sudo" be installed.
+if os_is_debian_based; then
+  if ! command -v sudo > /dev/null; then
+    >&2 echo 'FATAL ERROR: "sudo" must be installed and configured.'
+    exit 1
+  fi
+fi
+
 # Install pipx if it's not already installed.
 #
 # pipx is needed to install uv, and uv is needed to run the setup script.
 if ! command -v pipx > /dev/null; then
   if os_is_debian_based; then
     sudo apt-get install --assume-yes pipx
-  else
-    >&2 echo 'This distro is not supported.'
-    exit 1
   fi
 fi
 
@@ -68,9 +84,6 @@ fi
 if ! command -v pipx > /dev/null; then
   if os_is_debian_based; then
     sudo apt-get install --assume-yes git
-  else
-    >&2 echo 'This distro is not supported.'
-    exit 1
   fi
 fi
 
