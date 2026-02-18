@@ -15,12 +15,13 @@ import tempfile
 import warnings
 from collections.abc import Callable
 from dataclasses import dataclass
-from enum import Enum
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, run
 from typing import Dict, List, Literal, TypedDict
 
 from docopt import docopt
+
+from enums import BaseDistro, StepResult, VcshConfigResult
 
 # dotfiles-openjck-setup:
 # Set up dotfile dependencies.
@@ -88,32 +89,11 @@ xdg_data_home = run(
 ).stdout.strip()
 
 
-class Result(Enum):
-    DONE = 1
-    ALREADY_DONE = 2
-    UNSUPPORTED = 3
-
-
-class BaseDistro(Enum):
-    UNKNOWN = 1
-    ALPINE = 2
-    ARCH = 3
-    DEBIAN = 4
-    GENTOO = 5
-    REDHAT = 6
-    SUSE = 7
-
-
 @dataclass
 class Step:
     term: str
-    setup_fn: Callable[[], Result]
+    setup_fn: Callable[[], StepResult]
     own_activity_output: bool = False
-
-
-class VcshConfigResult(Enum):
-    MODIFIED = 1
-    UNMODIFIED = 2
 
 
 class Packages(TypedDict):
@@ -226,7 +206,7 @@ def get_base_distro() -> BaseDistro:
     return BaseDistro.UNKNOWN
 
 
-def set_up_packages_system_debian() -> Result:
+def set_up_packages_system_debian() -> StepResult:
     to_install: List[str] = []
 
     for package in config["packages"][BaseDistro.DEBIAN]["system"]:
@@ -240,7 +220,7 @@ def set_up_packages_system_debian() -> Result:
             to_install.append(package)
 
     if len(to_install) == 0:
-        return Result.ALREADY_DONE
+        return StepResult.ALREADY_DONE
     else:
         # Do not print output on the same line as "Setting up [step name]...".
         #
@@ -250,17 +230,17 @@ def set_up_packages_system_debian() -> Result:
         # instead.)
         print()
         run(["apt-get", "install", "--yes", " ".join(to_install)], check=True)
-        return Result.DONE
+        return StepResult.DONE
 
 
-def set_up_packages_system(base_distro: BaseDistro) -> Result:
+def set_up_packages_system(base_distro: BaseDistro) -> StepResult:
     if base_distro == BaseDistro.DEBIAN:
         return set_up_packages_system_debian()
     else:
-        return Result.UNSUPPORTED
+        return StepResult.UNSUPPORTED
 
 
-def set_up_packages_flatpak(base_distro: BaseDistro) -> Result:
+def set_up_packages_flatpak(base_distro: BaseDistro) -> StepResult:
     installed_any = False
 
     # Set up a remote for Flathub.
@@ -317,12 +297,12 @@ def set_up_packages_flatpak(base_distro: BaseDistro) -> Result:
             installed_any = True
 
     if installed_any:
-        return Result.DONE
+        return StepResult.DONE
     else:
-        return Result.ALREADY_DONE
+        return StepResult.ALREADY_DONE
 
 
-def set_up_packages_homebrew(base_distro: BaseDistro) -> Result:
+def set_up_packages_homebrew(base_distro: BaseDistro) -> StepResult:
     to_install: List[str] = []
 
     # Install Homebrew itself, if necessary.
@@ -350,7 +330,7 @@ def set_up_packages_homebrew(base_distro: BaseDistro) -> Result:
             to_install.append(homebrew_formula)
 
     if len(to_install) == 0:
-        return Result.ALREADY_DONE
+        return StepResult.ALREADY_DONE
     else:
         # Do not print output on the same line as "Setting up [step name]...".
         print()
@@ -358,10 +338,10 @@ def set_up_packages_homebrew(base_distro: BaseDistro) -> Result:
             [*deescalate_args, "brew", "install", " ".join(to_install)],
             check=True,
         )
-        return Result.DONE
+        return StepResult.DONE
 
 
-def set_up_packages_pipx(base_distro: BaseDistro) -> Result:
+def set_up_packages_pipx(base_distro: BaseDistro) -> StepResult:
     to_install: List[str] = []
 
     pipx_list = json.loads(
@@ -378,7 +358,7 @@ def set_up_packages_pipx(base_distro: BaseDistro) -> Result:
             to_install.append(pipx_package)
 
     if len(to_install) == 0:
-        return Result.ALREADY_DONE
+        return StepResult.ALREADY_DONE
     else:
         # Do not print output on the same line as "Setting up [step name]...".
         print()
@@ -386,10 +366,10 @@ def set_up_packages_pipx(base_distro: BaseDistro) -> Result:
             [*deescalate_args, "pipx", "install", " ".join(to_install)],
             check=True,
         )
-        return Result.DONE
+        return StepResult.DONE
 
 
-def set_up_directories() -> Result:
+def set_up_directories() -> StepResult:
     created_any = False
 
     for directory in config["directories"]:
@@ -399,9 +379,9 @@ def set_up_directories() -> Result:
             created_any = True
 
     if created_any:
-        return Result.DONE
+        return StepResult.DONE
     else:
-        return Result.ALREADY_DONE
+        return StepResult.ALREADY_DONE
 
 
 # This installs docopts. Note the s at the end of the word.
@@ -412,12 +392,12 @@ def set_up_directories() -> Result:
 # with writing help text and makes parsing arguments very easy. docopts (with the s)
 # does the same thing for shell scripts, and it's used by all of my shell scripts except
 # the bootstrap script.
-def set_up_docopts() -> Result:
+def set_up_docopts() -> StepResult:
     docopts_bin_destination = Path(directory_bin_local_downloaded).expanduser()
     docopts_bin_filename = docopts_bin_destination.joinpath("docopts")
 
     if docopts_bin_filename.is_file():
-        return Result.ALREADY_DONE
+        return StepResult.ALREADY_DONE
     else:
         with tempfile.TemporaryDirectory() as tmp_dir:
             # Do not print output on the same line as "Setting up [step name]...".
@@ -449,10 +429,10 @@ def set_up_docopts() -> Result:
                 stdout=DEVNULL,
             )
 
-            return Result.DONE
+            return StepResult.DONE
 
 
-def set_up_vcsh() -> Result:
+def set_up_vcsh() -> StepResult:
     modified_config = False
 
     show_untracked_result = set_vcsh_config("status.showUntrackedFiles", "no")
@@ -486,17 +466,17 @@ def set_up_vcsh() -> Result:
         modified_config = True
 
     if modified_config:
-        return Result.DONE
+        return StepResult.DONE
     else:
-        return Result.ALREADY_DONE
+        return StepResult.ALREADY_DONE
 
 
-def set_up_tmux() -> Result:
+def set_up_tmux() -> StepResult:
     tpm_path = Path(f"~{logged_in_user}/.tmux/plugins/tpm").expanduser()
     tpm_path_str = tpm_path.absolute().as_posix()
 
     if tpm_path.is_dir():
-        return Result.ALREADY_DONE
+        return StepResult.ALREADY_DONE
     else:
         # Do not print output on the same line as "Setting up [step name]...".
         print()
@@ -520,7 +500,7 @@ def set_up_tmux() -> Result:
             check=True,
         )
 
-        return Result.DONE
+        return StepResult.DONE
 
 
 def run_steps(steps: List[Step]):
@@ -542,12 +522,12 @@ def run_step(step: Step, longest_term_length: int):
     result = step.setup_fn()
 
     match result:
-        case Result.DONE:
+        case StepResult.DONE:
             if not step.own_activity_output:
                 print("done.")
-        case Result.ALREADY_DONE:
+        case StepResult.ALREADY_DONE:
             print("already done.")
-        case Result.UNSUPPORTED:
+        case StepResult.UNSUPPORTED:
             print("unsupported.")
 
 

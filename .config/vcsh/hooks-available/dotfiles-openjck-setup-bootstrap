@@ -74,4 +74,4 @@ fi
 # shellcheck disable=SC2016
 LOGGED_IN_USER_XDG_CONFIG_HOME=$(su - "$LOGGED_IN_USER" -c 'echo "$XDG_CONFIG_HOME"')
 
-"$LOGGED_IN_USER_XDG_CONFIG_HOME"/vcsh/hooks-available/dotfiles-openjck-setup/dotfiles-openjck-setup "$@"
+"$LOGGED_IN_USER_XDG_CONFIG_HOME"/vcsh/hooks-available/dotfiles-openjck-setup/dotfiles-openjck-setup.py "$@"

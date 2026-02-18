@@ -1,18 +1,11 @@
-.PHONY: run format test lint
-
-MAIN = dotfiles-openjck-setup
-
-run:
-	./dotfiles-openjck-setup
+.PHONY: format lint
 
 format:
-	uv run isort $(MAIN)
-	uv run black $(MAIN)
-
-test: lint
+	uv run isort .
+	uv run black .
 
 lint:
-	uv run pyright $(MAIN)
-	uv run isort --check $(MAIN)
-	uv run black --check $(MAIN)
-	uv run flake8 --max-line-length 88 $(MAIN) # black uses 88 as the max line length.
+	uv run isort --check .
+	uv run black --check .
+	uv run pyright .
+	uv run flake8 .
