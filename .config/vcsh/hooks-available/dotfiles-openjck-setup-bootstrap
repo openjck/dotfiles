@@ -2,10 +2,10 @@
 
 # Install the dependencies for the dotfiles-openjck-setup script, then run it.
 #
-# The dotfiles-openjck-setup script is written in Python. uv is used to ensure
-# that the correct version of Python is installed, as well as to ensure that all
-# Python packages that the script depends on are installed. For that reason, uv
-# must be installed before running the script. This script installs uv.
+# The dotfiles-openjck-setup script is written in Python. The Python tool "uv"
+# is used to ensure that the correct version of Python is installed, as well as
+# all Python packages that the script depends on. For that reason, uv must be
+# installed before running the script. This script installs uv.
 #
 # The dotfiles-openjck-setup script installs docopts, so docopts is not used in
 # this script itself.
@@ -37,6 +37,13 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
+if (( EUID != 0 )); then
+  >&2 echo 'FATAL ERROR: This script must be run as root.'
+  exit 1
+fi
+
+LOGGED_IN_USER=$(logname)
+
 function os_is_debian_based() {
   [[ -f /etc/debian_version ]]
 }
@@ -46,45 +53,25 @@ if ! os_is_debian_based; then
   exit 1
 fi
 
-# Require sudo.
+# Install pip if it's not already installed.
 #
-# Debian doesn't ship with "sudo" by default, but it's used in these setup
-# scripts to install packages. If "sudo" were not installed and these scripts
-# were run as root instead, special care would need to be taken to ensure the
-# directories that are created have the correct permissions, among other things.
-# For that reason, it's just easier to require that "sudo" be installed.
-if os_is_debian_based; then
-  if ! command -v sudo > /dev/null; then
-    >&2 echo 'FATAL ERROR: "sudo" must be installed and configured.'
-    exit 1
-  fi
-fi
-
-# Install pipx if it's not already installed.
-#
-# pipx is needed to install uv, and uv is needed to run the setup script.
-if ! command -v pipx > /dev/null; then
+# pip is needed to install uv system-wide, and a system-wide uv is needed to run
+# the setup script.
+if ! command -v pip > /dev/null; then
   if os_is_debian_based; then
-    sudo apt-get install --assume-yes pipx
+    apt-get install --assume-yes python3-pip
   fi
 fi
 
 # Install uv if it's not already installed.
-#
-# uv is needed to run the setup script.
 if ! command -v uv > /dev/null; then
-  pipx install uv
+  pip install --break-system-packages uv
 fi
 
-# Install git if it's not already installed.
+# Disable SC2016. We _want_ to use single quotes because we do not want
+# $XDG_CONFIG_HOME to be expanded before the command is run.
 #
-# git is used within the setup script. I could use a Python package for
-# interacting with Git, which would make this step unnecessary, but I'd rather
-# not learn another tool and keep the dependency updated.
-if ! command -v pipx > /dev/null; then
-  if os_is_debian_based; then
-    sudo apt-get install --assume-yes git
-  fi
-fi
+# shellcheck disable=SC2016
+LOGGED_IN_USER_XDG_CONFIG_HOME=$(su - "$LOGGED_IN_USER" -c 'echo "$XDG_CONFIG_HOME"')
 
-"$HOME"/bin/vcsh/dotfiles-openjck-setup/dotfiles-openjck-setup "$@"
+"$LOGGED_IN_USER_XDG_CONFIG_HOME"/vcsh/hooks-available/dotfiles-openjck-setup/dotfiles-openjck-setup "$@"

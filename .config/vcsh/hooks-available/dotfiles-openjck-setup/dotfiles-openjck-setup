@@ -2,13 +2,14 @@
 #
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["docopt==0.6.2"]
+# dependencies = [
+#     "docopt>=0.6.2",
+# ]
 # ///
 
 import json
 import os
 import shutil
-import subprocess
 import sys
 import tempfile
 import warnings
@@ -16,6 +17,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+from subprocess import DEVNULL, PIPE, run
 from typing import Dict, List, Literal, TypedDict
 
 from docopt import docopt
@@ -24,7 +26,7 @@ from docopt import docopt
 # Set up dotfile dependencies.
 #
 # Usage instructions:
-# Install "uv", then run this script.
+# Install "uv", then run this script as root.
 
 # MIT License
 #
@@ -53,10 +55,37 @@ from docopt import docopt
 # https://hypirion.com/musings/use-python-for-scripting
 warnings.simplefilter("default", DeprecationWarning)
 
-xdg_config_home = os.environ["XDG_CONFIG_HOME"]
-xdg_data_home = os.environ["XDG_DATA_HOME"]
+if os.geteuid() != 0:
+    print("FATAL ERROR: This script must be run as root.", file=sys.stderr)
+    sys.exit(1)
 
-directory_bin_local_downloaded = "~/bin/personal/local/downloaded"
+
+# This is the user that is logged in, the one who _became_ superuser to run this script.
+logged_in_user = run(
+    ["logname"],
+    check=True,
+    stdout=PIPE,
+    text=True,
+).stdout.strip()
+
+deescalate_args = ["runuser", "--user", logged_in_user, "--"]
+deescalate_str = " ".join(deescalate_args)
+
+directory_bin_local_downloaded = f"~{logged_in_user}/bin/personal/local/downloaded"
+
+xdg_config_home = run(
+    ["su", "-", logged_in_user, "-c", 'echo "$XDG_CONFIG_HOME"'],
+    check=True,
+    stdout=PIPE,
+    text=True,
+).stdout.strip()
+
+xdg_data_home = run(
+    ["su", "-", logged_in_user, "-c", 'echo "$XDG_CONFIG_HOME"'],
+    check=True,
+    stdout=PIPE,
+    text=True,
+).stdout.strip()
 
 
 class Result(Enum):
@@ -139,60 +168,43 @@ config: Config = {
         },
     },
     "directories": [
-        "~/apps/appimage",
-        "~/apps/repos/git",
-        "~/bin/personal/local",
-        "~/bin/personal/local/temporary",
+        f"~{logged_in_user}/apps/appimage",
+        f"~{logged_in_user}/apps/repos/git",
+        f"~{logged_in_user}/bin/personal/local",
+        f"~{logged_in_user}/bin/personal/local/temporary",
         directory_bin_local_downloaded,
         f"{xdg_config_home}/bash/init/functions/local",
         f"{xdg_data_home}/fzf",
-        "~/LGTD/inboxes/main",
+        f"~{logged_in_user}/LGTD/inboxes/main",
     ],
 }
-
-
-# Run a command, allowing stdout and stderr to be printed to the console.
-def run(cmd: str):
-    return subprocess.run(cmd, shell=True, check=True)
-
-
-# Run a command, allowing stderr to be printed to the console, but discarding
-# stdout (i.e., not allowing it to print on the console and not capturing it
-# for use in this script).
-def run_quietly(cmd: str):
-    return subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
-
-
-# Run a command, capturing stdout and allowing stderr to be printed to the
-# console.
-#
-# Pass "check=False" to ignore, rather than raise an error, when a command exits with
-# a non-zero exit code.
-def run_and_capture(cmd: str, check: bool = True):
-    return subprocess.run(
-        cmd, shell=True, check=check, text=True, stdout=subprocess.PIPE
-    ).stdout.strip()
-
-
-# Run a command, discarding both stdout and stderr.
-def run_silently(cmd: str):
-    return subprocess.run(
-        cmd,
-        shell=True,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
 
 
 def set_vcsh_config(config: str, desired_value: str) -> VcshConfigResult:
     # If the configuration option is not set, the command will exit with a non-zero exit
     # code, so pass check=False to ignore that.
-    value = run_and_capture(f"vcsh dotfiles-openjck config {config}", check=False)
+    value = run(
+        [*deescalate_args, "vcsh", "dotfiles-openjck", "config", config],
+        check=False,
+        stdout=PIPE,
+        text=True,
+    ).stdout.strip()
 
     if value == desired_value:
         return VcshConfigResult.UNMODIFIED
     else:
-        run_quietly(f"vcsh dotfiles-openjck config {config} {desired_value}")
+        run(
+            [
+                *deescalate_args,
+                "vcsh",
+                "dotfiles-openjck",
+                "config",
+                config,
+                desired_value,
+            ],
+            stdout=DEVNULL,
+        )
+
         return VcshConfigResult.MODIFIED
 
 
@@ -218,7 +230,13 @@ def set_up_packages_system_debian() -> Result:
     to_install: List[str] = []
 
     for package in config["packages"][BaseDistro.DEBIAN]["system"]:
-        if run_silently(f"dpkg -s {package}").returncode != 0:
+        dpkg_s = run(
+            [*deescalate_args, "dpkg", "-s", package],
+            stderr=DEVNULL,
+            stdout=DEVNULL,
+        )
+
+        if dpkg_s.returncode != 0:
             to_install.append(package)
 
     if len(to_install) == 0:
@@ -231,7 +249,7 @@ def set_up_packages_system_debian() -> Result:
         # strictly speaking, apt-get and friends are recommended for use in scripts
         # instead.)
         print()
-        run(f'sudo apt-get install --yes {" ".join(to_install)}')
+        run(["apt-get", "install", "--yes", " ".join(to_install)], check=True)
         return Result.DONE
 
 
@@ -245,31 +263,57 @@ def set_up_packages_system(base_distro: BaseDistro) -> Result:
 def set_up_packages_flatpak(base_distro: BaseDistro) -> Result:
     installed_any = False
 
-    # Set up remotes, including one remote for Flathub and one remote for
-    # verified flatpaks on Flathub.
-    #
-    # The system will prompt for the sudo password when doing this, so we can't run
-    # these commands quietly.
+    # Set up a remote for Flathub.
     run(
-        "flatpak remote-add --if-not-exists flathub "
-        + "https://dl.flathub.org/repo/flathub.flatpakrepo"
+        [
+            "flatpak",
+            "remote-add",
+            "--if-not-exists",
+            "flathub",
+            "https://dl.flathub.org/repo/flathub.flatpakrepo",
+        ],
+        stdout=DEVNULL,
     )
+
+    # Set up a remote for verified Flatpaks on Flathub.
     run(
-        "flatpak remote-add --if-not-exists --subset=verified "
-        + "flathub-verified https://flathub.org/repo/flathub.flatpakrepo"
+        [
+            "flatpak",
+            "remote-add",
+            "--if-not-exists",
+            "--subset=verified",
+            "flathub-verified",
+            "https://flathub.org/repo/flathub.flatpakrepo",
+        ],
+        stdout=DEVNULL,
     )
 
     for remote, flatpak_apps in config["packages"][base_distro]["flatpak"].items():
         to_install: List[str] = []
 
         for flatpak_app in flatpak_apps:
-            if run_silently(f"flatpak info {flatpak_app}").returncode != 0:
+            flatpak_info = run(
+                [*deescalate_args, "flatpak", "info", flatpak_app],
+                stderr=DEVNULL,
+                stdout=DEVNULL,
+            )
+
+            if flatpak_info.returncode != 0:
                 to_install.append(flatpak_app)
 
         if len(to_install) > 0:
             # Do not print output on the same line as "Setting up [step name]...".
             print()
-            run(f"flatpak install --noninteractive {remote} " + " ".join(to_install))
+            run(
+                [
+                    *deescalate_args,
+                    "flatpak",
+                    "install" "--noninteractive",
+                    remote,
+                    " ".join(to_install),
+                ],
+                check=True,
+            )
             installed_any = True
 
     if installed_any:
@@ -284,12 +328,25 @@ def set_up_packages_homebrew(base_distro: BaseDistro) -> Result:
     # Install Homebrew itself, if necessary.
     homebrew_install_path = Path("/home/linuxbrew/.linuxbrew")
     if not homebrew_install_path.is_dir():
-        run_quietly(
-            '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'  # noqa: E501
+        run(
+            f'{deescalate_str} /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',  # noqa: E501
+            shell=True,
+            stdout=DEVNULL,
         )
 
     for homebrew_formula in config["packages"][base_distro]["homebrew"]:
-        if run_silently(f"brew list {homebrew_formula}").returncode != 0:
+        brew_list = run(
+            [
+                *deescalate_args,
+                "/home/linuxbrew/.linuxbrew/bin/brew",
+                "list",
+                homebrew_formula,
+            ],
+            stderr=DEVNULL,
+            stdout=DEVNULL,
+        )
+
+        if brew_list.returncode != 0:
             to_install.append(homebrew_formula)
 
     if len(to_install) == 0:
@@ -297,14 +354,24 @@ def set_up_packages_homebrew(base_distro: BaseDistro) -> Result:
     else:
         # Do not print output on the same line as "Setting up [step name]...".
         print()
-        run(f'brew install {" ".join(to_install)}')
+        run(
+            [*deescalate_args, "brew", "install", " ".join(to_install)],
+            check=True,
+        )
         return Result.DONE
 
 
 def set_up_packages_pipx(base_distro: BaseDistro) -> Result:
     to_install: List[str] = []
 
-    pipx_list = json.loads(run_and_capture("pipx list --json"))
+    pipx_list = json.loads(
+        run(
+            [*deescalate_args, "pipx", "list", "--json"],
+            check=True,
+            stdout=PIPE,
+            text=True,
+        ).stdout.strip()
+    )
 
     for pipx_package in config["packages"][base_distro]["pipx"]:
         if pipx_package not in pipx_list["venvs"]:
@@ -315,7 +382,10 @@ def set_up_packages_pipx(base_distro: BaseDistro) -> Result:
     else:
         # Do not print output on the same line as "Setting up [step name]...".
         print()
-        run(f'pipx install {" ".join(to_install)}')
+        run(
+            [*deescalate_args, "pipx", "install", " ".join(to_install)],
+            check=True,
+        )
         return Result.DONE
 
 
@@ -343,20 +413,41 @@ def set_up_directories() -> Result:
 # does the same thing for shell scripts, and it's used by all of my shell scripts except
 # the bootstrap script.
 def set_up_docopts() -> Result:
-    if shutil.which("docopts") is not None:
+    docopts_bin_destination = Path(directory_bin_local_downloaded).expanduser()
+    docopts_bin_filename = docopts_bin_destination.joinpath("docopts")
+
+    if docopts_bin_filename.is_file():
         return Result.ALREADY_DONE
     else:
-        with tempfile.TemporaryDirectory(delete=False) as tmp_dir:
+        with tempfile.TemporaryDirectory() as tmp_dir:
             # Do not print output on the same line as "Setting up [step name]...".
             print()
-            run(f"git clone https://github.com/docopt/docopts.git {tmp_dir}/docopts")
+            run(
+                [
+                    "git",
+                    "clone",
+                    "https://github.com/docopt/docopts.git",
+                    f"{tmp_dir}/docopts",
+                ],
+                check=True,
+            )
 
             # For some reason, running `{tmp_dir}/docopts` directly does not work. You
             # really do need to cd into the directory first.
-            run(f"cd {tmp_dir}/docopts && ./get_docopts.sh")
+            run(
+                f"cd {tmp_dir}/docopts && ./get_docopts.sh",
+                check=True,
+                shell=True,
+            )
 
             docopts_bin_destination = Path(directory_bin_local_downloaded).expanduser()
             shutil.copy(f"{tmp_dir}/docopts/docopts", docopts_bin_destination)
+
+            run(
+                ["chown", logged_in_user, docopts_bin_filename],
+                check=True,
+                stdout=DEVNULL,
+            )
 
             return Result.DONE
 
@@ -391,7 +482,7 @@ def set_up_vcsh() -> Result:
         sc_file = open(sc_filename, mode="w")
         sc_file.write(sc_file_contents)
         sc_file.close()
-        run("vcsh dotfiles-openjck checkout")
+        run([*deescalate_args, "vcsh", "dotfiles-openjck", "checkout"], check=True)
         modified_config = True
 
     if modified_config:
@@ -401,7 +492,7 @@ def set_up_vcsh() -> Result:
 
 
 def set_up_tmux() -> Result:
-    tpm_path = Path("~/.tmux/plugins/tpm").expanduser()
+    tpm_path = Path(f"~{logged_in_user}/.tmux/plugins/tpm").expanduser()
     tpm_path_str = tpm_path.absolute().as_posix()
 
     if tpm_path.is_dir():
@@ -411,10 +502,23 @@ def set_up_tmux() -> Result:
         print()
 
         # Install tpm.
-        run(f"git clone --quiet https://github.com/tmux-plugins/tpm {tpm_path_str}")
+        run(
+            [
+                *deescalate_args,
+                "git",
+                "clone",
+                "https://github.com/tmux-plugins/tpm",
+                tpm_path_str,
+            ],
+            check=True,
+            stdout=DEVNULL,
+        )
 
         # Install plugins.
-        run(f"{tpm_path_str}/bin/install_plugins")
+        run(
+            [*deescalate_args, f"{tpm_path_str}/bin/install_plugins"],
+            check=True,
+        )
 
         return Result.DONE
 
@@ -474,9 +578,9 @@ Options:
     steps = [
         Step("packages (system)", lambda: set_up_packages_system(base_distro), True),
         Step("packages (flatpak)", lambda: set_up_packages_flatpak(base_distro), True),
-        Step(
-            "packages (homebrew)", lambda: set_up_packages_homebrew(base_distro), True
-        ),
+        # Step(
+        #     "packages (homebrew)", lambda: set_up_packages_homebrew(base_distro), True
+        # ),
         Step("packages (pipx)", lambda: set_up_packages_pipx(base_distro), True),
         # Set up directories before docopts else because set_up_docopts requires one of
         # those directories to exist.
