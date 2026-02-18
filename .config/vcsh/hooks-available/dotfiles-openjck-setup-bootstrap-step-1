@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+sudo su \
+  --command "HOME=$HOME $XDG_CONFIG_HOME/vcsh/hooks-available/dotfiles-openjck-setup-bootstrap-step-2" \
+  root
