@@ -13,6 +13,7 @@ export D_BIN_PERSONAL_FLATPAK=$D_BIN_PERSONAL/flatpak
 export D_BIN_PERSONAL_LOCAL=$D_BIN_PERSONAL/local
 export D_BIN_PERSONAL_LOCAL_DOWNLOADED=$D_BIN_PERSONAL_LOCAL/downloaded
 export D_BIN_PERSONAL_LOCAL_TEMPORARY=$D_BIN_PERSONAL_LOCAL/temporary
+export D_BIN_PERSONAL_VCSH=$D_BIN/personal/vcsh
 
 # Add environment variables for config directories.
 export D_CONFIG_NVIM=$XDG_CONFIG_HOME/nvim
