@@ -67,12 +67,8 @@ Follow these steps to install _all_ of these files:
   ways to accomplish this, but logging out and logging back in is the easiest
   and most comprehensive.
 
-7. Run `vcsh upgrade dotfiles-openjck`.
-
-- This runs this project's setup script. The setup script will also run when
-  `vcsh pull` is run, but _not_ when `vcsh dotfiles-openjck pull` is run. I
-  don't think it's possible to configure vcsh to run any hook like this when
-  `vcsh dotfiles-openjck [subcommand]` is run.
+7. Run `$HOME/bin/personal/vcsh/dotfiles-openjck-setup` as root, where $HOME is
+   the home directory of the _user account_ which performed the previous steps.
 
 ### Single shell script
 
