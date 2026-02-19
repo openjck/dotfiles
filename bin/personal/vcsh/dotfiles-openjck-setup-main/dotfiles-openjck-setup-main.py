@@ -24,11 +24,11 @@ from docopt import docopt
 from custom_types import Config
 from enums import BaseDistro, StepResult, VcshConfigResult
 
-# dotfiles-openjck-setup:
+# dotfiles-openjck-setup-main:
 # Set up dotfile dependencies.
 #
 # Usage instructions:
-# Install "uv", then run this script as root.
+# Install "uv" as root, then run this script as root.
 
 # MIT License
 #

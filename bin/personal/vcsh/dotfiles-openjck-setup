@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+# Install the dependencies of the main setup script, then run it.
+#
+# This script therefore functions like a bootstrap script.
+#
+# The main setup script is written in Python. The Python tool "uv" is used to
+# ensure that the correct version of Python is installed, as well as all Python
+# packages that the script depends on. For that reason, uv must be installed
+# before running the script. This script installs uv.
+#
+# The main setup script installs docopts, so docopts is not used in this script
+# itself.
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+if (( EUID != 0 )); then
+  >&2 echo 'FATAL ERROR: This script must be run as root.'
+  exit 1
+fi
+
+function os_is_debian_based() {
+  [[ -f /etc/debian_version ]]
+}
+
+if ! os_is_debian_based; then
+  >&2 echo 'FATAL ERROR: This distro is not supported.'
+  exit 1
+fi
+
+# https://stackoverflow.com/a/246128/715866
+THIS_SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+
+# Install pip if it's not already installed.
+#
+# pip is needed to install uv, and uv is needed to run the setup script.
+if ! command -v pip > /dev/null; then
+  if os_is_debian_based; then
+    apt-get install --assume-yes pipx
+  fi
+fi
+
+# Install uv in the root user's account if it's not already installed.
+if ! command -v uv > /dev/null; then
+  pipx install uv
+fi
+
+# pipx installs uv to /root/.local/bin/uv, so /root/.local/bin must be in the
+# PATH when running the main setup script. On some systems, it's not on the PATH
+# by default.
+PATH="/root/.local/bin:$PATH" \
+  "$THIS_SCRIPT_DIR"/dotfiles-openjck-setup-main/dotfiles-openjck-setup-main.py
