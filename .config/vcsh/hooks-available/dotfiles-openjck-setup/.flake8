@@ -1,0 +1,4 @@
+[flake8]
+# black uses a line length of 88.
+max-line-length = 88
+exclude = .venv

@@ -17,10 +17,11 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, run
-from typing import Dict, List, Literal, TypedDict
+from typing import List
 
 from docopt import docopt
 
+from custom_types import Config
 from enums import BaseDistro, StepResult, VcshConfigResult
 
 # dotfiles-openjck-setup:
@@ -94,18 +95,6 @@ class Step:
     term: str
     setup_fn: Callable[[], StepResult]
     own_activity_output: bool = False
-
-
-class Packages(TypedDict):
-    system: List[str]
-    flatpak: Dict[Literal["flathub-verified", "flathub"], List[str]]
-    homebrew: List[str]
-    pipx: List[str]
-
-
-class Config(TypedDict):
-    packages: Dict[BaseDistro, Packages]
-    directories: List[str]
 
 
 config: Config = {
