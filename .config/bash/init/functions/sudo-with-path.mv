@@ -1,5 +1,4 @@
-# Preserve the path when using sudo. The extra space before the closing quote is
-# important. It tells bash to preserve aliases.
+# Run sudo with the $PATH of the current user preserved.
 #
 # https://unix.stackexchange.com/a/83194
 # https://askubuntu.com/a/22043
@@ -8,6 +7,6 @@
 # doesn't work:
 #
 # https://unix.stackexchange.com/a/442755
-function sudo() {
-  command sudo env "PATH=$PATH" "$@"
+function sudo-with-path() {
+  sudo env "PATH=$PATH" "$@"
 }
