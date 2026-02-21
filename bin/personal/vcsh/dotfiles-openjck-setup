@@ -26,6 +26,10 @@ if ! os_is_debian_based; then
   exit 1
 fi
 
+# In addition to checking if the user has (some form of) sudo access, this
+# prompts the user for their password once, now, at the beginning of the setup
+# process, so that they don't need to be prompted for it in the middle of the
+# setup process.
 if ! sudo -v; then
   >&2 echo "FATAL ERROR: \"sudo\" must be installed and enabled for \"$USER\"."
   exit 1
