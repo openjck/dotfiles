@@ -13,22 +13,22 @@ import shutil
 import sys
 import tempfile
 import warnings
-from collections.abc import Callable
-from dataclasses import dataclass
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, run
 from typing import List
 
 from docopt import docopt
 
+from constants import DIRECTORY_BIN_LOCAL_DOWNLOADED, XDG_CONFIG_HOME, XDG_DATA_HOME
 from custom_types import Config
+from data_classes import Step
 from enums import BaseDistro, StepResult, VcshConfigResult
 
 # dotfiles-openjck-setup-main:
 # Set up dotfile dependencies.
 #
 # Usage instructions:
-# Install "uv" as root, then run this script as root.
+# Install "uv", then run this script.
 
 # MIT License
 #
@@ -57,52 +57,12 @@ from enums import BaseDistro, StepResult, VcshConfigResult
 # https://hypirion.com/musings/use-python-for-scripting
 warnings.simplefilter("default", DeprecationWarning)
 
-if os.geteuid() != 0:
-    print("FATAL ERROR: This script must be run as root.", file=sys.stderr)
-    sys.exit(1)
-
-
-# This is the user that is logged in, the one who _became_ superuser to run this script.
-logged_in_user = run(
-    ["logname"],
-    check=True,
-    stdout=PIPE,
-    text=True,
-).stdout.strip()
-
-deescalate_args = ["runuser", "--user", logged_in_user, "--"]
-deescalate_str = " ".join(deescalate_args)
-
-directory_bin_local_downloaded = f"~{logged_in_user}/bin/personal/local/downloaded"
-
-xdg_config_home = run(
-    ["su", "-", logged_in_user, "-c", 'echo "$XDG_CONFIG_HOME"'],
-    check=True,
-    stdout=PIPE,
-    text=True,
-).stdout.strip()
-
-xdg_data_home = run(
-    ["su", "-", logged_in_user, "-c", 'echo "$XDG_CONFIG_HOME"'],
-    check=True,
-    stdout=PIPE,
-    text=True,
-).stdout.strip()
-
-
-@dataclass
-class Step:
-    term: str
-    setup_fn: Callable[[], StepResult]
-    own_activity_output: bool = False
-
-
 config: Config = {
     "packages": {
         BaseDistro.DEBIAN: {
             "system": [
                 "bat",
-                "curl"  # Needed to install homebrew.
+                "curl",  # Needed to install homebrew.
                 "fd-find",
                 "flatpak",
                 "git",
@@ -138,14 +98,14 @@ config: Config = {
         },
     },
     "directories": [
-        f"~{logged_in_user}/apps/appimage",
-        f"~{logged_in_user}/apps/repos/git",
-        f"~{logged_in_user}/bin/personal/local",
-        f"~{logged_in_user}/bin/personal/local/temporary",
-        directory_bin_local_downloaded,
-        f"{xdg_config_home}/bash/init/functions/local",
-        f"{xdg_data_home}/fzf",
-        f"~{logged_in_user}/LGTD/inboxes/main",
+        "~/apps/appimage",
+        "~/apps/repos/git",
+        "~/bin/personal/local",
+        "~/bin/personal/local/temporary",
+        DIRECTORY_BIN_LOCAL_DOWNLOADED,
+        f"{XDG_CONFIG_HOME}/bash/init/functions/local",
+        f"{XDG_DATA_HOME}/fzf",
+        "~/LGTD/inboxes/main",
     ],
 }
 
@@ -154,7 +114,7 @@ def set_vcsh_config(config: str, desired_value: str) -> VcshConfigResult:
     # If the configuration option is not set, the command will exit with a non-zero exit
     # code, so pass check=False to ignore that.
     value = run(
-        [*deescalate_args, "vcsh", "dotfiles-openjck", "config", config],
+        ["vcsh", "dotfiles-openjck", "config", config],
         check=False,
         stdout=PIPE,
         text=True,
@@ -165,7 +125,6 @@ def set_vcsh_config(config: str, desired_value: str) -> VcshConfigResult:
     else:
         run(
             [
-                *deescalate_args,
                 "vcsh",
                 "dotfiles-openjck",
                 "config",
@@ -201,7 +160,7 @@ def set_up_packages_system_debian() -> StepResult:
 
     for package in config["packages"][BaseDistro.DEBIAN]["system"]:
         dpkg_s = run(
-            [*deescalate_args, "dpkg", "-s", package],
+            ["dpkg", "-s", package],
             stderr=DEVNULL,
             stdout=DEVNULL,
         )
@@ -219,7 +178,7 @@ def set_up_packages_system_debian() -> StepResult:
         # strictly speaking, apt-get and friends are recommended for use in scripts
         # instead.)
         print()
-        run(["apt-get", "install", "--yes", *to_install], check=True)
+        run(["sudo", "apt-get", "install", "--yes", *to_install], check=True)
         return StepResult.DONE
 
 
@@ -236,6 +195,7 @@ def set_up_packages_flatpak(base_distro: BaseDistro) -> StepResult:
     # Set up a remote for Flathub.
     run(
         [
+            "sudo",
             "flatpak",
             "remote-add",
             "--if-not-exists",
@@ -248,6 +208,7 @@ def set_up_packages_flatpak(base_distro: BaseDistro) -> StepResult:
     # Set up a remote for verified Flatpaks on Flathub.
     run(
         [
+            "sudo",
             "flatpak",
             "remote-add",
             "--if-not-exists",
@@ -276,6 +237,7 @@ def set_up_packages_flatpak(base_distro: BaseDistro) -> StepResult:
             print()
             run(
                 [
+                    "sudo",
                     "flatpak",
                     "install",
                     "--noninteractive",
@@ -299,7 +261,7 @@ def set_up_packages_homebrew(base_distro: BaseDistro) -> StepResult:
     homebrew_install_path = Path("/home/linuxbrew/.linuxbrew")
     if not homebrew_install_path.is_dir():
         run(
-            f'{deescalate_str} /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',  # noqa: E501
+            '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',  # noqa: E501
             shell=True,
             stdout=DEVNULL,
         )
@@ -307,7 +269,6 @@ def set_up_packages_homebrew(base_distro: BaseDistro) -> StepResult:
     for homebrew_formula in config["packages"][base_distro]["homebrew"]:
         brew_list = run(
             [
-                *deescalate_args,
                 "/home/linuxbrew/.linuxbrew/bin/brew",
                 "list",
                 homebrew_formula,
@@ -325,7 +286,7 @@ def set_up_packages_homebrew(base_distro: BaseDistro) -> StepResult:
         # Do not print output on the same line as "Setting up [step name]...".
         print()
         run(
-            [*deescalate_args, "brew", "install", *to_install],
+            ["brew", "install", *to_install],
             check=True,
         )
         return StepResult.DONE
@@ -336,7 +297,7 @@ def set_up_packages_pipx(base_distro: BaseDistro) -> StepResult:
 
     pipx_list = json.loads(
         run(
-            [*deescalate_args, "pipx", "list", "--json"],
+            ["pipx", "list", "--json"],
             check=True,
             stdout=PIPE,
             text=True,
@@ -353,7 +314,7 @@ def set_up_packages_pipx(base_distro: BaseDistro) -> StepResult:
         # Do not print output on the same line as "Setting up [step name]...".
         print()
         run(
-            [*deescalate_args, "pipx", "install", *to_install],
+            ["pipx", "install", *to_install],
             check=True,
         )
         return StepResult.DONE
@@ -383,7 +344,7 @@ def set_up_directories() -> StepResult:
 # does the same thing for shell scripts, and it's used by all of my shell scripts except
 # the bootstrap script.
 def set_up_docopts() -> StepResult:
-    docopts_bin_destination = Path(directory_bin_local_downloaded).expanduser()
+    docopts_bin_destination = Path(DIRECTORY_BIN_LOCAL_DOWNLOADED).expanduser()
     docopts_bin_filename = docopts_bin_destination.joinpath("docopts")
 
     if docopts_bin_filename.is_file():
@@ -402,22 +363,17 @@ def set_up_docopts() -> StepResult:
                 check=True,
             )
 
-            # For some reason, running `{tmp_dir}/docopts` directly does not work. You
-            # really do need to cd into the directory first.
+            # Running `{tmp_dir}/docopts` directly does not work because the script
+            # attempts to read a file which is a sibling of the script by relative path
+            # name. You really do need to cd into the directory first.
             run(
                 f"cd {tmp_dir}/docopts && ./get_docopts.sh",
                 check=True,
                 shell=True,
             )
 
-            docopts_bin_destination = Path(directory_bin_local_downloaded).expanduser()
+            docopts_bin_destination = Path(DIRECTORY_BIN_LOCAL_DOWNLOADED).expanduser()
             shutil.copy(f"{tmp_dir}/docopts/docopts", docopts_bin_destination)
-
-            run(
-                ["chown", logged_in_user, docopts_bin_filename],
-                check=True,
-                stdout=DEVNULL,
-            )
 
             return StepResult.DONE
 
@@ -443,7 +399,7 @@ def set_up_vcsh() -> StepResult:
 """
 
     sc_filename = (
-        f"{xdg_config_home}/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout"
+        f"{XDG_CONFIG_HOME}/vcsh/repo.d/dotfiles-openjck.git/info/sparse-checkout"
     )
 
     if (not os.path.isfile(sc_filename)) or open(
@@ -452,7 +408,7 @@ def set_up_vcsh() -> StepResult:
         sc_file = open(sc_filename, mode="w")
         sc_file.write(sc_file_contents)
         sc_file.close()
-        run([*deescalate_args, "vcsh", "dotfiles-openjck", "checkout"], check=True)
+        run(["vcsh", "dotfiles-openjck", "checkout"], check=True)
         modified_config = True
 
     if modified_config:
@@ -462,7 +418,7 @@ def set_up_vcsh() -> StepResult:
 
 
 def set_up_tmux() -> StepResult:
-    tpm_path = Path(f"~{logged_in_user}/.tmux/plugins/tpm").expanduser()
+    tpm_path = Path("~/.tmux/plugins/tpm").expanduser()
     tpm_path_str = tpm_path.absolute().as_posix()
 
     if tpm_path.is_dir():
@@ -474,7 +430,6 @@ def set_up_tmux() -> StepResult:
         # Install tpm.
         run(
             [
-                *deescalate_args,
                 "git",
                 "clone",
                 "https://github.com/tmux-plugins/tpm",
@@ -486,7 +441,7 @@ def set_up_tmux() -> StepResult:
 
         # Install plugins.
         run(
-            [*deescalate_args, f"{tpm_path_str}/bin/install_plugins"],
+            [f"{tpm_path_str}/bin/install_plugins"],
             check=True,
         )
 
