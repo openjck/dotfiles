@@ -102,6 +102,7 @@ config: Config = {
         BaseDistro.DEBIAN: {
             "system": [
                 "bat",
+                "curl"  # Needed to install homebrew.
                 "fd-find",
                 "flatpak",
                 "git",
