@@ -218,7 +218,7 @@ def set_up_packages_system_debian() -> StepResult:
         # strictly speaking, apt-get and friends are recommended for use in scripts
         # instead.)
         print()
-        run(["apt-get", "install", "--yes", " ".join(to_install)], check=True)
+        run(["apt-get", "install", "--yes", *to_install], check=True)
         return StepResult.DONE
 
 
@@ -262,7 +262,7 @@ def set_up_packages_flatpak(base_distro: BaseDistro) -> StepResult:
 
         for flatpak_app in flatpak_apps:
             flatpak_info = run(
-                [*deescalate_args, "flatpak", "info", flatpak_app],
+                ["flatpak", "info", flatpak_app],
                 stderr=DEVNULL,
                 stdout=DEVNULL,
             )
@@ -275,11 +275,11 @@ def set_up_packages_flatpak(base_distro: BaseDistro) -> StepResult:
             print()
             run(
                 [
-                    *deescalate_args,
                     "flatpak",
-                    "install" "--noninteractive",
+                    "install",
+                    "--noninteractive",
                     remote,
-                    " ".join(to_install),
+                    *to_install,
                 ],
                 check=True,
             )
@@ -324,7 +324,7 @@ def set_up_packages_homebrew(base_distro: BaseDistro) -> StepResult:
         # Do not print output on the same line as "Setting up [step name]...".
         print()
         run(
-            [*deescalate_args, "brew", "install", " ".join(to_install)],
+            [*deescalate_args, "brew", "install", *to_install],
             check=True,
         )
         return StepResult.DONE
@@ -352,7 +352,7 @@ def set_up_packages_pipx(base_distro: BaseDistro) -> StepResult:
         # Do not print output on the same line as "Setting up [step name]...".
         print()
         run(
-            [*deescalate_args, "pipx", "install", " ".join(to_install)],
+            [*deescalate_args, "pipx", "install", *to_install],
             check=True,
         )
         return StepResult.DONE
