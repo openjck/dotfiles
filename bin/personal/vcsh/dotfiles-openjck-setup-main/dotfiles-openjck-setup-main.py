@@ -547,9 +547,9 @@ Options:
     steps = [
         Step("packages (system)", lambda: set_up_packages_system(base_distro), True),
         Step("packages (flatpak)", lambda: set_up_packages_flatpak(base_distro), True),
-        # Step(
-        #     "packages (homebrew)", lambda: set_up_packages_homebrew(base_distro), True
-        # ),
+        Step(
+            "packages (homebrew)", lambda: set_up_packages_homebrew(base_distro), True
+        ),
         Step("packages (pipx)", lambda: set_up_packages_pipx(base_distro), True),
         # Set up directories before docopts else because set_up_docopts requires one of
         # those directories to exist.
