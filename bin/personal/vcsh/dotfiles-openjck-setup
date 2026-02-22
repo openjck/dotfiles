@@ -48,4 +48,15 @@ if ! command -v uv > /dev/null; then
   pipx install uv
 fi
 
+# uv was already installed to $HOME/.local/bin, so add that to the $PATH.
+#
+# The new $HOME/.profile file, which includes that in the $PATH, has not yet
+# been applied, and some distros don't include $HOME/.local/bin on the $PATH by
+# default.
+PATH=$HOME/.local/bin:$PATH
+
+# Homebrew _will be_ installed to /home/linuxbrew/.linuxbrew/bin, so add that to
+# the $PATH. If this were not done, "brew" commands would fail later.
+PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
+
 "$HOME"/bin/personal/vcsh/dotfiles-openjck-setup-main/dotfiles-openjck-setup-main.py
