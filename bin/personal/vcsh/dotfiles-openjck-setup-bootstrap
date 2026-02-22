@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# Use "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
+# This script is **intentionally** not executable.
+#
+# This script should never need to be run _after_ setup is complete. Rather, it
+# should be downloaded from the Git host, marked as executable, and run to
+# _perform_ the setup.
+
+function os_is_debian_based() {
+  [[ -f /etc/debian_version ]]
+}
+
+function prompt_to_fix_conflicts() {
+  read -rp 'Address all file conflicts, then press [Enter] '
+}
+
+if ! os_is_debian_based; then
+  >&2 echo 'FATAL ERROR: This distro is not supported.'
+  exit 1
+fi
+
+# In addition to checking if the user has (some form of) sudo access, this
+# prompts the user for their password once, now, at the beginning of this
+# process, so that they don't need to be prompted for it in the middle of this
+# process.
+if ! sudo --validate; then
+  >&2 echo "FATAL ERROR: \"sudo\" must be installed and enabled for \"$USER\"."
+  exit 1
+fi
+
+if ! command -v vcsh > /dev/null; then
+  if os_is_debian_based; then
+    sudo apt-get install --assume-yes vcsh
+  fi
+fi
+
+# https://stackoverflow.com/a/32708121/715866
+while true; do
+    read -rp 'Use SSH or HTTPS to clone dotfiles (S/H)? ' PROTOCOL
+    case $PROTOCOL in
+        [Ss]) REMOTE='git@github.com:openjck/dotfiles.git'; break;;
+        [Hh]) REMOTE='https://github.com/openjck/dotfiles.git'; break;;
+        *) echo 'Please choose SSH (S) or HTTPS (H).';;
+    esac
+done
+
+if ! vcsh clone "$REMOTE" dotfiles-openjck --quiet; then
+  prompt_to_fix_conflicts
+
+  # Git requires that "pull" be run after any file conflicts are addressed, even
+  # though one might expect to have to run "clone" again in that situation.
+  while ! vcsh dotfiles-openjck pull; do
+    prompt_to_fix_conflicts
+  done
+fi
+
+vcsh upgrade dotfiles-openjck
