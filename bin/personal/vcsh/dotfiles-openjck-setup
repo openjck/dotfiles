@@ -30,7 +30,7 @@ fi
 # prompts the user for their password once, now, at the beginning of the setup
 # process, so that they don't need to be prompted for it in the middle of the
 # setup process.
-if ! sudo -v; then
+if ! sudo --validate; then
   >&2 echo "FATAL ERROR: \"sudo\" must be installed and enabled for \"$USER\"."
   exit 1
 fi
