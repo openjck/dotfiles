@@ -19,7 +19,12 @@ from typing import List
 
 from docopt import docopt
 
-from constants import DIRECTORY_BIN_LOCAL_DOWNLOADED, XDG_CONFIG_HOME, XDG_DATA_HOME
+from constants import (
+    BASE_DISTRO,
+    DIRECTORY_BIN_LOCAL_DOWNLOADED,
+    XDG_CONFIG_HOME,
+    XDG_DATA_HOME,
+)
 from custom_types import Config
 from data_classes import Step
 from enums import BaseDistro, StepResult, VcshConfigResult
@@ -60,22 +65,27 @@ warnings.simplefilter("default", DeprecationWarning)
 config: Config = {
     "packages": {
         BaseDistro.DEBIAN: {
-            "system": [
-                "bat",
-                "curl",  # Needed to install homebrew.
-                "fd-find",
-                "flatpak",
-                "git",
-                "moreutils",
-                "pipx",
-                "pwgen",
-                "renameutils",
-                "ripgrep",
-                "sd",
-                "tmux",
-                "toilet",
-                "vcsh",
-            ],
+            "system": {
+                "add": [
+                    "bat",
+                    "curl",  # Needed to install homebrew, although I'll also use it.
+                    "fd-find",
+                    "flatpak",
+                    "git",
+                    "moreutils",
+                    "pipx",
+                    "pwgen",
+                    "renameutils",
+                    "ripgrep",
+                    "sd",
+                    "tmux",
+                    "toilet",
+                    "vcsh",
+                ],
+                "remove": [
+                    "firefox",  # The Firefox Flatpak will be installed instead.
+                ],
+            },
             "flatpak": {
                 "flathub-verified": [
                     "org.mozilla.firefox",
@@ -137,38 +147,24 @@ def set_vcsh_config(config: str, desired_value: str) -> VcshConfigResult:
         return VcshConfigResult.MODIFIED
 
 
-# https://unix.stackexchange.com/a/46086/410447
-def get_base_distro() -> BaseDistro:
-    distro_markers = {
-        "/etc/redhat-release": BaseDistro.REDHAT,
-        "/etc/arch-release": BaseDistro.ARCH,
-        "/etc/gentoo-release": BaseDistro.GENTOO,
-        "/etc/SuSE-release": BaseDistro.SUSE,
-        "/etc/debian_version": BaseDistro.DEBIAN,
-        "/etc/alpine-release": BaseDistro.ALPINE,
-    }
-
-    for filename, base_distro in distro_markers.items():
-        if os.path.isfile(filename):
-            return base_distro
-
-    return BaseDistro.UNKNOWN
-
-
 def set_up_packages_system_debian() -> StepResult:
-    to_install: List[str] = []
+    to_add: List[str] = []
+    to_remove: List[str] = []
 
-    for package in config["packages"][BaseDistro.DEBIAN]["system"]:
-        dpkg_s = run(
-            ["dpkg", "-s", package],
-            stderr=DEVNULL,
-            stdout=DEVNULL,
-        )
+    for action, packages in config["packages"][BaseDistro.DEBIAN]["system"].items():
+        for package in packages:
+            dpkg_s = run(
+                ["dpkg", "-s", package],
+                stderr=DEVNULL,
+                stdout=DEVNULL,
+            )
 
-        if dpkg_s.returncode != 0:
-            to_install.append(package)
+            if action == "add" and dpkg_s.returncode != 0:
+                to_add.append(package)
+            elif action == "remove" and dpkg_s.returncode == 0:
+                to_remove.append(package)
 
-    if len(to_install) == 0:
+    if len(to_add) == 0 and len(to_remove) == 0:
         return StepResult.ALREADY_DONE
     else:
         # Do not print output on the same line as "Setting up [step name]...".
@@ -178,18 +174,19 @@ def set_up_packages_system_debian() -> StepResult:
         # strictly speaking, apt-get and friends are recommended for use in scripts
         # instead.)
         print()
-        run(["sudo", "apt-get", "install", "--yes", *to_install], check=True)
+        run(["sudo", "apt-get", "install", "--assume-yes", *to_add], check=True)
+        run(["sudo", "apt-get", "purge", "--assume-yes", *to_remove], check=True)
         return StepResult.DONE
 
 
-def set_up_packages_system(base_distro: BaseDistro) -> StepResult:
-    if base_distro == BaseDistro.DEBIAN:
+def set_up_packages_system() -> StepResult:
+    if BASE_DISTRO == BaseDistro.DEBIAN:
         return set_up_packages_system_debian()
     else:
         return StepResult.UNSUPPORTED
 
 
-def set_up_packages_flatpak(base_distro: BaseDistro) -> StepResult:
+def set_up_packages_flatpak() -> StepResult:
     installed_any = False
 
     # Set up a remote for Flathub.
@@ -219,7 +216,7 @@ def set_up_packages_flatpak(base_distro: BaseDistro) -> StepResult:
         stdout=DEVNULL,
     )
 
-    for remote, flatpak_apps in config["packages"][base_distro]["flatpak"].items():
+    for remote, flatpak_apps in config["packages"][BASE_DISTRO]["flatpak"].items():
         to_install: List[str] = []
 
         for flatpak_app in flatpak_apps:
@@ -254,7 +251,7 @@ def set_up_packages_flatpak(base_distro: BaseDistro) -> StepResult:
         return StepResult.ALREADY_DONE
 
 
-def set_up_packages_homebrew(base_distro: BaseDistro) -> StepResult:
+def set_up_packages_homebrew() -> StepResult:
     to_install: List[str] = []
 
     # Install Homebrew itself, if necessary.
@@ -266,7 +263,7 @@ def set_up_packages_homebrew(base_distro: BaseDistro) -> StepResult:
             stdout=DEVNULL,
         )
 
-    for homebrew_formula in config["packages"][base_distro]["homebrew"]:
+    for homebrew_formula in config["packages"][BASE_DISTRO]["homebrew"]:
         brew_list = run(
             [
                 "/home/linuxbrew/.linuxbrew/bin/brew",
@@ -292,7 +289,7 @@ def set_up_packages_homebrew(base_distro: BaseDistro) -> StepResult:
         return StepResult.DONE
 
 
-def set_up_packages_pipx(base_distro: BaseDistro) -> StepResult:
+def set_up_packages_pipx() -> StepResult:
     to_install: List[str] = []
 
     pipx_list = json.loads(
@@ -304,7 +301,7 @@ def set_up_packages_pipx(base_distro: BaseDistro) -> StepResult:
         ).stdout.strip()
     )
 
-    for pipx_package in config["packages"][base_distro]["pipx"]:
+    for pipx_package in config["packages"][BASE_DISTRO]["pipx"]:
         if pipx_package not in pipx_list["venvs"]:
             to_install.append(pipx_package)
 
@@ -498,15 +495,11 @@ Options:
 
     docopt(help_text)
 
-    base_distro = get_base_distro()
-
     steps = [
-        Step("packages (system)", lambda: set_up_packages_system(base_distro), True),
-        Step("packages (flatpak)", lambda: set_up_packages_flatpak(base_distro), True),
-        Step(
-            "packages (homebrew)", lambda: set_up_packages_homebrew(base_distro), True
-        ),
-        Step("packages (pipx)", lambda: set_up_packages_pipx(base_distro), True),
+        Step("packages (system)", set_up_packages_system, True),
+        Step("packages (flatpak)", set_up_packages_flatpak, True),
+        Step("packages (homebrew)", set_up_packages_homebrew, True),
+        Step("packages (pipx)", set_up_packages_pipx, True),
         # Set up directories before docopts else because set_up_docopts requires one of
         # those directories to exist.
         Step("directories", set_up_directories),

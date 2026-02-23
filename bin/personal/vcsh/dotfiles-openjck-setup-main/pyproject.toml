@@ -15,5 +15,10 @@ dev = [
     "types-docopt>=0.6.11.20241107",
 ]
 
+# Make isort and black agree on formatting of imports, so that they don't undo
+# each other's work.
+[tool.isort]
+profile = "black"
+
 [tool.pyright]
 typeCheckingMode = "strict"
