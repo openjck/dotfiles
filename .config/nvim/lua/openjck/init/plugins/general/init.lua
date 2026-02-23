@@ -1,4 +1,3 @@
-require('openjck.init.plugins.general.hardtime')
 require('openjck.init.plugins.general.neogit')
 require('openjck.init.plugins.general.nvim-notify')
 require('openjck.init.plugins.general.refactoring')
