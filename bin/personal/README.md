@@ -8,7 +8,8 @@ can from it. As another once said, "I hope you find your explorations
 satisfying."
 
 For general-purpose scripts that you _may_ be interested in downloading and
-running, please see the [_general_](../general) directory. The README of the
-_general_ directory also has some important information that you'll want to know
-if you _do_ intend on downloading and running any of the scripts in this
-_personal_ directory.
+using, please see the [_general_](../general) directory.
+
+If you _do_ want to use any of these scripts, please see the ["Shell scripts"
+documentation](../../docs/scripts.md) for installation instructions and other
+important information.
