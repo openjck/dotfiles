@@ -33,6 +33,12 @@
 
 # Use Bash's unofficial "strict mode."
 #
+# The suggested change to the value of "IFS" is not applied because it doesn't
+# appear to be necessary when best practices and ShellCheck's advice are being
+# followed. In the examples the author provides, the preferred results occur
+# even when "IFS" is unchanged, as long as variables are double-quoted, which is
+# a best practice and a ShellCheck recommendation.
+#
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -o errexit
 set -o nounset
