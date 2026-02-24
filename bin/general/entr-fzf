@@ -11,7 +11,7 @@
 
 # MIT License
 #
-# Copyright (c) 2023, 2024, 2025 John Karahalis
+# Copyright (c) 2023, 2024, 2025, 2026 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -31,10 +31,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Use "strict mode."
+# Use Bash's unofficial "strict mode."
 #
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
+set -o errexit
+set -o nounset
+set -o pipefail
 
 COMMAND_NAME=$(basename "$0")
 

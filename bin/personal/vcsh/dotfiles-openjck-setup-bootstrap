@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-# Use "strict mode."
+# Use Bash's unofficial "strict mode."
 #
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
+set -o errexit
+set -o nounset
+set -o pipefail
 
 # This script is **intentionally** not executable.
 #

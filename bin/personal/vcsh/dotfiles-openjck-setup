@@ -12,10 +12,12 @@
 # The main setup script installs docopts, so docopts is not used in this script
 # itself.
 
-# Use "strict mode."
+# Use Bash's unofficial "strict mode."
 #
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
+set -o errexit
+set -o nounset
+set -o pipefail
 
 function os_is_debian_based() {
   [[ -f /etc/debian_version ]]
