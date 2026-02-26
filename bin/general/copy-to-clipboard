@@ -112,13 +112,14 @@ else
   INPUT=${ARGS[FILE]}
 fi
 
-XCLIP_ADDITIONAL_ARGS=''
+XCLIP_ADDITIONAL_ARGS=()
+
 if ! ${ARGS[--include-final-newline]}; then
-  XCLIP_ADDITIONAL_ARGS='-rmlastnl '
+  XCLIP_ADDITIONAL_ARGS+=(-rmlastnl)
 fi
 
 # Leaving "$XCLIP_ADDITIONAL_ARGS" unquoted here appears to be required for
 # reasons I don't fully understand.
 #
 # shellcheck disable=SC2086
-xclip -selection clipboard $XCLIP_ADDITIONAL_ARGS "$INPUT"
+xclip -selection clipboard "${XCLIP_ADDITIONAL_ARGS[@]}" "$INPUT"
