@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+function _repl_completions() {
+  local REPLS=(
+    "deno"
+    "ghci"
+    "node"
+    "php"
+    "python"
+    "ruby"
+  )
+
+  # If the user is trying to complete any argument except for the first
+  # argument, return nothing, since the script only takes one argument.
+  if (( COMP_CWORD != 1 )); then
+    return 0
+  fi
+
+  local CURSOR="${COMP_WORDS[$COMP_CWORD]}"
+
+  mapfile -t COMPREPLY < <(compgen -W "${REPLS[*]}" -- "$CURSOR")
+}
+
+complete -F _repl_completions repl

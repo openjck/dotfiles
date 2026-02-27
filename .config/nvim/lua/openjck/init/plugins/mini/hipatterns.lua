@@ -29,6 +29,11 @@ hipatterns.setup({
     -- IN<busted>PROG (yes, mentally remove the string "<busted>" while reading
     -- this) is a keyword I often use to mark work in progress that should be
     -- modified before a pull request / merge request is opened.
+    im_portant = {
+      pattern = unbusted('%f[%w]()IM<busted>PORTANT()%f[%W]'),
+      group = 'MiniHipatternsFixme',
+    },
+
     fix_me = {
       pattern = unbusted('%f[%w]()FIX<busted>ME()%f[%W]'),
       group = 'MiniHipatternsFixme',

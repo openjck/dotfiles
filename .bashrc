@@ -16,6 +16,7 @@ source "$XDG_CONFIG_HOME/bash/init/homebrew.bash"
 # Source configurations.
 source "$XDG_CONFIG_HOME/bash/init/asdf.bash"
 source "$XDG_CONFIG_HOME/bash/init/bash-completion.bash"
+source "$XDG_CONFIG_HOME/bash/init/bin-completions.bash"
 source "$XDG_CONFIG_HOME/bash/init/directories.bash"
 source "$XDG_CONFIG_HOME/bash/init/files.bash"
 source "$XDG_CONFIG_HOME/bash/init/gpg.bash"

@@ -113,6 +113,8 @@ function exit_if_not_installed() {
   fi
 }
 
+# IMPORTANT: When adding support for a new keyword here, be suer to add it to
+# _completions/repl_ as well, so that it will be a suggested completion.
 case "${ARGS[IDENTIFIER]}" in
   "deno" | "typescript" | "ts")
     exit_if_not_installed deno
