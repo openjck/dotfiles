@@ -123,6 +123,9 @@ case "${ARGS[IDENTIFIER]}" in
   "node" | "javascript" | "js")
     exit_if_not_installed node
     exec node ;;
+  "php")
+    exit_if_not_installed php
+    exec php -a ;;
   "python" | "py")
     exit_if_not_installed python
     exec python -i ;;
