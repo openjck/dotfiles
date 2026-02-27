@@ -1,0 +1,132 @@
+#!/usr/bin/env bash
+
+# indent:
+# Launch a REPL by providing the name of a language or runtime.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
+# MIT License
+#
+# Copyright (c) 2026 John Karahalis
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+# Use Bash's unofficial "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -o errexit
+set -o nounset
+set -o pipefail
+IFS=$'\n\t'
+
+COMMAND_NAME=$(basename "$0")
+
+##########################
+# BEGIN DEPENDENCY CHECK #
+##########################
+
+DEPENDENCIES=(
+  docopts
+)
+
+MISSING_DEPENDENCIES=()
+
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" > /dev/null; then
+    MISSING_DEPENDENCIES+=("$DEPENDENCY")
+  fi
+done
+
+if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
+  >&2 fold --spaces <<EOF
+FATAL ERROR: The following are not installed. You must install them on your \
+own for "$COMMAND_NAME" to function properly.
+
+EOF
+  for DEPENDENCY in "${MISSING_DEPENDENCIES[@]}"; do
+    >&2 echo "  - $DEPENDENCY"
+  done
+  exit 1
+fi
+
+########################
+# END DEPENDENCY CHECK #
+########################
+
+eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+Launch a REPL by providing the name of a language or runtime.
+
+Compilers, interpreters, and runtimes provide different methods of launching
+a REPL. This script handles those differences so that a REPL can be launched by
+providing a language or runtime name directly.
+
+Usage:
+  $COMMAND_NAME [IDENTIFIER]
+  $COMMAND_NAME -h | --help
+
+Examples:
+  $COMMAND_NAME python
+  $COMMAND_NAME javascript
+  $COMMAND_NAME node
+  $COMMAND_NAME deno
+
+Supported identifiers:
+  deno   (aliases: typescript, ts)
+  ghci   (aliases: ghc, haskell, hs)
+  node   (aliases: javascript, js)
+  php
+  python (alias: py)
+  ruby   (alias: rb)
+
+Options:
+  -h, --help
+      Show this documentation
+EOF
+)"
+
+function exit_if_not_installed() {
+  local COMMAND=$1
+
+  if ! command -v "$COMMAND" > /dev/null; then
+    >&2 echo "FATAL ERROR: \"$COMMAND\" is not installed."
+    exit 1
+  fi
+}
+
+case "${ARGS[IDENTIFIER]}" in
+  "deno" | "typescript" | "ts")
+    exit_if_not_installed deno
+    exec deno repl ;;
+  "ghci" | "ghc" | "haskell" | "hs")
+    exit_if_not_installed ghci
+    exec ghci ;;
+  "node" | "javascript" | "js")
+    exit_if_not_installed node
+    exec node ;;
+  "python" | "py")
+    exit_if_not_installed python
+    exec python -i ;;
+  "ruby" | "rb")
+    exit_if_not_installed irb
+    exec irb ;;
+esac
