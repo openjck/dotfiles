@@ -2,9 +2,12 @@ local basics = require('mini.basics')
 
 basics.setup({
   mappings = {
-    -- Use <C-hjkl> to navigate between panes (just like the keybindings
-    -- vim-tmux-navigator offers, making vim-tmux-navigator unnecessary), and
-    -- use <C-arrow> to adjust pane size.
+    -- Use <C-hjkl> to navigate between panes, and use <C-arrow> to adjust pane
+    -- size.
+    --
+    -- The first part is _part_ of what vim-tmux-navigator does, but
+    -- vim-tmux-navigator is still needed because it allows moving _between_
+    -- Neovim and tmux with those keystrokes.
     windows = true,
   }
 })
