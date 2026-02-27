@@ -45,6 +45,41 @@ information on how to install them, or search "install [program] on
 If you run a shell script and any dependencies are missing, an error message
 will be printed to explain that you need to install them on your own.
 
+#### Installing completion
+
+Some scripts offer completion. For example, typing this:
+
+```bash
+$ repl p<Tab><Tab>
+```
+
+will show this:
+
+```bash
+php     python
+```
+
+When the letters that are typed only match one possible value, the full word
+will be automatically completed. For example, this...
+
+```bash
+$ repl py<Tab><Tab>
+```
+
+becomes:
+
+```bash
+$ repl python
+```
+
+To install completion for a particular script, download the file of the same
+name in the _completion_ directory (e.g.,
+[_completion/repl_](../bin/general/completion/repl) for the
+[_repl_](../bin/general/repl) script). Then, either move that file to your
+_~/.local/share/bash-completion/completions_ directory, or move it anywhere you
+like and source it from your _~/.bashrc_ file (e.g., `source
+/path/to/the_downloaded_file`).
+
 ### Usage
 
 Pass the `-h` or `--help` option to any shell script to read its detailed
