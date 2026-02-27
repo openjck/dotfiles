@@ -8,4 +8,4 @@ set -o nounset
 set -o pipefail
 IFS=$'\n\t'
 
-format "$@"
+npx prettier --write "$@"
