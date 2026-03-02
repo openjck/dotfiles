@@ -1,3 +1,6 @@
+# This cannot be a shell script because shell scripts cannot easily shadow other
+# commands.
+
 # Run rg with custom options and page the results. If there are no results,
 # return immediately.
 #

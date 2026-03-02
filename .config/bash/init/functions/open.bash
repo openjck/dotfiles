@@ -1,3 +1,6 @@
+# This cannot be a shell script because shell scripts cannot easily shadow other
+# commands.
+
 function open() {
   local TARGET="${1:-$(pwd)}"
 

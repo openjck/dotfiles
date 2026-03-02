@@ -1,6 +1,7 @@
-# This would not work properly if it were a shell script. Shell scripts are
-# executed in subshells, where "cd" does not affect the shell that called the
-# script.
+# This cannot be a shell script because shell scripts are executed in subshells
+# and therefore cannot cause the parent shell (the shell that called the shell
+# script) to navigate.
+
 function mkcd() {
   local DIRECTORY=$1
 

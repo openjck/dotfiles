@@ -1,11 +1,11 @@
+# This cannot be a shell script because shell scripts are executed in subshells
+# and therefore cannot cause the parent shell (the shell that called the shell
+# script) to navigate.
+
 # cdv: cd with visibility
 #
 # Change the current directory and immediately list directory contents. All "cd"
 # options are accepted and behave in the same way.
-#
-# This would not work properly if it were a shell script. Shell scripts are
-# executed in subshells, where "cd" does not affect the shell that called the
-# script.
 function cdv() {
   if cd "$@"; then
     local NUM_VISIBLE_FILES
