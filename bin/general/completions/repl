@@ -3,7 +3,7 @@
 function _repl_completions() {
   local REPLS=(
     "deno"
-    "ghci"
+    "ghc"
     "node"
     "php"
     "python"

@@ -92,11 +92,11 @@ Examples:
 
 Supported identifiers:
   deno   (aliases: typescript, ts)
-  ghci   (aliases: ghc, haskell, hs)
+  ghc    (aliases: ghci, haskell, hs)
   node   (aliases: javascript, js)
   php
   python (alias: py)
-  ruby   (alias: rb)
+  ruby   (alias: irb, rb)
 
 Options:
   -h, --help
@@ -113,7 +113,7 @@ function exit_if_not_installed() {
   fi
 }
 
-# IMPORTANT: When adding support for a new keyword here, be suer to add it to
+# IMPORTANT: When adding support for a new identifier here, be suer to add it to
 # _completions/repl_ as well, so that it will be a suggested completion.
 case "${ARGS[IDENTIFIER]}" in
   "deno" | "typescript" | "ts")
@@ -134,4 +134,7 @@ case "${ARGS[IDENTIFIER]}" in
   "ruby" | "rb")
     exit_if_not_installed irb
     exec irb ;;
+  *)
+    >&2 echo "FATAL ERROR: Identifier \"${ARGS[IDENTIFIER]}\" not supported."
+    exit 1
 esac
