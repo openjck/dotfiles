@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+##
+# Debian-based systems, and possibly others, rename bat to batcat.
+#
+
+if __command_exists batcat; then
+  batcat "$@"
+else
+  command bat "$@"
+fi
