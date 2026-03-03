@@ -1,3 +1,0 @@
-function dt() {
-  deno task "$@"
-}
