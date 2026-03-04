@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Use Bash's unofficial "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -o errexit
+set -o nounset
+set -o pipefail
+IFS=$'\n\t'
+
+while true; do
+  block "$@" | lolcat --animate --speed=40
+done
