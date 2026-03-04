@@ -1,7 +1,10 @@
 # Use auto-completions of the first command as auto-completions for the second
 # command. For example, if we were to do the following:
 #
-#   alias g="git"
+#   function g() {
+#     git "$@"
+#   }
+#
 #   __reuse-completions git g
 #
 # ...then we would be able to type "g b<tab>" and "branch" would be among the
