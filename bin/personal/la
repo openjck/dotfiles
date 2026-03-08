@@ -8,4 +8,8 @@ set -o nounset
 set -o pipefail
 IFS=$'\n\t'
 
+# Use the "ls" function, which shadows the ls command with certain flags
+# applied.
+source "$D_BASH_FUNCTIONS"/ls.bash
+
 ls --all "$@"
