@@ -1,14 +1,3 @@
-#!/usr/bin/env bash
-
-# Use Bash's unofficial "strict mode."
-#
-# http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -o errexit
-set -o nounset
-set -o pipefail
-IFS=$'\n\t'
-
-##
 # Run sudo with the $PATH of the current user preserved.
 #
 # https://unix.stackexchange.com/a/83194
@@ -18,5 +7,6 @@ IFS=$'\n\t'
 # doesn't work:
 #
 # https://unix.stackexchange.com/a/442755
-
-sudo env "PATH=$PATH" "$@"
+function sudo-with-path() {
+  sudo env "PATH=$PATH" "$@"
+}

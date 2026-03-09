@@ -1,9 +1,9 @@
+# Use fzf to navigate to the home directory, any repo, or any directory assigned
+# to an environment variable that starts with "D_".
+#
 # This cannot be a shell script because shell scripts are executed in subshells
 # and therefore cannot cause the parent shell (the shell that called the shell
 # script) to navigate.
-
-# Use fzf to navigate to the home directory, any repo, or any directory assigned
-# to an environment variable that starts with "D_".
 function jump() {
   local CHOICES
 

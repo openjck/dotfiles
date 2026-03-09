@@ -1,0 +1,3 @@
+function hd() {
+  helix-dotfiles "$@"
+}

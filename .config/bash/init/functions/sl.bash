@@ -1,6 +1,3 @@
-# This cannot be a shell script because shell scripts cannot easily shadow other
-# commands.
-
 # Run sl with a random combination of arguments and allow it to be interrupted
 # with Ctrl+C.
 function sl() {
