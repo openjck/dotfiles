@@ -72,6 +72,7 @@ config: Config = {
                     "fd-find",
                     "flatpak",
                     "git",
+                    "just",
                     "moreutils",
                     "pipx",
                     "pwgen",
