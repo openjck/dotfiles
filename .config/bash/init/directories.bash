@@ -25,7 +25,6 @@ export D_CONFIG_VCSH_HOOKS_ENABLED=$D_CONFIG_VCSH/hooks-enabled
 # Add environment variables for other directories.
 export D_DEVEL=$HOME/devel
 export D_DEVEL_REPOS=$HOME/devel/repos
-export D_DOTFILES_OPENJCK_SETUP=$D_CONFIG_VCSH_HOOKS_AVAILABLE/dotfiles-openjck-setup
 
 # Add environment variables for Windows directories if WSL is being used.
 if __in_wsl; then
