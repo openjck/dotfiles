@@ -22,7 +22,7 @@ function jump() {
     echo "$HOME"
     {
       env | grep '^D_' | sed 's/^.*=//'
-      find "$HOME/devel/repos" -maxdepth 1 -type d 2> /dev/null
+      find "$HOME/devel/repos" -maxdepth 1 -type d 2>/dev/null
     } | sort --unique
   })
 
@@ -32,7 +32,7 @@ function jump() {
   # up to it. When I'm using "jump", I _do_ almost always know the exact name of
   # the directory I want to jump to, even though I don't want to type the whole
   # path leading up to it.
-  if SELECTION=$(fzf --tiebreak=end <<< "$CHOICES"); then
+  if SELECTION=$(fzf --tiebreak=end <<<"$CHOICES"); then
     cdv "$SELECTION"
   fi
 }

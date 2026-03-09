@@ -8,7 +8,7 @@ function module-root() {
 
   if [[ -f "$DIRNAME.info.yml" ]]; then
     echo "$PWD"
-  elif [[ "$PWD" == / ]]; then
+  elif [[ $PWD == / ]]; then
     return 1
   else
     (cd .. && module-root)

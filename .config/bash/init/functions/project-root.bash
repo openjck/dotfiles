@@ -4,9 +4,9 @@
 # https://stackoverflow.com/a/957978/4297741
 function project-root() {
   local PROJECT_ROOT
-  PROJECT_ROOT=$(git rev-parse --show-toplevel 2> /dev/null)
+  PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 
-  if [[ -n "$PROJECT_ROOT" ]]; then
+  if [[ -n $PROJECT_ROOT ]]; then
     echo "$PROJECT_ROOT"
   else
     return 1

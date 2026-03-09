@@ -8,7 +8,7 @@ function mkcd() {
   # When the `--parents` option is used, `mkdir` does not exit with an error
   # code if a directory already exists, so that case needs to be handled
   # manually.
-  if [[ -d "$DIRECTORY" ]]; then
+  if [[ -d $DIRECTORY ]]; then
     >&2 echo "Directory already exists: $DIRECTORY"
   else
     if mkdir --parents "$DIRECTORY"; then
