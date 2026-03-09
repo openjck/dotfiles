@@ -41,13 +41,13 @@ fi
 # Install pip if it's not already installed.
 #
 # pip is needed to install uv, and uv is needed to run the setup script.
-if ! command -v pip > /dev/null; then
+if ! command -v pip >/dev/null; then
   if os_is_debian_based; then
     sudo apt-get install --assume-yes pipx
   fi
 fi
 
-if ! command -v uv > /dev/null; then
+if ! command -v uv >/dev/null; then
   pipx install uv
 fi
 

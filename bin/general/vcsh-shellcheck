@@ -54,12 +54,12 @@ DEPENDENCIES=(
 MISSING_DEPENDENCIES=()
 
 for DEPENDENCY in "${DEPENDENCIES[@]}"; do
-  if ! command -v "$DEPENDENCY" > /dev/null; then
+  if ! command -v "$DEPENDENCY" >/dev/null; then
     MISSING_DEPENDENCIES+=("$DEPENDENCY")
   fi
 done
 
-if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
+if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
   >&2 fold --spaces <<EOF
 FATAL ERROR: The following are not installed. You must install them on your \
 own for "$COMMAND_NAME" to function properly.
@@ -75,7 +75,8 @@ fi
 # END DEPENDENCY CHECK #
 ########################
 
-eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+eval "$(
+  docopts --help=- -A ARGS : "$@" <<EOF
 Run ShellCheck against supported shell scripts tracked by vcsh.
 
 Usage:
@@ -99,14 +100,13 @@ function has-shell-script-filename() {
 
   # Match based on exact basename.
   [[ $BASENAME == '.bash_login' ]] ||
-  [[ $BASENAME == '.bash_logout' ]] ||
-  [[ $BASENAME == '.bash_profile' ]] ||
-  [[ $BASENAME == '.bashrc' ]] ||
-  [[ $BASENAME == '.kshrc' ]] ||
-  [[ $BASENAME == '.profile' ]] ||
-
-  # Match based on file extension.
-  [[ $BASENAME =~ \.(bash|dash|ksh|sh)$ ]]
+    [[ $BASENAME == '.bash_logout' ]] ||
+    [[ $BASENAME == '.bash_profile' ]] ||
+    [[ $BASENAME == '.bashrc' ]] ||
+    [[ $BASENAME == '.kshrc' ]] ||
+    [[ $BASENAME == '.profile' ]] ||
+    # Match based on file extension.
+    [[ $BASENAME =~ \.(bash|dash|ksh|sh)$ ]]
 }
 
 function has-shell-script-content() {
@@ -114,21 +114,20 @@ function has-shell-script-content() {
 
   # Test if the file has the shebang of a script type supported by ShellCheck.
   grep --quiet --extended-regexp '#!.*\s+(bash|dash|ksh|sh)$' "$FILENAME" ||
-
-  # Test if the file contains a ShellCheck directive.
-  #
-  # Testing for the existence of the string "source-path" is redundant (testing
-  # for "source" would be enough), but I want to be explicit.
-  grep --quiet --extended-regexp \
-    'shellcheck\s+(disable|enable|external-sources|source|source-path|shell)' \
-    "$FILENAME"
+    # Test if the file contains a ShellCheck directive.
+    #
+    # Testing for the existence of the string "source-path" is redundant (testing
+    # for "source" would be enough), but I want to be explicit.
+    grep --quiet --extended-regexp \
+      'shellcheck\s+(disable|enable|external-sources|source|source-path|shell)' \
+      "$FILENAME"
 }
 
 function is-shellcheck-file() {
   local FILENAME=$1
 
   has-shell-script-filename "$FILENAME" ||
-  has-shell-script-content "$FILENAME"
+    has-shell-script-content "$FILENAME"
 }
 
 function main() {
@@ -191,7 +190,7 @@ function main() {
     # If ShellCheck exited with a non-zero exit code, then it printed output. If
     # it printed output, we should show newline before the next debugging
     # statement.
-    if (( SHELLCHECK_EXIT_STATUS != 0 )); then
+    if ((SHELLCHECK_EXIT_STATUS != 0)); then
       echo
     fi
     echo "${#FILES_TO_LINT[@]} files were linted with ShellCheck."

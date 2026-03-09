@@ -51,12 +51,12 @@ DEPENDENCIES=(
 MISSING_DEPENDENCIES=()
 
 for DEPENDENCY in "${DEPENDENCIES[@]}"; do
-  if ! command -v "$DEPENDENCY" > /dev/null; then
+  if ! command -v "$DEPENDENCY" >/dev/null; then
     MISSING_DEPENDENCIES+=("$DEPENDENCY")
   fi
 done
 
-if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
+if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
   >&2 fold --spaces <<EOF
 FATAL ERROR: The following are not installed. You must install them on your \
 own for "$COMMAND_NAME" to function properly.
@@ -75,7 +75,8 @@ fi
 COMMAND_NAME=$(basename "$0")
 GIT_SUBCOMMAND_NAME=${COMMAND_NAME/git-/}
 
-eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+eval "$(
+  docopts --help=- -A ARGS : "$@" <<EOF
 Print the name of the upstream Git branch.
 
 If there is no upstream Git branch, print nothing and return with an error code.
@@ -107,5 +108,5 @@ if git rev-parse; then
   # Redirect stderr to /dev/null to avoid printing error if there is no upstream
   # branch. Note that this script will nonetheless return with an error code if
   # there is no upstream branch.
-  git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2> /dev/null
+  git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2>/dev/null
 fi

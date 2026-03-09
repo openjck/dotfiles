@@ -52,12 +52,12 @@ DEPENDENCIES=(
 MISSING_DEPENDENCIES=()
 
 for DEPENDENCY in "${DEPENDENCIES[@]}"; do
-  if ! command -v "$DEPENDENCY" > /dev/null; then
+  if ! command -v "$DEPENDENCY" >/dev/null; then
     MISSING_DEPENDENCIES+=("$DEPENDENCY")
   fi
 done
 
-if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
+if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
   >&2 fold --spaces <<EOF
 FATAL ERROR: The following are not installed. You must install them on your \
 own for "$COMMAND_NAME" to function properly.
@@ -73,7 +73,8 @@ fi
 # END DEPENDENCY CHECK #
 ########################
 
-eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+eval "$(
+  docopts --help=- -A ARGS : "$@" <<EOF
 Make a full backup of the system currently being used.
 
 The backup will include every file from the root directory on down. It will be
@@ -90,9 +91,9 @@ Options:
 EOF
 )"
 
-if [[ ! -d "${ARGS[DIRECTORY]}" ]]; then
+if [[ ! -d ${ARGS[DIRECTORY]} ]]; then
   >&2 fold --spaces \
-    <<< "FATAL ERROR: Directory \"${ARGS[DIRECTORY]}\" does not exist."
+    <<<"FATAL ERROR: Directory \"${ARGS[DIRECTORY]}\" does not exist."
   exit 1
 fi
 
@@ -110,14 +111,14 @@ BASENAME="$(hostname)-$(date --iso-8601=seconds).tar.gz"
 #
 # Besides, tar is probably more commonly used on Linux.
 tar --verbose \
-    --create \
-    --gzip \
-    --preserve-permissions \
-    --file="${ARGS[DIRECTORY]}/$BASENAME" \
-    --exclude='./media' \
-    --exclude='./mnt' \
-    --exclude='./proc' \
-    --exclude='./sys' \
-    --exclude='lost+found' \
-    --directory=/ \
-    .
+  --create \
+  --gzip \
+  --preserve-permissions \
+  --file="${ARGS[DIRECTORY]}/$BASENAME" \
+  --exclude='./media' \
+  --exclude='./mnt' \
+  --exclude='./proc' \
+  --exclude='./sys' \
+  --exclude='lost+found' \
+  --directory=/ \
+  .

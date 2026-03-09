@@ -54,12 +54,12 @@ DEPENDENCIES=(
 MISSING_DEPENDENCIES=()
 
 for DEPENDENCY in "${DEPENDENCIES[@]}"; do
-  if ! command -v "$DEPENDENCY" > /dev/null; then
+  if ! command -v "$DEPENDENCY" >/dev/null; then
     MISSING_DEPENDENCIES+=("$DEPENDENCY")
   fi
 done
 
-if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
+if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
   >&2 fold --spaces <<EOF
 FATAL ERROR: The following are not installed. You must install them on your \
 own for "$COMMAND_NAME" to function properly.
@@ -75,7 +75,8 @@ fi
 # END DEPENDENCY CHECK #
 ########################
 
-eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+eval "$(
+  docopts --help=- -A ARGS : "$@" <<EOF
 Select one or more files with fzf and run a command when any one changes.
 
 Use the tab key to select multiple files.
@@ -95,8 +96,8 @@ EOF
 )"
 
 # Process variadic arguments.
-for ((I=0; I < ARGS[COMMAND,#]; I++)); do
-  ENTR_ARGS+=("${ARGS[COMMAND,$I]}")
+for ((I = 0; I < ARGS['COMMAND,#']; I++)); do
+  ENTR_ARGS+=("${ARGS["COMMAND,$I"]}")
 done
 
 fzf --multi | entr "${ENTR_ARGS[@]}"

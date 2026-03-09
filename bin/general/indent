@@ -52,12 +52,12 @@ DEPENDENCIES=(
 MISSING_DEPENDENCIES=()
 
 for DEPENDENCY in "${DEPENDENCIES[@]}"; do
-  if ! command -v "$DEPENDENCY" > /dev/null; then
+  if ! command -v "$DEPENDENCY" >/dev/null; then
     MISSING_DEPENDENCIES+=("$DEPENDENCY")
   fi
 done
 
-if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
+if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
   >&2 fold --spaces <<EOF
 FATAL ERROR: The following are not installed. You must install them on your \
 own for "$COMMAND_NAME" to function properly.
@@ -73,7 +73,8 @@ fi
 # END DEPENDENCY CHECK #
 ########################
 
-eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+eval "$(
+  docopts --help=- -A ARGS : "$@" <<EOF
 Indent input with spaces.
 
 This command may appear to strip color from input, but it doesn't. Rather, many
@@ -99,10 +100,10 @@ Options:
 EOF
 )"
 
-if [[ -z "${ARGS[FILE]}" ]]; then
+if [[ -z ${ARGS[FILE]} ]]; then
   INPUT=/dev/stdin
-elif [[ ! -f "${ARGS[FILE]}" ]]; then
-  >&2 fold --spaces <<< "FATAL ERROR: File \"${ARGS[FILE]}\" does not exist."
+elif [[ ! -f ${ARGS[FILE]} ]]; then
+  >&2 fold --spaces <<<"FATAL ERROR: File \"${ARGS[FILE]}\" does not exist."
   exit 1
 else
   INPUT=${ARGS[FILE]}
@@ -114,7 +115,7 @@ if [[ ! ${ARGS[--size]} =~ ^[0-9]+$ ]]; then
 fi
 
 SPACES=''
-for (( I=1; I <= ${ARGS[--size]}; I++ )); do
+for ((I = 1; I <= ${ARGS[--size]}; I++)); do
   SPACES+=' '
 done
 

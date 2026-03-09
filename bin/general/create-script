@@ -52,12 +52,12 @@ DEPENDENCIES=(
 MISSING_DEPENDENCIES=()
 
 for DEPENDENCY in "${DEPENDENCIES[@]}"; do
-  if ! command -v "$DEPENDENCY" > /dev/null; then
+  if ! command -v "$DEPENDENCY" >/dev/null; then
     MISSING_DEPENDENCIES+=("$DEPENDENCY")
   fi
 done
 
-if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
+if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
   >&2 fold --spaces <<EOF
 FATAL ERROR: The following are not installed. You must install them on your \
 own for "$COMMAND_NAME" to function properly.
@@ -73,7 +73,8 @@ fi
 # END DEPENDENCY CHECK #
 ########################
 
-eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+eval "$(
+  docopts --help=- -A ARGS : "$@" <<EOF
 Quickly create a new shell script with executable permission.
 
 Create a new, empty file with the given name, make it executable, and open it
@@ -96,12 +97,12 @@ Options:
 EOF
 )"
 
-if [[ -f "${ARGS[FILE]}" ]]; then
+if [[ -f ${ARGS[FILE]} ]]; then
   >&2 echo "FATAL ERROR: File \"${ARGS[FILE]}\" already exists."
   exit 1
 fi
 
-echo "${ARGS[--shebang]}" > "${ARGS[FILE]}"
+echo "${ARGS[--shebang]}" >"${ARGS[FILE]}"
 chmod u+x "${ARGS[FILE]}"
 
 if ! $EDITOR "${ARGS[FILE]}"; then

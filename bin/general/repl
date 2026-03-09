@@ -52,12 +52,12 @@ DEPENDENCIES=(
 MISSING_DEPENDENCIES=()
 
 for DEPENDENCY in "${DEPENDENCIES[@]}"; do
-  if ! command -v "$DEPENDENCY" > /dev/null; then
+  if ! command -v "$DEPENDENCY" >/dev/null; then
     MISSING_DEPENDENCIES+=("$DEPENDENCY")
   fi
 done
 
-if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
+if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
   >&2 fold --spaces <<EOF
 FATAL ERROR: The following are not installed. You must install them on your \
 own for "$COMMAND_NAME" to function properly.
@@ -73,7 +73,8 @@ fi
 # END DEPENDENCY CHECK #
 ########################
 
-eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+eval "$(
+  docopts --help=- -A ARGS : "$@" <<EOF
 Launch a REPL by providing the name of a language or runtime.
 
 Compilers, interpreters, and runtimes provide different methods of launching
@@ -107,7 +108,7 @@ EOF
 function exit_if_not_installed() {
   local COMMAND=$1
 
-  if ! command -v "$COMMAND" > /dev/null; then
+  if ! command -v "$COMMAND" >/dev/null; then
     >&2 echo "FATAL ERROR: \"$COMMAND\" is not installed."
     exit 1
   fi
@@ -118,23 +119,30 @@ function exit_if_not_installed() {
 case "${ARGS[IDENTIFIER]}" in
   "deno" | "typescript" | "ts")
     exit_if_not_installed deno
-    exec deno repl ;;
+    exec deno repl
+    ;;
   "ghci" | "ghc" | "haskell" | "hs")
     exit_if_not_installed ghci
-    exec ghci ;;
+    exec ghci
+    ;;
   "node" | "javascript" | "js")
     exit_if_not_installed node
-    exec node ;;
+    exec node
+    ;;
   "php")
     exit_if_not_installed php
-    exec php -a ;;
+    exec php -a
+    ;;
   "python" | "py")
     exit_if_not_installed python
-    exec python -i ;;
+    exec python -i
+    ;;
   "ruby" | "rb")
     exit_if_not_installed irb
-    exec irb ;;
+    exec irb
+    ;;
   *)
     >&2 echo "FATAL ERROR: Identifier \"${ARGS[IDENTIFIER]}\" not supported."
     exit 1
+    ;;
 esac

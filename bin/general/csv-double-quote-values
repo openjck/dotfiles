@@ -53,12 +53,12 @@ DEPENDENCIES=(
 MISSING_DEPENDENCIES=()
 
 for DEPENDENCY in "${DEPENDENCIES[@]}"; do
-  if ! command -v "$DEPENDENCY" > /dev/null; then
+  if ! command -v "$DEPENDENCY" >/dev/null; then
     MISSING_DEPENDENCIES+=("$DEPENDENCY")
   fi
 done
 
-if (( ${#MISSING_DEPENDENCIES[@]} > 0 )); then
+if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
   >&2 fold --spaces <<EOF
 FATAL ERROR: The following are not installed. You must install them on your \
 own for "$COMMAND_NAME" to function properly.
@@ -74,7 +74,8 @@ fi
 # END DEPENDENCY CHECK #
 ########################
 
-eval "$(docopts --help=- -A ARGS : "$@" <<EOF
+eval "$(
+  docopts --help=- -A ARGS : "$@" <<EOF
 Add double quotes around all values in a CSV file.
 
 Usage:
@@ -89,8 +90,8 @@ Options:
 EOF
 )"
 
-if [[ ! -f "${ARGS[FILE]}" ]]; then
-  >&2 fold --spaces <<< "FATAL ERROR: File \"${ARGS[FILE]}\" does not exist."
+if [[ ! -f ${ARGS[FILE]} ]]; then
+  >&2 fold --spaces <<<"FATAL ERROR: File \"${ARGS[FILE]}\" does not exist."
   exit 1
 fi
 
@@ -107,8 +108,8 @@ OUTPUT_FILE=$(mktemp)
 #
 # shellcheck disable=SC2016
 if ruby -rcsv -ne \
-    'puts CSV.generate_line(CSV.parse_line($_), :force_quotes=>true)' \
-    "${ARGS[FILE]}" > "$OUTPUT_FILE"; then
+  'puts CSV.generate_line(CSV.parse_line($_), :force_quotes=>true)' \
+  "${ARGS[FILE]}" >"$OUTPUT_FILE"; then
   if ${ARGS[--overwrite]}; then
     mv "$OUTPUT_FILE" "${ARGS[FILE]}"
   else

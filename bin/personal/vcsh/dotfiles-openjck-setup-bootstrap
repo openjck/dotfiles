@@ -36,7 +36,7 @@ if ! sudo --validate; then
   exit 1
 fi
 
-if ! command -v vcsh > /dev/null; then
+if ! command -v vcsh >/dev/null; then
   if os_is_debian_based; then
     sudo apt-get install --assume-yes vcsh
   fi
@@ -44,12 +44,18 @@ fi
 
 # https://stackoverflow.com/a/32708121/715866
 while true; do
-    read -rp 'Use SSH or HTTPS to clone dotfiles (S/H)? ' PROTOCOL
-    case $PROTOCOL in
-        [Ss]) REMOTE='git@github.com:openjck/dotfiles.git'; break;;
-        [Hh]) REMOTE='https://github.com/openjck/dotfiles.git'; break;;
-        *) echo 'Please choose SSH (S) or HTTPS (H).';;
-    esac
+  read -rp 'Use SSH or HTTPS to clone dotfiles (S/H)? ' PROTOCOL
+  case $PROTOCOL in
+    [Ss])
+      REMOTE='git@github.com:openjck/dotfiles.git'
+      break
+      ;;
+    [Hh])
+      REMOTE='https://github.com/openjck/dotfiles.git'
+      break
+      ;;
+    *) echo 'Please choose SSH (S) or HTTPS (H).' ;;
+  esac
 done
 
 if ! vcsh clone "$REMOTE" dotfiles-openjck --quiet; then
