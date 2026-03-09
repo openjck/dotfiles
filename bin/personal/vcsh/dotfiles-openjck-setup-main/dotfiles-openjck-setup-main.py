@@ -78,6 +78,7 @@ config: Config = {
                     "renameutils",
                     "ripgrep",
                     "sd",
+                    "shfmt",
                     "tmux",
                     "toilet",
                     "vcsh",
