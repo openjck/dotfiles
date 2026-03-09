@@ -25,10 +25,10 @@ function __reuse-completions() {
   # For example, the "cd" command already has completion loaded at this point
   # and loading it again will modify the completion such that cdable_vars no
   # longer works.
-  if ! spec=$(complete -p "$original_command" 2> /dev/null); then
+  if ! spec=$(complete -p "$original_command" 2>/dev/null); then
     _completion_loader "$original_command"
 
-    if ! spec=$(complete -p "$original_command" 2> /dev/null); then
+    if ! spec=$(complete -p "$original_command" 2>/dev/null); then
       return 1
     fi
   fi

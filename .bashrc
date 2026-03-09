@@ -25,6 +25,7 @@ source "$XDG_CONFIG_HOME/bash/init/less.bash"
 source "$XDG_CONFIG_HOME/bash/init/nvm.bash"
 source "$XDG_CONFIG_HOME/bash/init/options.bash"
 source "$XDG_CONFIG_HOME/bash/init/prompt.bash"
+source "$XDG_CONFIG_HOME/bash/init/shfmt.bash"
 source "$XDG_CONFIG_HOME/bash/init/tmux.bash"
 
 # bat must be configured after less, since the BAT_PAGER environment variable

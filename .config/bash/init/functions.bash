@@ -21,7 +21,7 @@ function source-local-bash-functions() {
   # raise an error if no files match.
   #
   # https://stackoverflow.com/a/6364244/715866
-  if compgen -G "$XDG_CONFIG_HOME/bash/init/functions/local/*.bash" > /dev/null; then
+  if compgen -G "$XDG_CONFIG_HOME/bash/init/functions/local/*.bash" >/dev/null; then
     local FUNCTION
     for FUNCTION in "$XDG_CONFIG_HOME"/bash/init/functions/local/*.bash; do
       source "$FUNCTION"
