@@ -7,3 +7,7 @@ lint:
   uv run black --check .
   uv run pyright .
   uv run flake8 .
+
+clean:
+  # https://stackoverflow.com/a/41386937/715866
+  find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
