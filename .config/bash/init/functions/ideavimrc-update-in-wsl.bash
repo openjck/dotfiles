@@ -1,3 +1,8 @@
+# vim: ft=sh
+#
+# As of 2026-03-15, Neovim incorrectly detects this as an IdeaVim filetype when
+# the above modeline is not present.
+
 # Replace the WSL copy of the IdeaVim configuration file with the Windows copy
 # of it.
 #
