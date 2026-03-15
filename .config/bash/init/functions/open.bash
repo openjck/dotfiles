@@ -1,3 +1,6 @@
+# TODO: This should probably be rewritten and published as a shell script.
+# TODO: Add Mac support at the same time.
+
 function open() {
   local TARGET="${1:-$(pwd)}"
 
