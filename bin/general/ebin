@@ -75,7 +75,7 @@ fi
 
 eval "$(
   docopts --help=- -A ARGS : "$@" <<EOF
-Edit the first executable on the "\$PATH" with the given name.
+Edit the first executable on the \$PATH with the given name.
 
 The editor that is used is determined by the value of "\$EDITOR".
 
