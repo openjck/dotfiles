@@ -15,7 +15,7 @@ function ideavimrc-update-in-wsl() {
     rm "$TARGET"
     cp --no-preserve=mode,ownership "$D_WINDOWS_HOME/.ideavimrc" "$TARGET"
   else
-    >&2 echo 'Fatal error: WSL copy of IdeaVim configuration file contains uncommitted'
+    >&2 echo 'FATAL ERROR: WSL copy of IdeaVim configuration file contains uncommitted'
     >&2 echo '             changes. Commit them before proceeding.'
     return 1
   fi
