@@ -111,7 +111,9 @@ if [[ $found_project_root == true ]]; then
   echo "$project_root"
 else
   if [[ $PWD == / ]]; then
-    >&2 echo 'FATAL ERROR: Current directory is not in a project.'
+  >&2 cat <<'EOF'
+FATAL ERROR: Current directory is not a subdirectory of project.
+EOF
     exit 1
   else
     cd ..
