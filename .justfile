@@ -22,6 +22,7 @@ format: shell-format
 
 shell-lint:
   shfmt --list ${SHFMT_FORMATTING_FLAGS} {{paths}}
+  vcsh-shellcheck
 
 shell-format:
   shfmt --write --list ${SHFMT_FORMATTING_FLAGS} {{paths}}
