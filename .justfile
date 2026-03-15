@@ -7,7 +7,7 @@ xdg_config_home := if env('XDG_CONFIG_HOME', '') =~ '^/' {
   home / '.config'
 }
 
-dirs := (
+paths := (
   home / '.bashrc ' +
   home / 'bin ' +
   home / '.profile ' +
@@ -21,7 +21,7 @@ lint: shell-lint
 format: shell-format
 
 shell-lint:
-  shfmt --list ${SHFMT_FORMATTING_FLAGS} {{dirs}}
+  shfmt --list ${SHFMT_FORMATTING_FLAGS} {{paths}}
 
 shell-format:
-  shfmt --write --list ${SHFMT_FORMATTING_FLAGS} {{dirs}}
+  shfmt --write --list ${SHFMT_FORMATTING_FLAGS} {{paths}}
