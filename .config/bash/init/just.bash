@@ -1,2 +1,4 @@
 # Set up just completion.
-eval "$(just --completions bash)"
+if __command_exists just; then
+  eval "$(just --completions bash)"
+fi

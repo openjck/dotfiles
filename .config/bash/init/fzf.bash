@@ -12,4 +12,6 @@ export FZF_HISTORY_FILE=$XDG_DATA_HOME/fzf/history
 # Use `command fzf` so that the fzf alias is not used when doing this. I don't
 # think using the alias does any harm at the time of this writing, but depending
 # on what options are set, it theoretically could in the future.
-eval "$(command fzf --bash)"
+if __command_exists fzf; then
+  eval "$(command fzf --bash)"
+fi
