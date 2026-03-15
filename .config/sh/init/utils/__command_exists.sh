@@ -7,5 +7,5 @@
 # shell or loaded later, like cdv or _completion_loader.
 __command_exists() {
   COMMAND=$1
-  command -v "$COMMAND" > /dev/null
+  command -v "$COMMAND" >/dev/null
 }

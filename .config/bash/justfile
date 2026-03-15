@@ -1,5 +1,0 @@
-lint:
-  shfmt --list ${SHFMT_FORMATTING_FLAGS} .
-
-format:
-  shfmt --write --list ${SHFMT_FORMATTING_FLAGS} .
