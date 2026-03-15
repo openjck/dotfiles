@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+
+# project-root:
+# Print the path of the current project's root, or exit with an error.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
+# MIT License
+#
+# Copyright (c) 2023, 2026 John Karahalis
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+# Use Bash's unofficial "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -o errexit
+set -o nounset
+set -o pipefail
+IFS=$'\n\t'
+
+COMMAND_NAME=$(basename "$0")
+
+##########################
+# BEGIN DEPENDENCY CHECK #
+##########################
+
+DEPENDENCIES=(
+  docopts
+)
+
+MISSING_DEPENDENCIES=()
+
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" >/dev/null; then
+    MISSING_DEPENDENCIES+=("$DEPENDENCY")
+  fi
+done
+
+if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
+  >&2 fold --spaces <<EOF
+FATAL ERROR: The following are not installed. You must install them on your \
+own for "$COMMAND_NAME" to function properly.
+
+EOF
+  for DEPENDENCY in "${MISSING_DEPENDENCIES[@]}"; do
+    >&2 echo "  - $DEPENDENCY"
+  done
+  exit 1
+fi
+
+########################
+# END DEPENDENCY CHECK #
+########################
+
+eval "$(
+  docopts --help=- -A ARGS : "$@" <<EOF
+Print the path of the current project's root, or exit with an error.
+
+A project root is any directory that contains a subdirectory named ".git",
+".hg", or ".svn". If no parent directory contains any of those subdirectories,
+an error message is printed and this command exits with exit code 1.
+
+Usage:
+  $COMMAND_NAME
+  $COMMAND_NAME -h | --help
+
+Options:
+  -h, --help
+      Show this documentation
+EOF
+)"
+
+PROJECT_ROOT_DIRECTORIES=(
+  ".git"
+  ".hg"
+  ".svn"
+)
+
+found_project_root=false
+
+for DIRECTORY in "${PROJECT_ROOT_DIRECTORIES[@]}"; do
+  if [[ -d $DIRECTORY ]]; then
+    found_project_root=true
+    project_root=$PWD
+    break
+  fi
+done
+
+if [[ $found_project_root == true ]]; then
+  echo "$project_root"
+else
+  if [[ $PWD == / ]]; then
+    >&2 echo 'FATAL ERROR: Current directory is not in a project.'
+    exit 1
+  else
+    cd ..
+    $COMMAND_NAME
+  fi
+fi
