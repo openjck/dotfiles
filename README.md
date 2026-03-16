@@ -12,13 +12,10 @@ Shell scripts that might be useful to others are stored in the
 [_bin/general_](bin/general) directory, whereas shell scripts that reflect my
 personal needs are stored in the [_bin/personal_](bin/personal) directory. The
 [_.config/bash/init/functions_](.config/bash/init/functions) directory contains
-little utilities that are also unlikely to be of direct use to others, as well
-as utilities that cannot realistically be implemented as shell scripts. (Some
+smaller commands that are also unlikely to be of direct use to others, as well
+as commands that cannot realistically be implemented as shell scripts. (Some
 things, like shadowing another command or navigating with `cd`, are difficult or
-impossible in to achieve in a shell script.) That said, some of the utilities in
-[_.config/bash/init/functions_](.config/bash/init/functions) could be
-re-implemented as shell scripts, and they may be more useful to others if they
-were. I hope to rewrite those utilities as shell scripts in the future.
+impossible in to achieve in a shell script.)
 
 I'm very pleased with the organization of those utilities. I've tried many
 methods of organizing aliases and functions, but this method, inspired by
