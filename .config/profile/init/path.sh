@@ -12,7 +12,6 @@ fi
 PATH="$HOME/.local/bin:$PATH"
 PATH="$HOME/bin/general:$PATH"
 PATH="$HOME/apps/appimage:$PATH"
-PATH="$HOME/bin/personal/flatpak:$PATH"
 PATH="$HOME/bin/personal/local/downloaded:$PATH"
 PATH="$HOME/bin/personal:$PATH"
 PATH="$HOME/bin/personal/vcsh:$PATH"
