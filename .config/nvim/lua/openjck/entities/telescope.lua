@@ -9,7 +9,7 @@ function exports.dotfiles()
       'bash',
       '-c',
       [[
-        vcsh-list-files
+        vcsh-list-all-files
       ]],
     }
   })
