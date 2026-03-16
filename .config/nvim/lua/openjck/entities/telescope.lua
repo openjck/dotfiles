@@ -9,7 +9,6 @@ function exports.dotfiles()
       'bash',
       '-c',
       [[
-        source "$XDG_CONFIG_HOME/bash/init/functions/vcsh-list-files.bash" && \
         vcsh-list-files
       ]],
     }
