@@ -103,7 +103,7 @@ By contrast, running "$COMMAND_NAME ls-files" would print the following:
   private-dotfile-3
 
 Usage:
-  $COMMAND_NAME COMMAND
+  $COMMAND_NAME COMMAND...
   $COMMAND_NAME -h | --help
 
 Options:
@@ -112,17 +112,11 @@ Options:
 EOF
 )"
 
+# Process variadic arguments.
+for ((I = 0; I < ARGS['COMMAND,#']; I++)); do
+  VCSH_ARGS+=("${ARGS["COMMAND,$I"]}")
+done
+
 for REPO in $(vcsh list); do
-  # We _want_ word splitting here, because the command and its options
-  # **cannot** be passed to vcsh as a single argument. For example, this does
-  # not work:
-  #
-  #   vcsh dotfiles-openjck "ls-files --deleted"
-  #
-  # but this does:
-  #
-  #   vcsh dotfiles-openjck ls-files --deleted
-  #
-  # shellcheck disable=SC2086
-  vcsh "$REPO" ${ARGS[COMMAND]}
+  vcsh "$REPO" "${VCSH_ARGS[@]}"
 done
