@@ -1,6 +1,3 @@
-# TODO: This should probably be rewritten and published as a shell script.
-# TODO: Add Mac support at the same time.
-
 function open() {
   local TARGET="${1:-$(pwd)}"
 
@@ -12,6 +9,10 @@ function open() {
   elif __command_exists xdg-open; then
     xdg-open "$TARGET"
   else
+    # macOS uses "open" to open files and directories.
+    #
+    # "open" is also the most appropriate fallback for everything else, since
+    # this function may be shadowing an existing command named "open".
     command open "$TARGET"
   fi
 }
