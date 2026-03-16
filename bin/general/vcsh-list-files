@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# vcsh-list-files:
-# Print all files in all vcsh repos without printing a header for each repo.
+# vcsh-list-files-relative:
+# Print files in vcsh repos, relative to the current directory, without headers.
 #
 # Installation instructions:
 # https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
@@ -76,13 +76,16 @@ fi
 
 eval "$(
   docopts --help=- -A ARGS : "$@" <<EOF
-Print all files in all vcsh repos without printing a header for each repo.
+Print files in vcsh repos, relative to the current directory, without headers.
 
-This works like "vcsh foreach ls-files", except that it doesn't print a header
-for each repo like "vcsh foreach ls-files" does at the time of this writing. At
-the time of this writing, "vcsh foreach ls-files" prints something like the
-following, assuming there are two vcsh repos configured, one named
-"alices-shared-dotfiles" and one named "alices-private-dotfiles":
+This works like "vcsh foreach ls-files", with some important differences. First,
+all files from all vcsh repos are printed, not just those in the current
+directory, and all file paths are shown relative to the current directory.
+Second, filenames are shown sorted. Finally, headers are not printed for each
+repo like "vcsh foreach ls-files" does at the time of this writing. At the time
+of this writing, "vcsh foreach ls-files" prints something like the following,
+assuming there are two vcsh repos configured, one named "alices-shared-dotfiles"
+and one named "alices-private-dotfiles":
 
   alices-shared-dotfiles:
   shared-dotfile-1
@@ -95,12 +98,18 @@ following, assuming there are two vcsh repos configured, one named
 
 By contrast, running "$COMMAND_NAME" would print the following:
 
-  shared-dotfile-1
-  shared-dotfile-2
-  shared-dotfile-3
+  ../parent-private-dotfile-1
+  ../parent-private-dotfile-2
+  ../parent-private-dotfile-3
+  ../parent-shared-dotfile-1
+  ../parent-shared-dotfile-2
+  ../parent-shared-dotfile-3
   private-dotfile-1
   private-dotfile-2
   private-dotfile-3
+  shared-dotfile-1
+  shared-dotfile-2
+  shared-dotfile-3
 
 Usage:
   $COMMAND_NAME
@@ -113,5 +122,5 @@ EOF
 )"
 
 for REPO in $(vcsh list); do
-  vcsh "$REPO" ls-files
+  vcsh "$REPO" ls-files "$HOME"
 done | sort --unique
