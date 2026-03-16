@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# vcsh-all:
-# Run a vcsh subcommand in all repos without printing a header for each repo.
+# vcsh-list-files:
+# Print all files in all vcsh repos without printing a header for each repo.
 #
 # Installation instructions:
 # https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
@@ -11,7 +11,7 @@
 
 # MIT License
 #
-# Copyright (c) 2023, 2025, 2026 John Karahalis
+# Copyright (c) 2024, 2026 John Karahalis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -76,13 +76,13 @@ fi
 
 eval "$(
   docopts --help=- -A ARGS : "$@" <<EOF
-Run a vcsh subcommand in all repos without printing a header for each repo.
+Print all files in all vcsh repos without printing a header for each repo.
 
-This works like "vcsh foreach" (e.g., "vcsh foreach ls-files"), except that it
-doesn't print a header for each repo like "vcsh foreach" does at the time of
-this writing. At the time of this writing, "vcsh foreach ls-files" prints
-something like the following, assuming there are two vcsh repos configured, one
-named "alices-shared-dotfiles" and one named "alices-private-dotfiles":
+This works like "vcsh foreach ls-files", except that it doesn't print a header
+for each repo like "vcsh foreach ls-files" does at the time of this writing. At
+the time of this writing, "vcsh foreach ls-files" prints something like the
+following, assuming there are two vcsh repos configured, one named
+"alices-shared-dotfiles" and one named "alices-private-dotfiles":
 
   alices-shared-dotfiles:
   shared-dotfile-1
@@ -93,7 +93,7 @@ named "alices-shared-dotfiles" and one named "alices-private-dotfiles":
   private-dotfile-2
   private-dotfile-3
 
-By contrast, running "$COMMAND_NAME ls-files" would print the following:
+By contrast, running "$COMMAND_NAME" would print the following:
 
   shared-dotfile-1
   shared-dotfile-2
@@ -103,7 +103,7 @@ By contrast, running "$COMMAND_NAME ls-files" would print the following:
   private-dotfile-3
 
 Usage:
-  $COMMAND_NAME COMMAND...
+  $COMMAND_NAME
   $COMMAND_NAME -h | --help
 
 Options:
@@ -112,11 +112,6 @@ Options:
 EOF
 )"
 
-# Process variadic arguments.
-for ((I = 0; I < ARGS['COMMAND,#']; I++)); do
-  VCSH_ARGS+=("${ARGS["COMMAND,$I"]}")
-done
-
 for REPO in $(vcsh list); do
-  vcsh "$REPO" "${VCSH_ARGS[@]}"
-done
+  vcsh "$REPO" ls-files
+done | sort --unique
