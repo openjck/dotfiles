@@ -44,7 +44,7 @@ Follow these steps to install _all_ of these files:
 1. Ensure `sudo` is installed and your user is able to run `sudo` commands
    successfully.
 2. Download the
-   [dotfiles-openjck-setup-bootstrap](./bin/personal/vcsh/dotfiles-openjck-setup-bootstrap)
+   [_dotfiles-openjck-setup-bootstrap_](./bin/personal/vcsh/dotfiles-openjck-setup-bootstrap)
    script.
 3. Make _dotfiles-openjck-setup-bootstrap_ executable.
 4. Run _dotfiles-openjck-setup-bootstrap_.
