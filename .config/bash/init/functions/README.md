@@ -34,8 +34,8 @@ keep all of these small, relatively insignificant commands in the same place.
 I could rewrite some of these commands to be more self-contained, so that they
 could more easily be used by others. For example, I could have a _general_
 subdirectory and a _personal_ subdirectory, with self-contained and
-general-interest commands like [`cdv`](./cdv) in the _general_ directory, as
-I do in my [_bin_ directory](../../../../bin). Maybe I'll do that some day.
+general-interest commands like [`cdv`](./cdv.bash) in the _general_ directory,
+as I do in my [_bin_ directory](../../../../bin). Maybe I'll do that some day.
 
 ## Use in shell scripts
 
