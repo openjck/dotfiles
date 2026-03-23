@@ -2,10 +2,10 @@
 # Change the directory and immediately print the contents of the new directory.
 #
 # Installation instructions:
-# TODO
+# https://github.com/openjck/dotfiles/blob/main/docs/functions.md#installation
 #
 # Usage instructions:
-# TODO
+# https://github.com/openjck/dotfiles/blob/main/docs/functions.md#usage
 
 # MIT License
 #
