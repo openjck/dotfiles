@@ -3,8 +3,10 @@ export D_INBOX=$HOME/LGTD/inboxes/main
 
 # Add environment variables for Bash functions.
 export D_BASH_FUNCTIONS=$XDG_CONFIG_HOME/bash/init/functions
-export D_BASH_FUNCTIONS_FLATPAK=$D_BASH_FUNCTIONS/flatpak
-export D_BASH_FUNCTIONS_LOCAL=$D_BASH_FUNCTIONS/local
+export D_BASH_FUNCTIONS_GENERAL=$XDG_CONFIG_HOME/bash/init/functions/general
+export D_BASH_FUNCTIONS_PERSONAL=$XDG_CONFIG_HOME/bash/init/functions/personal
+export D_BASH_FUNCTIONS_FLATPAK=$D_BASH_FUNCTIONS_PERSONAL/flatpak
+export D_BASH_FUNCTIONS_PERSONAL_LOCAL=$D_BASH_FUNCTIONS_PERSONAL/local
 
 # Add environment variables for ~/bin directories.
 export D_BIN=$HOME/bin
