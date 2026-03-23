@@ -9,8 +9,13 @@ Follow these steps to install a single Bash function:
 
 1. Choose where you will save your function. If you don't have any particular
    preference, a good location might be one that's out of the way, like
-   a directory named _~/.config/bash/functions_. To create a directory with that name, run
-   `mkdir -p "$HOME/.config/bash/functions"`.
+   a directory named _~/.config/bash/functions_. To create a directory with that
+   name, run the following:
+
+   ```shell
+   mkdir -p "$HOME/.config/bash/functions"
+   ```
+
 2. Download the function and save it to the location you chose in the previous
    step.
 3. Update your _~/.bashrc_ file to source that function. For example, if you
