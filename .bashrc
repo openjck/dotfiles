@@ -44,6 +44,7 @@ source "$XDG_CONFIG_HOME/bash/init/npm.bash"
 # "c" function reuses "cd" completion, which is altered when "cdable_vars" is
 # enabled.
 source "$XDG_CONFIG_HOME/bash/init/functions.bash"
+source "$XDG_CONFIG_HOME/bash/init/general-function-completions.bash"
 
 # For some reason, if `eval "$(fzf --bash)"` is run before functions.bash is
 # loaded, autocomplete for the "c" function will not work.

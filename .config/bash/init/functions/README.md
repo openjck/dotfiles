@@ -1,41 +1,18 @@
-These are custom commands which I find helpful when using Bash. They are almost
-exclusively used interactively, not in shell scripts, and most are pretty
-simple. The commands are written for my personal setup, my personal needs, and
-my personal preferences. Most are _not_ self-contained. For those reasons, these
-commands are somewhat unlikely to be of direct use to others, but some, like
-[`jump`](./jump.bash), [`cdv`](./cdv.bash), and
-[`p-search-all`](./p-search-all.bash) are neat and potentially worth using if
-detangled from the rest of my dotfile setup.
+These are custom commands I've written to make some tasks easier while using
+Bash. They are almost all used interactively, not in shell scripts, but they
+_can_ be used in shell scripts by following the instructions in the next
+section.
 
-These are not written as shell scripts in
-[_~/bin/personal_](../../../../bin/personal) in some cases out of necessity and
-in other cases because I find this more convenient. Regarding necessity, any
-command that shadows another command cannot easily be implemented as a shell
-script. For example, a command named `ls` that itself ran `ls --color=auto`
-would trigger an infinite loop unless the `$PATH` were intelligently modified
-before that call. In functions, by contrast, one can use the `command` command
-(e.g., `command ls --color=auto`) to call the _native_ `ls`, the one that isn't
-a function. Additionally, any command that navigates using `cd` cannot be
-implemented as a shell script, because shell scripts are executed in subshells,
-and navigating in a subshell does not affect the interactive parent shell that
-called the shell script. As for convenience, my approach here allows me to call
-`__reuse-completions` in the file that defines the command, which helps keep
-things organized. That wouldn't be possible if these were shell scripts for the
-same reason that navigation in shell scripts is problematic: calling
-`__reuse-completion` in the shell script would not affect the interactive parent
-shell that called the shell script. I would need one or more separate files in
-my Bash configuration which call `__reuse-completion` as needed.
+The commands in the _general_ directory are self-contained and may be useful to
+others, whereas the commands in the _personal_ directory are unlikely to be of
+any direct use to others. Because others are unlikely to use the commands in the
+_personal_ directory, they may or may not be self-contained.
 
-I could theoretically rewrite _some_ of these as shell scripts in
-[_~/bin/personal_](../../../../bin/personal), the ones that don't shadow
-commands, don't use `cd`, and don't call `__reuse-completions`, but I'd rather
-keep all of these small, relatively insignificant commands in the same place.
+That said, as of 2026-03-23, there are still many commands in the _personal_
+directory which can be rewritten and shared in the _general_ directory. I will
+be working on that over time.
 
-I could rewrite some of these commands to be more self-contained, so that they
-could more easily be used by others. For example, I could have a _general_
-subdirectory and a _personal_ subdirectory, with self-contained and
-general-interest commands like [`cdv`](./cdv.bash) in the _general_ directory,
-as I do in my [_bin_ directory](../../../../bin). Maybe I'll do that some day.
+Please see the READMEs in each directory for more information.
 
 ## Use in shell scripts
 

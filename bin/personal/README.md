@@ -2,10 +2,9 @@ These scripts are **not** secret or private. I haven't made a mistake by
 publishing them.
 
 Rather, these scripts are written for my personal setup, my personal needs, and
-my personal preferences. It's pretty unlikely you'll want to run any of these
-with them.
-can from it. As another once said, "I hope you find your explorations
-satisfying."
+my personal preferences. It's unlikely you'll want to run any of these scripts
+as-is, so I didn't bother to make them all self-contained. Even still, I'm
+sharing them here so that you can learn from them if you'd like to.
 
 For general-purpose scripts that you _may_ be interested in downloading and
 using, please see the [_general_](../general) directory.
