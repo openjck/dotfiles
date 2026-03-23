@@ -1,23 +1,28 @@
-These are my public configuration files, shell scripts, and more. Nothing here
-is especially groundbreaking or innovative, but I take pleasure in crafting
-small, useful, beautiful tools with great love and care and with great attention
-to detail. I'm sharing these things for the benefit of others, and I sincerely
-hope others find them useful.
+These are my shell scripts, other custom commands, configuration files, and
+more. Nothing here is especially groundbreaking or innovative, but I take
+pleasure in crafting small, useful, beautiful tools with great love and care and
+with great attention to detail. I'm sharing these things for the benefit of
+others, and I sincerely hope others find them useful.
 
-My shell scripts are well-documented, and readers may also be interested in my
-methods of organization, my Bash functions, my Neovim configuration, my tmux
-configuration, and my Git configuration, among other things.
+My shell scripts and other custom commands are well-documented, and readers may
+also be interested in my methods of organization, my Bash configuration, my
+Neovim configuration, my tmux configuration, and my Git configuration, among
+other things.
 
 Shell scripts that might be useful to others are stored in the
 [_bin/general_](bin/general) directory, whereas shell scripts that reflect my
 personal needs are stored in the [_bin/personal_](bin/personal) directory. The
 [_.config/bash/init/functions_](.config/bash/init/functions) directory contains
-smaller commands that are also unlikely to be of direct use to others, as well
-as commands that cannot realistically be implemented as shell scripts. (Some
-things, like shadowing another command or navigating with `cd`, are difficult or
-impossible in to achieve in a shell script.)
+custom commands which generally cannot be implemented as shell scripts. It is
+split in the same way: the
+[_.../functions/general_](.config/bash/init/functions/general) directory
+contains commands that may be useful to others, whereas the
+[_.../functions/personal_](.config/bash/init/functions/personal) directory
+contains commands that reflect my personal needs. Please see the README files in
+those directories for more information, including installation and usage
+instructions.
 
-I'm very pleased with the organization of those utilities. I've tried many
+I'm very pleased with the organization of those commands. I've tried many
 methods of organizing aliases and functions, but this method, inspired by
 [fish](https://github.com/fish-shell/fish-shell), feels the most natural. No
 aliases are used. Everything is a function, and every function has its own file.

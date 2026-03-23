@@ -22,7 +22,7 @@ without providing its full path. For example, if you installed the
 _rename-files-sequentially_ script, you'll be able to run the following from
 anywhere:
 
-```
+```shell
 $ rename-files-sequentially
 ```
 
