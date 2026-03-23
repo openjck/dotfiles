@@ -3,6 +3,23 @@
 In this project, Bash functions are used to provide custom commands that, for
 one reason or another, are not implemented as shell scripts.
 
+### Requirements
+
+To use the functions from this project, you must be using Bash as your
+interactive shell. Some operating systems, like macOS, now ship with Zsh by
+default instead.
+
+To determine what shell you're using, run the following:
+
+```shell
+echo $SHELL
+```
+
+If you're using Zsh or another shell, the instructions below may work with some
+modifications. Alternatively, you could follow the instructions below directly
+as-is, then follow the instructions for non-Bash shells in the section titled
+["Usage from non-Bash shells"](#usage-from-non-bash-shells).
+
 ### Installation
 
 Follow these steps to install a single Bash function:
@@ -36,6 +53,10 @@ function, you'll be able to run the following from anywhere:
 $ cdv
 ```
 
+If you're using a shell other than Bash, the above command would not work, but
+there _would be_ other ways to run it. See the section titled ["Usage from
+non-Bash shells"](#usage-from-non-bash-shells) for more information.
+
 #### Installing dependencies
 
 Some functions depend on other external programs, like `rsync`, `fd`, and
@@ -52,6 +73,25 @@ documentation. For example:
 
 ```shell
 $ cdv --help
+```
+
+#### Usage from non-Bash shells
+
+If you normally use Zsh or any other shell that isn't Bash, but you followed the
+instructions above as-is, with no modifications, you must instead run the
+following:
+
+```shell
+$ bash # Enters Bash, leaving all Zsh features and config behind...
+$ cdv
+```
+
+You might be able to use the following simpler approach for _some_ functions.
+Many functions, however, will not behave as intended when run this way,
+including functions that change the directory:
+
+```shell
+$ bash -ic example-function-name
 ```
 
 ### Compatibility
