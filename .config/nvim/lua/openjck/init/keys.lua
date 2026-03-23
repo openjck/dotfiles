@@ -9,3 +9,7 @@ vim.keymap.set('n', 'gQ', '<Nop>', { noremap = true })
 vim.keymap.set('n', 'q:', '<Nop>', { noremap = true })
 vim.keymap.set('n', 'q/', '<Nop>', { noremap = true })
 vim.keymap.set('n', 'q?', '<Nop>', { noremap = true })
+
+if vim.opt.diff:get() then
+  vim.keymap.set('n', '<F1>', '<Cmd>quitall<CR>', { noremap = true })
+end
