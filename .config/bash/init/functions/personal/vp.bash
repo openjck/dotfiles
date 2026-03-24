@@ -2,4 +2,4 @@ function vp() {
   vcsh dotfiles-openjck "$@"
 }
 
-__reuse-completions vcsh vp
+__reuse-completions git vp
