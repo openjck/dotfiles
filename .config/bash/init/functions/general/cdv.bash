@@ -1,5 +1,5 @@
 # cdv:
-# Change the directory and immediately print the contents of the new directory.
+# Change the directory and immediately list the contents of the new directory.
 #
 # Installation instructions:
 # https://github.com/openjck/dotfiles/blob/main/docs/functions.md#installation
@@ -32,17 +32,17 @@
 function cdv() {
   if [[ $* == -h || $* == --help ]]; then
     fold --spaces <<EOF
-Change the directory and immediately print the contents of the new directory.
+Change the directory and immediately list the contents of the new directory.
 
 All arguments are passed through to the "cd" command, unless exactly one
 argument named "-h" or "--help" is passed, since that instead prints this help
 documentation. As with the "cd" command, if no arguments are provided, the
 current directory is changed to the home directory.
 
-If the new directory is empty, "ls --all" is run to print the contents of the
+If the new directory is empty, "ls --all" is run to list the contents of the
 empty directory ("." and ".."), mainly to indicate that the directory is empty.
 
-If the new directory is _not_ empty, "ls" is run with no arguments to print the
+If the new directory is _not_ empty, "ls" is run with no arguments to list the
 contents of the directory.
 
 Usage:
@@ -57,6 +57,10 @@ EOF
   fi
 
   if cd "$@"; then
+    # Running "ls" in very large directories can be slow, even when "find" is
+    # fast enough.
+    local MAX_FILES_TO_LIST=100000
+
     local NUM_VISIBLE_FILES
     NUM_VISIBLE_FILES=$(
       find . -maxdepth 1 -not -path '\.' -not -path '\./\.*' | wc --lines
@@ -64,6 +68,14 @@ EOF
 
     if ((NUM_VISIBLE_FILES == 0)); then
       ls --all
+    elif ((NUM_VISIBLE_FILES > MAX_FILES_TO_LIST)); then
+      local MAX_HUMAN_READABLE
+      MAX_HUMAN_READABLE=$(numfmt --grouping $MAX_FILES_TO_LIST)
+
+      fold --spaces <<EOF
+cdv: More than $MAX_HUMAN_READABLE files are present in this directory. "ls"
+     might be slow, so it has not been run automatically.
+EOF
     else
       ls
     fi
