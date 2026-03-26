@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# indent:
+# repl:
 # Launch a REPL by providing the name of a language or runtime.
 #
 # Installation instructions:
