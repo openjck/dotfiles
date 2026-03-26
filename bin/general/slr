@@ -47,6 +47,7 @@ COMMAND_NAME=$(basename "$0")
 
 DEPENDENCIES=(
   docopts
+  sl
 )
 
 MISSING_DEPENDENCIES=()
