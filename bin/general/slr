@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+
+# slr:
+# Run sl (Steam Locomotive) with display-related options applied randomly.
+#
+# Installation instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#installation
+#
+# Usage instructions:
+# https://github.com/openjck/dotfiles/blob/main/docs/scripts.md#usage
+
+# MIT License
+#
+# Copyright (c) 2023, 2024, 2026 John Karahalis
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+# Use Bash's unofficial "strict mode."
+#
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -o errexit
+set -o nounset
+set -o pipefail
+IFS=$'\n\t'
+
+COMMAND_NAME=$(basename "$0")
+
+##########################
+# BEGIN DEPENDENCY CHECK #
+##########################
+
+DEPENDENCIES=(
+  docopts
+)
+
+MISSING_DEPENDENCIES=()
+
+for DEPENDENCY in "${DEPENDENCIES[@]}"; do
+  if ! command -v "$DEPENDENCY" >/dev/null; then
+    MISSING_DEPENDENCIES+=("$DEPENDENCY")
+  fi
+done
+
+if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
+  >&2 fold --spaces <<EOF
+FATAL ERROR: The following are not installed. You must install them on your \
+own for "$COMMAND_NAME" to function properly.
+
+EOF
+  for DEPENDENCY in "${MISSING_DEPENDENCIES[@]}"; do
+    >&2 echo "  - $DEPENDENCY"
+  done
+  exit 1
+fi
+
+########################
+# END DEPENDENCY CHECK #
+########################
+
+eval "$(
+  docopts --help=- -A ARGS : "$@" <<EOF
+Run sl (Steam Locomotive) with display-related options applied randomly.
+
+SLR stands for Steam Locomotive Random.
+
+The locomotive displayed by sl will randomly have an accident, be of a smaller
+size, and/or fly, to maximize typo amusement.
+
+Unfortunately, docopts, the argument-parsing library that is used by this
+command, exits with an error message if unknown options are provided. There is
+no apparent way to change that behavior, other than manually supporting every
+option and ignoring them. That could be done, but it's not done at this time.
+For that reason, this command will exit with an error message if any _other_
+option intended for "ls" is provided. To work around that, you can create
+a function in your "~/.bashrc" file which drops the extra arguments, like this:
+
+  # Note that the name is slr, with the r, so that it has the same name as this
+  # executable.
+  function slr() {
+    slr -e
+  }
+
+  or
+
+  # Note that the name is sl, without the r, so that it maximizes amusement when
+  # "ls" typos occur.
+  function sl() {
+    slr -e
+  }
+
+Notice that the arguments to the functions ("\$@") are not passed through to the
+slr executable.
+
+Usage:
+  $COMMAND_NAME [-e]
+  $COMMAND_NAME -h | --help
+
+Options:
+  -e
+      Allow interrupt by Ctrl+C. (This argument is passed through to sl as-is.)
+  -h, --help
+      Show this documentation
+EOF
+)"
+
+# All display-related options that are accepted by Debian's version of sl.
+SL_DISPLAY_OPTIONS=(
+  '-a'
+  '-l'
+  '-F'
+)
+
+for SL_DISPLAY_OPTION in "${SL_DISPLAY_OPTIONS[@]}"; do
+  # Flip a coin...
+  if [[ $((RANDOM % 2)) -eq 0 ]]; then
+    ARGUMENTS+=("$SL_DISPLAY_OPTION")
+  fi
+done
+
+if ${ARGS[-e]}; then
+  ARGUMENTS+=("-e")
+fi
+
+sl "${ARGUMENTS[@]}"
