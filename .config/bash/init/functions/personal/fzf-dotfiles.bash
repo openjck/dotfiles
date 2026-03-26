@@ -8,5 +8,5 @@ function fzf-dotfiles() {
   #
   # Note that this doesn't affect the "<Leader>fd" command in Neovim, since that
   # uses Telescope, not fzf.
-  vcsh-list-files | fzf --tiebreak=end
+  vcsh-list-all-files | fzf --tiebreak=end
 }
