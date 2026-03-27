@@ -29,32 +29,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function mkcd() {
-  if [[ $* == -h || $* == --help ]]; then
-    fold --spaces <<EOF
-Make a directory (mkdir) and immediately navigate (cd) to it.
-
-DIR will be created even if its parent directories do not yet exist. For
-example, if the directory "animals" does not exist, and the following command is
-run:
-
-  ${FUNCNAME[0]} animals/vertebrates/elephants
-
-...then the directory "animals" will be created, the directory
-"animals/vertebrates" will be created, and the directory
-"animals/vertebrates/elephants" will also be created. Then, the current
-directory will be changed to "animals/vertebrates/elephants".
-
-Usage:
-  ${FUNCNAME[0]} DIR
-  ${FUNCNAME[0]} -h | --help
-
-Options:
-  -h, --help
-      Show this documentation
-EOF
-    return 0
-  fi
+# Usage:
+#   mkcd DIR
+#
+# DIR will be created even if its parent directories do not yet exist. For
+# example, if the directory "animals" does not exist, and the following command
+# is run:
+#
+#   mkcd animals/vertebrates/elephants
+#
+# ...then the directory "animals" will be created, the directory
+# "animals/vertebrates" will be created, and the directory
+# "animals/vertebrates/elephants" will also be created. Then, the current
+# directory will be changed to "animals/vertebrates/elephants".
 
   local DIRECTORY=$1
 
