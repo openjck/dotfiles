@@ -8,11 +8,47 @@ others, whereas the commands in the _personal_ directory are unlikely to be of
 any direct use to others. Because others are unlikely to use the commands in the
 _personal_ directory, they may or may not be self-contained.
 
-That said, as of 2026-03-23, there are still many commands in the _personal_
-directory which can be rewritten and shared in the _general_ directory. I will
-be working on that over time.
-
 Please see the READMEs in each directory for more information.
+
+## Reasons for using functions
+
+These functions are not written as Bash shell scripts strictly out of necessity.
+For each function, one or more of the following is true:
+
+- The function shadows an existing command, and shadowing an existing command in
+  a Bash shell script is difficult, awkward, and/or fragile. It can be done, but
+  only by intelligently modifying the `$PATH`, providing the full path to the
+  command being shadowed, or using some other cumbersome workaround that may not
+  work as expected in all situations. Additionally, the indirection workaround
+  that "sl" uses (create a Bash script named "foo" which calls the command being
+  shadowed, then make this function simply call "foo") would be problematic
+  because it would not allow the code to be self-contained (which is important
+  for _general_ functions and scripts) and/or because the code is so trivial
+  that it wouldn't be worth the effort.
+- The function passes all arguments as-is to the command being shadowed. It
+  doesn't appear to be possible to do that while using docopts, and all scripts
+  published in the [_~/bin/general_](../../../../bin/general) directory use
+  docopts.
+- The function changes the directory of the interactive shell being used, and
+  that can't be done by a Bash shell script, since Bash shell scripts are
+  executed in subshells and subshells do not affect their parent shells.
+- The command is insignificant enough that it just feels most appropriate for it
+  to be a function. (These could theoretically be rewritten as Bash scripts in
+  the [_~/bin/personal_](../../../../bin/personal) directory, but they just feel
+  like they fit here.)
+- For _personal_ functions which are not meant to be self-contained, the
+  approach being used allows me to call `__reuse-completions` in the file that
+  defines the command, which helps keep things organized. That wouldn't be
+  possible if these were shell scripts; calling `__reuse-completion` in the
+  shell script would not affect the interactive parent shell that called the
+  shell script. I would need one or more separate files in my Bash configuration
+  which call `__reuse-completion` as needed.
+
+## Reason for not using docopts
+
+These functions do not use docopts, like scripts in the
+[_~/bin/general_](../../../../bin/general) directory do, because docopts does
+not support functions.
 
 ## Use in shell scripts
 
