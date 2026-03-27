@@ -29,33 +29,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# Usage:
+#   cdv [CD_ARGUMENTS]
+#
+# All arguments are passed through to the "cd" command, unless exactly one
+# argument named "-h" or "--help" is passed, since that instead prints this help
+# documentation. As with the "cd" command, if no arguments are provided, the
+# current directory is changed to the home directory.
+#
+# If the new directory is empty, "ls --all" is run to list the contents of the
+# empty directory ("." and ".."), mainly to indicate that the directory is
+# empty.
+#
+# If the new directory is _not_ empty, "ls" is run with no arguments to list the
+# contents of the directory.
+
 function cdv() {
-  if [[ $* == -h || $* == --help ]]; then
-    fold --spaces <<EOF
-Change the directory and immediately list the contents of the new directory.
-
-All arguments are passed through to the "cd" command, unless exactly one
-argument named "-h" or "--help" is passed, since that instead prints this help
-documentation. As with the "cd" command, if no arguments are provided, the
-current directory is changed to the home directory.
-
-If the new directory is empty, "ls --all" is run to list the contents of the
-empty directory ("." and ".."), mainly to indicate that the directory is empty.
-
-If the new directory is _not_ empty, "ls" is run with no arguments to list the
-contents of the directory.
-
-Usage:
-  ${FUNCNAME[0]} [CD_ARGUMENTS]
-  ${FUNCNAME[0]} -h | --help
-
-Options:
-  -h, --help
-      Show this documentation
-EOF
-    return 0
-  fi
-
   if cd "$@"; then
     # Running "ls" in very large directories can be slow, even when "find" is
     # fast enough.
