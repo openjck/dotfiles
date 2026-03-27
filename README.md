@@ -9,20 +9,30 @@ also be interested in my methods of organization, my Bash configuration, my
 Neovim configuration, my tmux configuration, and my Git configuration, among
 other things.
 
-Shell scripts that might be useful to others are stored in the
-[_bin/general_](bin/general) directory, whereas shell scripts that reflect my
-personal needs are stored in the [_bin/personal_](bin/personal) directory. The
-[_.config/bash/init/functions_](.config/bash/init/functions) directory contains
-custom commands which generally cannot be implemented as shell scripts. It is
-split in the same way: the
-[_.../functions/general_](.config/bash/init/functions/general) directory
-contains commands that may be useful to others, whereas the
-[_.../functions/personal_](.config/bash/init/functions/personal) directory
-contains commands that reflect my personal needs. Please see the README files in
-those directories for more information, including installation and usage
-instructions.
+## Tools that others may find useful
 
-I'm very pleased with the organization of those commands. I've tried many
+### Bash shell scripts
+
+Bash shell scripts that might be useful to others are stored in the
+[_bin/general_](bin/general) directory. They are written to be as general and as
+self-contained as possible, so that others can easily use them. Please see the
+README in that directory for more information.
+
+### Bash functions
+
+The [_.config/bash/init/functions_](.config/bash/init/functions) directory
+contains custom commands which generally cannot be implemented as Bash shell
+scripts for one reason or another.
+
+Bash functions that might be useful to others are stored in the
+[_.../functions/general_](.config/bash/init/functions/general) directory. Like
+the _general_ Bash scripts, the _general_ functions are written to be as general
+and as self-contained as possible, so that others can easily use them. Please
+see the README in that directory for more information.
+
+## Organization of Bash functions
+
+I'm very pleased with the organization of my Bash functions. I've tried many
 methods of organizing aliases and functions, but this method, inspired by
 [fish](https://github.com/fish-shell/fish-shell), feels the most natural. No
 aliases are used. Everything is a function, and every function has its own file.
@@ -31,14 +41,11 @@ One weakness with the organization of my Bash configuration is that loading an
 interactive shell is pretty slow, relative to loading an unconfigured Bash
 session, taking about 1-2 seconds on my laptop. That poor performance may have
 something to do with how many files need to be read, although a quick experiment
-in concatenating the files did not seem to speed things up dramatically. Some
-day, if it becomes a real problem, I could look into adding a build step for the
-Bash configuration that concatenates and/or minifies all text into a single
-_.bashrc_ file. For now, it's not worth the effort. Waiting two seconds for
-a Bash shell to load is never a meaningful bottleneck for me.
-
-To ask questions or discuss these files, please use the
-[Discussions](https://github.com/openjck/dotfiles/discussions) page.
+in concatenating the files did not seem to speed things up dramatically.
+Alternatively, the poor performance may be related to how many functions are
+loaded. In either case, it's something I could look into in the future. For now,
+it's not worth the effort. Waiting two seconds for a Bash shell to load is never
+a meaningful bottleneck for me.
 
 ## Installation
 
@@ -56,10 +63,15 @@ Follow these steps to install _all_ of these files:
 
 ### Single shell script
 
-See the [shell script documentation](docs/scripts.md#installation) for
-information on how to install a single shell script.
+See the [shell script documentation](docs/scripts.md) for information on how to
+install and use single shell script.
 
-## Usage
+### Single Bash function
 
-See the [shell script documentation](docs/scripts.md#usage) for information on
-how to use shell scripts.
+See the [function documentation](docs/functions.md) for information on how to
+install and use a single Bash function.
+
+## Getting in touch
+
+To ask questions or discuss these files, please use the
+[Discussions](https://github.com/openjck/dotfiles/discussions) page.
