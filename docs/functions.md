@@ -68,12 +68,11 @@ information on how to install them, or search "install [program] on
 
 ### Usage
 
-Pass the `-h` or `--help` option to any function to read its detailed
-documentation. For example:
-
-```shell
-$ cdv --help
-```
+Functions do not use [docopts](https://github.com/docopt/docopts) because
+docopts does not support functions. For that reason, a `-h` or `--help` option
+cannot be passed to functions to print their help documentation. Instead, open
+the file and look for the comment block that begins with the word "Usage:". It
+will appear below the MIT license and above the function definition.
 
 #### Usage from non-Bash shells
 
