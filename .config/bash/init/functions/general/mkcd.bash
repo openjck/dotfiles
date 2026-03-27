@@ -43,6 +43,7 @@
 # "animals/vertebrates/elephants" will also be created. Then, the current
 # directory will be changed to "animals/vertebrates/elephants".
 
+function mkcd() {
   local DIRECTORY=$1
 
   # When the `--parents` option is used, `mkdir` does not exit with an error
