@@ -97,26 +97,30 @@ PROJECT_ROOT_DIRECTORIES=(
   ".svn"
 )
 
-found_project_root=false
+project_root=''
 
-for DIRECTORY in "${PROJECT_ROOT_DIRECTORIES[@]}"; do
-  if [[ -d $DIRECTORY ]]; then
-    found_project_root=true
-    project_root=$PWD
-    break
-  fi
-done
+function find_project_root() {
+  local DIRECTORY
 
-if [[ $found_project_root == true ]]; then
-  echo "$project_root"
-else
-  if [[ $PWD == / ]]; then
-    >&2 cat <<'EOF'
+  for DIRECTORY in "${PROJECT_ROOT_DIRECTORIES[@]}"; do
+    if [[ -d $DIRECTORY ]]; then
+      project_root=$PWD
+      break
+    fi
+  done
+
+  if [[ -n $project_root ]]; then
+    echo "$project_root"
+  else
+    if [[ $PWD == / ]]; then
+      >&2 cat <<'EOF'
 FATAL ERROR: Current directory is not a subdirectory of project.
 EOF
-    exit 1
-  else
-    cd ..
-    $COMMAND_NAME
+      exit 1
+    else
+      (cd .. && find_project_root)
+    fi
   fi
-fi
+}
+
+find_project_root
