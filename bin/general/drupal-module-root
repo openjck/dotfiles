@@ -92,17 +92,20 @@ Options:
 EOF
 )"
 
-# https://stackoverflow.com/a/1371283/715866
-DIRECTORY_NAME=${PWD##*/}
+function find_drupal_module_root() {
+  # https://stackoverflow.com/a/1371283/715866
+  DIRECTORY_NAME=${PWD##*/}
 
-if [[ -f "$DIRECTORY_NAME.info.yml" ]]; then
-  echo "$PWD"
-elif [[ $PWD == / ]]; then
-  >&2 cat <<'EOF'
+  if [[ -f "$DIRECTORY_NAME.info.yml" ]]; then
+    echo "$PWD"
+  elif [[ $PWD == / ]]; then
+    >&2 cat <<'EOF'
 FATAL ERROR: Current directory is not a subdirectory of a Drupal module.
 EOF
-  exit 1
-else
-  cd ..
-  $COMMAND_NAME
-fi
+    exit 1
+  else
+    (cd .. && find_drupal_module_root)
+  fi
+}
+
+find_drupal_module_root
