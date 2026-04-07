@@ -24,6 +24,7 @@ PATH="$HOME/.local/share/flatpak/exports/bin:$PATH"
 PATH="$HOME/bin/personal/local/downloaded:$PATH"
 PATH="$HOME/bin/personal:$PATH"
 PATH="$HOME/bin/personal/vcsh:$PATH"
+PATH="$HOME/bin/personal/private:$PATH"
 PATH="$HOME/bin/personal/local:$PATH"
 PATH="$HOME/bin/personal/local/temporary:$PATH"
 

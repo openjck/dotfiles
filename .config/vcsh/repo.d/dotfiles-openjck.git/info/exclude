@@ -4,5 +4,6 @@
 .ssh/*
 !.ssh/config
 
-# Ignore all local configuration files.
+# Ignore all local dotfiles and all private dotfiles.
 *local*
+*private*
