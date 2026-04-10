@@ -108,12 +108,53 @@ EOF
     exit 1
   fi
 
-  git switch "${ARGS[--branch]}"
-  git pull
-  npm audit || true
-  npm audit fix
-  git add -u
-  git commit -m "${ARGS[--message]}"
-  git push
-  git switch -
+  STARTING_BRANCH=$(git branch --show-current)
+
+  if [[ $STARTING_BRANCH == "${ARGS[--branch]}" ]]; then
+    DIFFERENT_STARTING_BRANCH=false
+  else
+    DIFFERENT_STARTING_BRANCH=true
+  fi
+
+  if [[ $DIFFERENT_STARTING_BRANCH = true ]]; then
+    echo "Switching to branch \"${ARGS[--branch]}\"..."
+    git switch --quiet "${ARGS[--branch]}"
+  else
+    echo "Already on branch \"${ARGS[--branch]}\"."
+  fi
+
+  echo -n 'Running "git pull"... '
+  git pull --quiet
+  echo 'done.'
+
+  echo -n 'Running "npm clean-install"... '
+  npm clean-install
+  echo 'done.'
+
+  echo -n 'Running "npm audit"... '
+
+  if npm audit >/dev/null; then
+    echo 'done.'
+    echo '"npm audit" reported no issues. There is nothing to do.'
+  else
+    echo 'done.'
+    echo '"npm audit" failed.'
+
+    echo -n 'Running "npm audit fix"... '
+    npm audit fix >/dev/null
+    echo 'done.'
+
+    echo -n 'Committing fixes... '
+    git add -u
+    git commit -m "${ARGS[--message]}"
+    echo 'done.'
+
+    echo -n 'Pushing commit... '
+    git push --quiet
+    echo 'done.'
+  fi
+
+  echo -n "Switching back to branch \"$STARTING_BRANCH\"... "
+  git switch --quiet -
+  echo 'done.'
 fi
