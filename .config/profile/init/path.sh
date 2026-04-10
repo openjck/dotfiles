@@ -1,5 +1,10 @@
 # shellcheck shell=sh
 
+path_prepend() {
+  ADDITION=$1
+  PATH="$ADDITION:$PATH"
+}
+
 # Line order matters here.
 #
 # We are **prepending** to $PATH, so each line takes priority over lines that
@@ -14,18 +19,18 @@
 # for system-wide Flatpak apps, and the second is for user-installed Flatpak
 # apps. Due to their order, user-installed Flatpak apps take precedence.
 if __command_exists ruby; then
-  PATH=$(ruby -e 'puts Gem.user_dir')/bin:$PATH
+  path_prepend "$(ruby -e 'puts Gem.user_dir')/bin"
 fi
-PATH="$HOME/.local/bin:$PATH"
-PATH="$HOME/bin/general:$PATH"
-PATH="$HOME/apps/appimage:$PATH"
-PATH="/var/lib/flatpak/exports/bin:$PATH"
-PATH="$HOME/.local/share/flatpak/exports/bin:$PATH"
-PATH="$HOME/bin/personal/local/downloaded:$PATH"
-PATH="$HOME/bin/personal:$PATH"
-PATH="$HOME/bin/personal/vcsh:$PATH"
-PATH="$HOME/bin/personal/private:$PATH"
-PATH="$HOME/bin/personal/local:$PATH"
-PATH="$HOME/bin/personal/local/temporary:$PATH"
+path_prepend "$HOME/.local/bin"
+path_prepend "$HOME/bin/general"
+path_prepend "$HOME/apps/appimage"
+path_prepend /var/lib/flatpak/exports/bin
+path_prepend "$HOME/.local/share/flatpak/exports/bin"
+path_prepend "$HOME/bin/personal/local/downloaded"
+path_prepend "$HOME/bin/personal"
+path_prepend "$HOME/bin/personal/vcsh"
+path_prepend "$HOME/bin/personal/private"
+path_prepend "$HOME/bin/personal/local"
+path_prepend "$HOME/bin/personal/local/temporary"
 
 export PATH
