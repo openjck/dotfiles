@@ -154,7 +154,9 @@ EOF
     echo 'done.'
   fi
 
-  echo -n "Switching back to branch \"$STARTING_BRANCH\"... "
-  git switch --quiet -
-  echo 'done.'
+  if [[ $DIFFERENT_STARTING_BRANCH = true ]]; then
+    echo -n "Switching back to branch \"$STARTING_BRANCH\"... "
+    git switch --quiet -
+    echo 'done.'
+  fi
 fi
