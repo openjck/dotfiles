@@ -18,5 +18,5 @@ if vcsh dotfiles-openjck diff --quiet "$TARGET"; then
 else
   >&2 echo 'FATAL ERROR: WSL copy of IdeaVim configuration file contains uncommitted'
   >&2 echo '             changes. Commit them before proceeding.'
-  return 1
+  exit 1
 fi
