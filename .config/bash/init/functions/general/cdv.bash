@@ -63,7 +63,7 @@ function cdv() {
 
       fold --spaces <<EOF
 cdv: More than $MAX_HUMAN_READABLE files are present in this directory. "ls"
-     might be slow, so it has not been run automatically.
+might be slow, so it has not been run automatically.
 EOF
     else
       ls
