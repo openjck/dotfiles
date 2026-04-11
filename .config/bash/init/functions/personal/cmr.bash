@@ -1,3 +1,3 @@
 function cmr() {
-  cdv-module-root
+  cdv-drupal-module-root
 }
