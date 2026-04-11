@@ -116,7 +116,7 @@ EOF
     DIFFERENT_STARTING_BRANCH=true
   fi
 
-  if [[ $DIFFERENT_STARTING_BRANCH = true ]]; then
+  if [[ $DIFFERENT_STARTING_BRANCH == true ]]; then
     echo "Switching to branch \"${ARGS[--branch]}\"..."
     git switch --quiet "${ARGS[--branch]}"
   else
@@ -154,7 +154,7 @@ EOF
     echo 'done.'
   fi
 
-  if [[ $DIFFERENT_STARTING_BRANCH = true ]]; then
+  if [[ $DIFFERENT_STARTING_BRANCH == true ]]; then
     echo -n "Switching back to branch \"$STARTING_BRANCH\"... "
     git switch --quiet -
     echo 'done.'

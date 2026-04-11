@@ -104,4 +104,4 @@ EOF
 )"
 
 FILE=$(which "${ARGS[BIN]}")
-${ARGS[--print-command]} "$FILE"
+${ARGS['--print-command']} "$FILE"
