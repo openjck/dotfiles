@@ -9,33 +9,38 @@ fi
 # and files that are sourced from this file.
 source "$XDG_CONFIG_HOME/bash/bootstrap/source_utils.bash"
 
+function source_init() {
+  local FILENAME=$1
+  source "$XDG_CONFIG_HOME/bash/init/$FILENAME.bash"
+}
+
 # Homebrew needs to be configured before anything that was installed by it
 # (e.g., fzf) is used, including during configuration.
-source "$XDG_CONFIG_HOME/bash/init/homebrew.bash"
+source_init homebrew
 
 # Source configurations.
-source "$XDG_CONFIG_HOME/bash/init/asdf.bash"
-source "$XDG_CONFIG_HOME/bash/init/bash-completion.bash"
-source "$XDG_CONFIG_HOME/bash/init/bin-completions.bash"
-source "$XDG_CONFIG_HOME/bash/init/directories.bash"
-source "$XDG_CONFIG_HOME/bash/init/files.bash"
-source "$XDG_CONFIG_HOME/bash/init/gpg.bash"
-source "$XDG_CONFIG_HOME/bash/init/history.bash"
-source "$XDG_CONFIG_HOME/bash/init/just.bash"
-source "$XDG_CONFIG_HOME/bash/init/less.bash"
-source "$XDG_CONFIG_HOME/bash/init/nvm.bash"
-source "$XDG_CONFIG_HOME/bash/init/options.bash"
-source "$XDG_CONFIG_HOME/bash/init/prompt.bash"
-source "$XDG_CONFIG_HOME/bash/init/shfmt.bash"
-source "$XDG_CONFIG_HOME/bash/init/tmux.bash"
+source_init asdf
+source_init bash-completion
+source_init bin-completions
+source_init directories
+source_init files
+source_init gpg
+source_init history
+source_init just
+source_init less
+source_init nvm
+source_init options
+source_init prompt
+source_init shfmt
+source_init tmux
 
 # bat must be configured after less, since the BAT_PAGER environment variable
 # includes the value of the $LESS environment variable.
-source "$XDG_CONFIG_HOME/bash/init/bat.bash"
+source_init bat
 
 # npm must be configured after nvm, or npm completion will not use the version
 # of npm provided by nvm.
-source "$XDG_CONFIG_HOME/bash/init/npm.bash"
+source_init npm
 
 # Functions must be sourced after Bash completion configuration because some
 # functions reuse completions from other commands.
@@ -43,12 +48,12 @@ source "$XDG_CONFIG_HOME/bash/init/npm.bash"
 # Functions must also be sourced after shell option configuration because the
 # "c" function reuses "cd" completion, which is altered when "cdable_vars" is
 # enabled.
-source "$XDG_CONFIG_HOME/bash/init/functions.bash"
-source "$XDG_CONFIG_HOME/bash/init/general-function-completions.bash"
+source_init functions
+source_init general-function-completions
 
 # For some reason, if `eval "$(fzf --bash)"` is run before functions.bash is
 # loaded, autocomplete for the "c" function will not work.
-source "$XDG_CONFIG_HOME/bash/init/fzf.bash"
+source_init fzf
 
 # Intentionally disabled configurations.
 #
