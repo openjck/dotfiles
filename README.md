@@ -58,7 +58,8 @@ Follow these steps to install _all_ of these files:
 2. Download the
    [_dotfiles-openjck-setup-bootstrap_](./bin/personal/vcsh/dotfiles-openjck-setup-bootstrap)
    script.
-3. Make _dotfiles-openjck-setup-bootstrap_ executable.
+3. Make _dotfiles-openjck-setup-bootstrap_ executable (e.g., `chmod u+x
+/path/to/dotfiles-openjck-setup-bootstrap`)
 4. Run _dotfiles-openjck-setup-bootstrap_.
 
 ### Single shell script
