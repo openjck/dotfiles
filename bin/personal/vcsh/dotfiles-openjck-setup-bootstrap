@@ -8,21 +8,55 @@ set -o nounset
 set -o pipefail
 IFS=$'\n\t'
 
-# This script is **intentionally** not executable.
+# This script is **intentionally** not executable by default.
 #
 # This script should never need to be run _after_ setup is complete. Rather, it
 # should be downloaded from the Git host, marked as executable, and run to
 # _perform_ the setup.
 
-function os_is_debian_based() {
-  [[ -f /etc/debian_version ]]
+# This is a copy of the __distro_base function, which is used elsewhere as
+# a utility, as of 2026-04-20.
+#
+# https://github.com/openjck/dotfiles/blob/0b619659e922d624125d16975285d3e7f3688839/.config/sh/init/utils/__distro_base.sh
+get_distro_base() {
+  # https://unix.stackexchange.com/a/46086/410447
+  if [[ -f /etc/alpine-release ]]; then
+    echo "alpine"
+  elif [[ -f /etc/arch-release ]]; then
+    echo "arch"
+  elif [[ -f /etc/debian_version ]]; then
+    echo "debian"
+  elif [[ -f /etc/gentoo-release ]]; then
+    echo "gentoo"
+  elif [[ -f /etc/redhat-release ]]; then
+    echo "redhat"
+  elif [[ -f /etc/SuSE-release ]]; then
+    echo "suse"
+  else
+    echo "__UNKNOWN__"
+  fi
 }
 
 function prompt_to_fix_conflicts() {
   read -rp 'Address all file conflicts, then press [Enter] '
 }
 
-if ! os_is_debian_based; then
+DISTRO_BASE=$(get_distro_base)
+
+SUPPORTED_DISTRO_BASES=(
+  "debian"
+  "redhat"
+)
+
+SUPPORTED=false
+for SUPPORTED_DISTRO_BASE in "${SUPPORTED_DISTRO_BASES[@]}"; do
+  if [[ $DISTRO_BASE == "$SUPPORTED_DISTRO_BASE" ]]; then
+    SUPPORTED=true
+    break
+  fi
+done
+
+if [[ $SUPPORTED == false ]]; then
   >&2 echo 'FATAL ERROR: This distro is not supported.'
   exit 1
 fi
@@ -37,9 +71,14 @@ if ! sudo --validate; then
 fi
 
 if ! command -v vcsh >/dev/null; then
-  if os_is_debian_based; then
-    sudo apt-get install --assume-yes vcsh
-  fi
+  case $DISTRO_BASE in
+    debian)
+      sudo apt-get install --assume-yes vcsh
+      ;;
+    redhat)
+      sudo dnf install --assumeyes vcsh
+      ;;
+  esac
 fi
 
 # https://stackoverflow.com/a/32708121/715866
