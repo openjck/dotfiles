@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 
-DISTRO=$(lsb_release --short --id)
+DISTRO=$(lsb_release --short --id 2>/dev/null)
 export DISTRO
 
 # Although Bash provides a "$HOSTNAME" environment variable by default, POSIX sh
