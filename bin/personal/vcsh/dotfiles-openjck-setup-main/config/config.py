@@ -14,7 +14,7 @@ config: Config = {
             "~/bin/personal/local",
             "~/bin/personal/local/temporary",
             DIRECTORY_BIN_LOCAL_DOWNLOADED,
-            f"{XDG_CONFIG_HOME}/bash/init/functions/local",
+            f"{XDG_CONFIG_HOME}/bash/init/functions/personal/local",
             f"{XDG_DATA_HOME}/fzf",
             "~/LGTD/inboxes/main",
         ],
