@@ -42,19 +42,15 @@ function prompt_to_fix_conflicts() {
 }
 
 DISTRO_BASE=$(get_distro_base)
-
-SUPPORTED_DISTRO_BASES=(
-  "debian"
-  "redhat"
-)
+DISTRO=$(lsb_release --short --id 2>/dev/null)
 
 SUPPORTED=false
-for SUPPORTED_DISTRO_BASE in "${SUPPORTED_DISTRO_BASES[@]}"; do
-  if [[ $DISTRO_BASE == "$SUPPORTED_DISTRO_BASE" ]]; then
-    SUPPORTED=true
-    break
-  fi
-done
+
+if [[ $DISTRO_BASE == debian ]]; then
+  SUPPORTED=true
+elif [[ $DISTRO == fedora ]]; then
+  SUPPORTED=true
+fi
 
 if [[ $SUPPORTED == false ]]; then
   >&2 echo 'FATAL ERROR: This distro is not supported.'
@@ -71,14 +67,16 @@ if ! sudo --validate; then
 fi
 
 if ! command -v vcsh >/dev/null; then
-  case $DISTRO_BASE in
-    debian)
-      sudo apt-get install --assume-yes vcsh
-      ;;
-    redhat)
-      sudo dnf install --assumeyes vcsh
-      ;;
-  esac
+  # We need to test for Fedora specifically because some distributions related
+  # to RedHat, including RedHat Enterprise Linux (RHEL) itself, have fewer
+  # packages available to them.
+  #
+  # I don't know if vcsh is available on RHEL, but it is available on Fedora.
+  if [[ $DISTRO_BASE == debian ]]; then
+    sudo apt-get install --assume-yes vcsh
+  elif [[ $DISTRO == fedora ]]; then
+    sudo dnf install --assumeyes vcsh
+  fi
 fi
 
 # https://stackoverflow.com/a/32708121/715866
