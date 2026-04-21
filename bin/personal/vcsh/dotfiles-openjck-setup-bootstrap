@@ -42,7 +42,7 @@ function prompt_to_fix_conflicts() {
 }
 
 DISTRO_BASE=$(get_distro_base)
-DISTRO=$(lsb_release --short --id 2>/dev/null)
+DISTRO=$(lsb_release --short --id 2>/dev/null | tr '[:upper:]' '[:lower:]')
 
 SUPPORTED=false
 

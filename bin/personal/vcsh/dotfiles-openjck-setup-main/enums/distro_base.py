@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class BaseDistro(Enum):
+class DistroBase(Enum):
     UNKNOWN = 1
     ALPINE = 2
     ARCH = 3

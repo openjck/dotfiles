@@ -19,15 +19,19 @@ from typing import List
 
 from docopt import docopt
 
-from constants import (
-    BASE_DISTRO,
+from constants.config import (
+    CONFIG_DIRECTORIES,
+    CONFIG_PACKAGES,
+)
+from constants.distro import (
+    DISTRO_BASE,
+)
+from constants.general import (
     DIRECTORY_BIN_LOCAL_DOWNLOADED,
     XDG_CONFIG_HOME,
-    XDG_DATA_HOME,
 )
-from custom_types import Config
 from data_classes import Step
-from enums import BaseDistro, StepResult, VcshConfigResult
+from enums import DistroBase, StepResult, VcshConfigResult
 
 # dotfiles-openjck-setup-main:
 # Set up dotfile dependencies.
@@ -62,65 +66,6 @@ from enums import BaseDistro, StepResult, VcshConfigResult
 # https://hypirion.com/musings/use-python-for-scripting
 warnings.simplefilter("default", DeprecationWarning)
 
-config: Config = {
-    "packages": {
-        BaseDistro.DEBIAN: {
-            "system": {
-                "add": [
-                    "bat",
-                    "curl",  # Needed to install homebrew, although I'll also use it.
-                    "fd-find",
-                    "flatpak",
-                    "git",
-                    "just",
-                    "moreutils",
-                    "pipx",
-                    "pwgen",
-                    "renameutils",
-                    "ripgrep",
-                    "sd",
-                    "shfmt",
-                    "tmux",
-                    "toilet",
-                    "vcsh",
-                ],
-                "remove": [
-                    "firefox",  # The Firefox Flatpak will be installed instead.
-                ],
-            },
-            "flatpak": {
-                "flathub-verified": [
-                    "org.mozilla.firefox",
-                ],
-                "flathub": [],
-            },
-            "homebrew": [
-                # gcc needs to be installed before fzf and perhaps some other formulae.
-                "gcc",
-                "fpp",
-                "fzf",
-                "nvim",
-                "topgrade",
-            ],
-            "pipx": [
-                "git-fzf",
-                "uv",
-                "yq",
-            ],
-        },
-    },
-    "directories": [
-        "~/apps/appimage",
-        "~/apps/repos/git",
-        "~/bin/personal/local",
-        "~/bin/personal/local/temporary",
-        DIRECTORY_BIN_LOCAL_DOWNLOADED,
-        f"{XDG_CONFIG_HOME}/bash/init/functions/local",
-        f"{XDG_DATA_HOME}/fzf",
-        "~/LGTD/inboxes/main",
-    ],
-}
-
 
 def set_vcsh_config(config: str, desired_value: str) -> VcshConfigResult:
     # If the configuration option is not set, the command will exit with a non-zero exit
@@ -149,11 +94,14 @@ def set_vcsh_config(config: str, desired_value: str) -> VcshConfigResult:
         return VcshConfigResult.MODIFIED
 
 
-def set_up_packages_system_debian() -> StepResult:
+def set_up_packages_system_apt_get() -> StepResult:
+    if CONFIG_PACKAGES is None or "system" not in CONFIG_PACKAGES:
+        return StepResult.NOTHING_TO_DO
+
     to_add: List[str] = []
     to_remove: List[str] = []
 
-    for action, packages in config["packages"][BaseDistro.DEBIAN]["system"].items():
+    for action, packages in CONFIG_PACKAGES["system"].items():
         for package in packages:
             dpkg_s = run(
                 ["dpkg", "-s", package],
@@ -181,14 +129,25 @@ def set_up_packages_system_debian() -> StepResult:
         return StepResult.DONE
 
 
+def set_up_packages_system_dnf() -> StepResult:
+    # TODO
+    return StepResult.UNSUPPORTED
+
+
 def set_up_packages_system() -> StepResult:
-    if BASE_DISTRO == BaseDistro.DEBIAN:
-        return set_up_packages_system_debian()
-    else:
-        return StepResult.UNSUPPORTED
+    match DISTRO_BASE:
+        case DistroBase.DEBIAN:
+            return set_up_packages_system_apt_get()
+        case DistroBase.REDHAT:
+            return set_up_packages_system_dnf()
+        case _:
+            return StepResult.UNSUPPORTED
 
 
 def set_up_packages_flatpak() -> StepResult:
+    if CONFIG_PACKAGES is None or "flatpak" not in CONFIG_PACKAGES:
+        return StepResult.NOTHING_TO_DO
+
     installed_any = False
 
     # Set up a remote for Flathub.
@@ -218,7 +177,7 @@ def set_up_packages_flatpak() -> StepResult:
         stdout=DEVNULL,
     )
 
-    for remote, flatpak_apps in config["packages"][BASE_DISTRO]["flatpak"].items():
+    for remote, flatpak_apps in CONFIG_PACKAGES["flatpak"].items():
         to_install: List[str] = []
 
         for flatpak_app in flatpak_apps:
@@ -254,6 +213,9 @@ def set_up_packages_flatpak() -> StepResult:
 
 
 def set_up_packages_homebrew() -> StepResult:
+    if CONFIG_PACKAGES is None or "homebrew" not in CONFIG_PACKAGES:
+        return StepResult.NOTHING_TO_DO
+
     to_install: List[str] = []
 
     # Install Homebrew itself, if necessary.
@@ -265,7 +227,7 @@ def set_up_packages_homebrew() -> StepResult:
             stdout=DEVNULL,
         )
 
-    for homebrew_formula in config["packages"][BASE_DISTRO]["homebrew"]:
+    for homebrew_formula in CONFIG_PACKAGES["homebrew"]:
         brew_list = run(
             [
                 "/home/linuxbrew/.linuxbrew/bin/brew",
@@ -292,6 +254,9 @@ def set_up_packages_homebrew() -> StepResult:
 
 
 def set_up_packages_pipx() -> StepResult:
+    if CONFIG_PACKAGES is None or "pipx" not in CONFIG_PACKAGES:
+        return StepResult.NOTHING_TO_DO
+
     to_install: List[str] = []
 
     pipx_list = json.loads(
@@ -303,7 +268,7 @@ def set_up_packages_pipx() -> StepResult:
         ).stdout.strip()
     )
 
-    for pipx_package in config["packages"][BASE_DISTRO]["pipx"]:
+    for pipx_package in CONFIG_PACKAGES["pipx"]:
         if pipx_package not in pipx_list["venvs"]:
             to_install.append(pipx_package)
 
@@ -320,9 +285,12 @@ def set_up_packages_pipx() -> StepResult:
 
 
 def set_up_directories() -> StepResult:
+    if CONFIG_DIRECTORIES is None:
+        return StepResult.NOTHING_TO_DO
+
     created_any = False
 
-    for directory in config["directories"]:
+    for directory in CONFIG_DIRECTORIES:
         path = Path(directory).expanduser()
         if not path.is_dir():
             path.mkdir(parents=True)
@@ -469,6 +437,8 @@ def run_step(step: Step, longest_term_length: int):
         case StepResult.DONE:
             if not step.own_activity_output:
                 print("done.")
+        case StepResult.NOTHING_TO_DO:
+            print("nothing to do.")
         case StepResult.ALREADY_DONE:
             print("already done.")
         case StepResult.UNSUPPORTED:

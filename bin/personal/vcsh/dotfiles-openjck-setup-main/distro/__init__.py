@@ -3,4 +3,4 @@
 # pyright: reportUnusedImport=false
 # flake8: noqa: F401
 
-from .config import Config, ConfigOptions, Directories, Overrides, Packages
+from .getters import get_distro, get_distro_base

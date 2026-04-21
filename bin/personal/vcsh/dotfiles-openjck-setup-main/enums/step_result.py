@@ -3,5 +3,6 @@ from enum import Enum
 
 class StepResult(Enum):
     DONE = 1
-    ALREADY_DONE = 2
-    UNSUPPORTED = 3
+    NOTHING_TO_DO = 2
+    ALREADY_DONE = 3
+    UNSUPPORTED = 4

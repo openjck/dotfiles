@@ -1,16 +1,33 @@
 from pathlib import Path
-from typing import Dict, List, Literal, TypedDict
+from typing import Dict, List, Literal, NotRequired, TypedDict
 
-from enums import BaseDistro
+from enums import Distro, DistroBase
+
+type PackagesSystem = Dict[Literal["add", "remove"], List[str]]
+type PackagesFlatpak = Dict[Literal["flathub-verified", "flathub"], List[str]]
+type PackagesHomebrew = List[str]
+type PackagesPipx = List[str]
+
+type Directories = List[str | Path]
 
 
 class Packages(TypedDict):
-    system: Dict[Literal["add", "remove"], List[str]]
-    flatpak: Dict[Literal["flathub-verified", "flathub"], List[str]]
-    homebrew: List[str]
-    pipx: List[str]
+    system: NotRequired[PackagesSystem]
+    flatpak: NotRequired[PackagesFlatpak]
+    homebrew: NotRequired[PackagesHomebrew]
+    pipx: NotRequired[PackagesPipx]
+
+
+class ConfigOptions(TypedDict):
+    packages: NotRequired[Packages]
+    directories: NotRequired[Directories]
+
+
+class Overrides(TypedDict):
+    by_distro_base: Dict[DistroBase, ConfigOptions]
+    by_distro: Dict[Distro, ConfigOptions]
 
 
 class Config(TypedDict):
-    packages: Dict[BaseDistro, Packages]
-    directories: List[str | Path]
+    general: ConfigOptions
+    overrides: Overrides

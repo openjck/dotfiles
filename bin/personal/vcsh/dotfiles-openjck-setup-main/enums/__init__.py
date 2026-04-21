@@ -3,6 +3,7 @@
 # pyright: reportUnusedImport=false
 # flake8: noqa: F401
 
-from .base_distro import BaseDistro
+from .distro import Distro
+from .distro_base import DistroBase
 from .step_result import StepResult
 from .vcsh_config_result import VcshConfigResult
