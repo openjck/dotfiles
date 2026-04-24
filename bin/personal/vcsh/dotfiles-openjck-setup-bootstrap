@@ -14,8 +14,8 @@ IFS=$'\n\t'
 # should be downloaded from the Git host, marked as executable, and run to
 # _perform_ the setup.
 
-# This is a copy of the __distro_base function, which is used elsewhere as
-# a utility, as of 2026-04-20.
+# This is a copy of the __distro_base function, which is used elsewhere as a
+# utility, as of 2026-04-20.
 #
 # https://github.com/openjck/dotfiles/blob/0b619659e922d624125d16975285d3e7f3688839/.config/sh/init/utils/__distro_base.sh
 get_distro_base() {
@@ -37,12 +37,30 @@ get_distro_base() {
   fi
 }
 
+# This is a copy of the get_os_id function, which is used elsewhere as a
+# utility, as of 2026-04-24.
+#
+# https://github.com/openjck/dotfiles/blob/3016d31b3e33329b7e024c9ca710c8953ba205ff/.config/sh/init/utils/__get_os_id.sh
+get_os_id() {
+  if [ -e /etc/os-release ]; then
+    . /etc/os-release
+  elif [ -e /usr/lib/os-release ]; then
+    . /usr/lib/os-release
+  fi
+
+  if [ -n "$ID" ]; then
+    echo "$ID"
+  else
+    echo "__UNKNOWN__"
+  fi
+}
+
 function prompt_to_fix_conflicts() {
   read -rp 'Address all file conflicts, then press [Enter] '
 }
 
 DISTRO_BASE=$(get_distro_base)
-DISTRO=$(lsb_release --short --id 2>/dev/null | tr '[:upper:]' '[:lower:]')
+DISTRO=$(get_os_id)
 
 SUPPORTED=false
 
