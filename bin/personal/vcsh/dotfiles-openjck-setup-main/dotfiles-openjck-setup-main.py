@@ -130,8 +130,38 @@ def set_up_packages_system_apt_get() -> StepResult:
 
 
 def set_up_packages_system_dnf() -> StepResult:
-    # TODO
-    return StepResult.UNSUPPORTED
+    if CONFIG_PACKAGES is None or "system" not in CONFIG_PACKAGES:
+        return StepResult.NOTHING_TO_DO
+
+    to_add: List[str] = []
+    to_remove: List[str] = []
+
+    for action, packages in CONFIG_PACKAGES["system"].items():
+        for package in packages:
+            dnf_list_installed = run(
+                ["dnf", "list", "installed", package],
+                stderr=DEVNULL,
+                stdout=DEVNULL,
+            )
+
+            if action == "add" and dnf_list_installed.returncode != 0:
+                to_add.append(package)
+            elif action == "remove" and dnf_list_installed.returncode == 0:
+                to_remove.append(package)
+
+    if len(to_add) == 0 and len(to_remove) == 0:
+        return StepResult.ALREADY_DONE
+    else:
+        # Do not print output on the same line as "Setting up [step name]...".
+        #
+        # Additionally, remember: "apt" is not meant to be used in scripting. (In this
+        # case, I'm sure it doesn't matter, since we're not parsing the output, but
+        # strictly speaking, apt-get and friends are recommended for use in scripts
+        # instead.)
+        print()
+        run(["sudo", "dnf", "install", "--assumeyes", *to_add], check=True)
+        run(["sudo", "dnf", "remove", "--assumeyes", *to_remove], check=True)
+        return StepResult.DONE
 
 
 def set_up_packages_system() -> StepResult:
