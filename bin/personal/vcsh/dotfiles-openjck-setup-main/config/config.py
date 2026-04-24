@@ -77,10 +77,10 @@ config: Config = {
                 "packages": {
                     "system": {
                         "add": [
-                            # TBD
+                            "gnome-terminal",
                         ],
                         "remove": [
-                            # TBD
+                            "ptyxis", # This is Fedora's default terminal.
                         ],
                     },
                     "flatpak": {
