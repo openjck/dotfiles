@@ -1,6 +1,5 @@
 import os
 import platform
-from subprocess import DEVNULL, PIPE, run
 
 from enums import Distro, DistroBase
 
