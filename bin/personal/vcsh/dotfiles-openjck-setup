@@ -91,9 +91,13 @@ fi
 # pip is needed to install uv, and uv is needed to run the setup script.
 if ! command -v pip >/dev/null; then
   if [[ $DISTRO_BASE == debian ]]; then
-    sudo apt-get install --assume-yes pipx
+    if ! dpkg -s pipx; then
+      sudo apt-get install --assume-yes pipx
+    fi
   elif [[ $DISTRO == fedora ]]; then
-    sudo dnf install --assumeyes pipx
+    if ! rpm -q pipx; then
+      sudo dnf install --assumeyes pipx
+    fi
   fi
 fi
 
@@ -101,27 +105,13 @@ if ! command -v uv >/dev/null; then
   pipx install uv
 fi
 
-# uv was already installed to $HOME/.local/bin, so add that to the $PATH.
+# For the Python script to work correctly, various environment variables ($PATH,
+# $XDG_CONFIG_HOME, and others) need to be set to the values configured in the
+# dotfiles-openjck repo.
 #
-# The new $HOME/.profile file, which includes that in the $PATH, has not yet
-# been applied, and some distros don't include $HOME/.local/bin on the $PATH by
-# default.
-PATH=$HOME/.local/bin:$PATH
-
-# Homebrew _will be_ installed to /home/linuxbrew/.linuxbrew/bin, so add that to
-# the $PATH. If this were not done, "brew" commands would fail later.
-PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
-
-# During initial setup, the XDG environment variables have not yet been set at this
-# point, so we need to manually set them here. They have the same values here that they
-# have in the ~/.profile configuration.
-#
-# Their values are read in the Python script, but they do not need to be exported,
-# because they are not read by any external script, so we can ignore SC2034.
-#
-# shellcheck disable=SC2034
-XDG_CONFIG_HOME=$HOME/.config
-# shellcheck disable=SC2034
-XDG_DATA_HOME=$HOME/.local/share
+# However, if the user is setting up these dotfiles for the first time, the new
+# $HOME/.profile file has not yet been applied at this point. Therefore,
+# manually source it now so that the environment variables are set.
+source "$HOME"/.profile
 
 "$HOME"/bin/personal/vcsh/dotfiles-openjck-setup-main/dotfiles-openjck-setup-main.py

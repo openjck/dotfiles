@@ -93,8 +93,11 @@ def set_vcsh_config(config: str, desired_value: str) -> VcshConfigResult:
 
         return VcshConfigResult.MODIFIED
 
-
-def set_up_packages_system_apt_get() -> StepResult:
+def set_up_packages_system_helper(
+    command_check_if_installed: list[str],
+    command_install: list[str],
+    command_remove: list[str]
+) -> StepResult:
     if CONFIG_PACKAGES is None or "system" not in CONFIG_PACKAGES:
         return StepResult.NOTHING_TO_DO
 
@@ -103,15 +106,15 @@ def set_up_packages_system_apt_get() -> StepResult:
 
     for action, packages in CONFIG_PACKAGES["system"].items():
         for package in packages:
-            dpkg_s = run(
-                ["dpkg", "-s", package],
+            check_if_installed = run(
+                [*command_check_if_installed, package],
                 stderr=DEVNULL,
                 stdout=DEVNULL,
             )
 
-            if action == "add" and dpkg_s.returncode != 0:
+            if action == "add" and check_if_installed.returncode != 0:
                 to_add.append(package)
-            elif action == "remove" and dpkg_s.returncode == 0:
+            elif action == "remove" and check_if_installed.returncode == 0:
                 to_remove.append(package)
 
     if len(to_add) == 0 and len(to_remove) == 0:
@@ -124,52 +127,27 @@ def set_up_packages_system_apt_get() -> StepResult:
         # strictly speaking, apt-get and friends are recommended for use in scripts
         # instead.)
         print()
-        run(["sudo", "apt-get", "install", "--assume-yes", *to_add], check=True)
-        run(["sudo", "apt-get", "purge", "--assume-yes", *to_remove], check=True)
-        return StepResult.DONE
-
-
-def set_up_packages_system_dnf() -> StepResult:
-    if CONFIG_PACKAGES is None or "system" not in CONFIG_PACKAGES:
-        return StepResult.NOTHING_TO_DO
-
-    to_add: List[str] = []
-    to_remove: List[str] = []
-
-    for action, packages in CONFIG_PACKAGES["system"].items():
-        for package in packages:
-            dnf_list_installed = run(
-                ["sudo", "dnf", "list", "installed", package],
-                stderr=DEVNULL,
-                stdout=DEVNULL,
-            )
-
-            if action == "add" and dnf_list_installed.returncode != 0:
-                to_add.append(package)
-            elif action == "remove" and dnf_list_installed.returncode == 0:
-                to_remove.append(package)
-
-    if len(to_add) == 0 and len(to_remove) == 0:
-        return StepResult.ALREADY_DONE
-    else:
-        # Do not print output on the same line as "Setting up [step name]...".
-        #
-        # Additionally, remember: "apt" is not meant to be used in scripting. (In this
-        # case, I'm sure it doesn't matter, since we're not parsing the output, but
-        # strictly speaking, apt-get and friends are recommended for use in scripts
-        # instead.)
-        print()
-        run(["sudo", "dnf", "install", "--assumeyes", *to_add], check=True)
-        run(["sudo", "dnf", "remove", "--assumeyes", *to_remove], check=True)
+        if len(to_add) > 0:
+            run([*command_install, *to_add], check=True)
+        if len(to_remove) > 0:
+            run([*command_remove, *to_remove], check=True)
         return StepResult.DONE
 
 
 def set_up_packages_system() -> StepResult:
     match DISTRO_BASE:
         case DistroBase.DEBIAN:
-            return set_up_packages_system_apt_get()
+            return set_up_packages_system_helper(
+                ["dpkg", "-s"],
+                ["sudo", "apt-get", "install", "--assume-yes"],
+                ["sudo", "apt-get", "purge", "--assume-yes"]
+            )
         case DistroBase.REDHAT:
-            return set_up_packages_system_dnf()
+            return set_up_packages_system_helper(
+                ["rpm", "-q"],
+                ["sudo", "dnf", "install", "--assumeyes"],
+                ["sudo", "dnf", "remove", "--assumeyes"]
+            )
         case _:
             return StepResult.UNSUPPORTED
 
@@ -246,21 +224,27 @@ def set_up_packages_homebrew() -> StepResult:
     if CONFIG_PACKAGES is None or "homebrew" not in CONFIG_PACKAGES:
         return StepResult.NOTHING_TO_DO
 
+    homebrew_was_installed = False
+
     to_install: List[str] = []
 
     # Install Homebrew itself, if necessary.
-    homebrew_install_path = Path("/home/linuxbrew/.linuxbrew")
-    if not homebrew_install_path.is_dir():
-        run(
-            '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',  # noqa: E501
-            shell=True,
-            stdout=DEVNULL,
-        )
+    homebrew_bin_path = Path("/home/linuxbrew/.linuxbrew/bin/brew")
+    if not homebrew_bin_path.is_file():
+        # Do not print output on the same line as "Setting up [step name]...".
+        print()
+
+        # As of 2026-04-24, installing Homebrew manually is not working for some unknown
+        # reason. In fact, running their suggested installation command automatically
+        # seems to corrupt vcsh's "dotfiles-openjck" repo, which is really weird.
+        input("In another terminal, install Homebrew manually, then press [Enter] ")
+
+        homebrew_was_installed = True
 
     for homebrew_formula in CONFIG_PACKAGES["homebrew"]:
         brew_list = run(
             [
-                "/home/linuxbrew/.linuxbrew/bin/brew",
+                homebrew_bin_path,
                 "list",
                 homebrew_formula,
             ],
@@ -274,8 +258,9 @@ def set_up_packages_homebrew() -> StepResult:
     if len(to_install) == 0:
         return StepResult.ALREADY_DONE
     else:
-        # Do not print output on the same line as "Setting up [step name]...".
-        print()
+        if not homebrew_was_installed:
+            # Do not print output on the same line as "Setting up [step name]...".
+            print()
         run(
             ["brew", "install", *to_install],
             check=True,
