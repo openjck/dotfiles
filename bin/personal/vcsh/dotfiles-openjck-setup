@@ -20,11 +20,59 @@ set -o nounset
 set -o pipefail
 IFS=$'\n\t'
 
-function os_is_debian_based() {
-  [[ -f /etc/debian_version ]]
+# This is a copy of the __distro_base function, which is used elsewhere as a
+# utility, as of 2026-04-20.
+#
+# https://github.com/openjck/dotfiles/blob/0b619659e922d624125d16975285d3e7f3688839/.config/sh/init/utils/__distro_base.sh
+get_distro_base() {
+  # https://unix.stackexchange.com/a/46086/410447
+  if [[ -f /etc/alpine-release ]]; then
+    echo "alpine"
+  elif [[ -f /etc/arch-release ]]; then
+    echo "arch"
+  elif [[ -f /etc/debian_version ]]; then
+    echo "debian"
+  elif [[ -f /etc/gentoo-release ]]; then
+    echo "gentoo"
+  elif [[ -f /etc/redhat-release ]]; then
+    echo "redhat"
+  elif [[ -f /etc/SuSE-release ]]; then
+    echo "suse"
+  else
+    echo "__UNKNOWN__"
+  fi
 }
 
-if ! os_is_debian_based; then
+# This is a copy of the get_os_id function, which is used elsewhere as a
+# utility, as of 2026-04-24.
+#
+# https://github.com/openjck/dotfiles/blob/3016d31b3e33329b7e024c9ca710c8953ba205ff/.config/sh/init/utils/__get_os_id.sh
+get_os_id() {
+  if [ -e /etc/os-release ]; then
+    . /etc/os-release
+  elif [ -e /usr/lib/os-release ]; then
+    . /usr/lib/os-release
+  fi
+
+  if [ -n "$ID" ]; then
+    echo "$ID"
+  else
+    echo "__UNKNOWN__"
+  fi
+}
+
+DISTRO_BASE=$(get_distro_base)
+DISTRO=$(get_os_id)
+
+SUPPORTED=false
+
+if [[ $DISTRO_BASE == debian ]]; then
+  SUPPORTED=true
+elif [[ $DISTRO == fedora ]]; then
+  SUPPORTED=true
+fi
+
+if [[ $SUPPORTED == false ]]; then
   >&2 echo 'FATAL ERROR: This distro is not supported.'
   exit 1
 fi
@@ -42,8 +90,10 @@ fi
 #
 # pip is needed to install uv, and uv is needed to run the setup script.
 if ! command -v pip >/dev/null; then
-  if os_is_debian_based; then
+  if [[ $DISTRO_BASE == debian ]]; then
     sudo apt-get install --assume-yes pipx
+  elif [[ $DISTRO == fedora ]]; then
+    sudo dnf install --assumeyes pipx
   fi
 fi
 
