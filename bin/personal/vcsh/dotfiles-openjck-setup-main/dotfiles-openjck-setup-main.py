@@ -139,7 +139,7 @@ def set_up_packages_system_dnf() -> StepResult:
     for action, packages in CONFIG_PACKAGES["system"].items():
         for package in packages:
             dnf_list_installed = run(
-                ["dnf", "list", "installed", package],
+                ["sudo", "dnf", "list", "installed", package],
                 stderr=DEVNULL,
                 stdout=DEVNULL,
             )
