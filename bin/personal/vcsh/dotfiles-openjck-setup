@@ -91,11 +91,11 @@ fi
 # pip is needed to install uv, and uv is needed to run the setup script.
 if ! command -v pip >/dev/null; then
   if [[ $DISTRO_BASE == debian ]]; then
-    if ! dpkg -s pipx; then
+    if ! dpkg -s pipx >/dev/null; then
       sudo apt-get install --assume-yes pipx
     fi
   elif [[ $DISTRO == fedora ]]; then
-    if ! rpm -q pipx; then
+    if ! rpm -q pipx >/dev/null; then
       sudo dnf install --assumeyes pipx
     fi
   fi
