@@ -77,25 +77,43 @@ config: Config = {
                 "packages": {
                     "system": {
                         "add": [
+                            "bat",
+                            "fd-find",
+                            "git",
                             "gnome-terminal",
+                            "just",
+                            "moreutils",
+                            "pipx",
+                            "pwgen",
+                            "renameutils",
+                            "shfmt",
+                            "toilet",
+                            "vcsh",
                         ],
                         "remove": [
+                            "firefox",
                             "ptyxis",  # This is Fedora's default terminal.
                         ],
                     },
                     "flatpak": {
                         "flathub-verified": [
-                            # TBD
+                            "org.mozilla.firefox",
                         ],
-                        "flathub": [
-                            # TBD
-                        ],
+                        "flathub": [],
                     },
                     "homebrew": [
-                        # TBD
+                        # gcc needs to be installed before fzf and perhaps some other
+                        # formulae.
+                        "gcc",
+                        "fpp",
+                        "fzf",
+                        "nvim",
+                        "topgrade",
                     ],
                     "pipx": [
-                        # TBD
+                        "git-fzf",
+                        "uv",
+                        "yq",
                     ],
                 },
             },
