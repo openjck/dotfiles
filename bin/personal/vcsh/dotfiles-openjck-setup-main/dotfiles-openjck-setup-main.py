@@ -238,7 +238,13 @@ def set_up_packages_homebrew() -> StepResult:
         # As of 2026-04-24, installing Homebrew manually is not working for some unknown
         # reason. In fact, running their suggested installation command automatically
         # seems to corrupt vcsh's "dotfiles-openjck" repo, which is really weird.
-        input("In another terminal, install Homebrew manually, then press [Enter] ")
+        print("""
+Homebrew is not installed. In another terminal, install it manually, then install all
+build dependencies documented on the following page:
+
+https://docs.brew.sh/Homebrew-on-Linux
+""".strip())
+        input("Read the above carefully, follow its instructions, then press [Enter] ")
 
         homebrew_was_installed = True
 
