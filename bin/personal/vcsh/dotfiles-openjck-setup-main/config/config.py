@@ -80,7 +80,7 @@ config: Config = {
                             "gnome-terminal",
                         ],
                         "remove": [
-                            "ptyxis", # This is Fedora's default terminal.
+                            "ptyxis",  # This is Fedora's default terminal.
                         ],
                     },
                     "flatpak": {
