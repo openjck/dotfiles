@@ -93,10 +93,11 @@ def set_vcsh_config(config: str, desired_value: str) -> VcshConfigResult:
 
         return VcshConfigResult.MODIFIED
 
+
 def set_up_packages_system_helper(
     command_check_if_installed: list[str],
     command_install: list[str],
-    command_remove: list[str]
+    command_remove: list[str],
 ) -> StepResult:
     if CONFIG_PACKAGES is None or "system" not in CONFIG_PACKAGES:
         return StepResult.NOTHING_TO_DO
@@ -140,13 +141,13 @@ def set_up_packages_system() -> StepResult:
             return set_up_packages_system_helper(
                 ["dpkg", "-s"],
                 ["sudo", "apt-get", "install", "--assume-yes"],
-                ["sudo", "apt-get", "purge", "--assume-yes"]
+                ["sudo", "apt-get", "purge", "--assume-yes"],
             )
         case DistroBase.REDHAT:
             return set_up_packages_system_helper(
                 ["rpm", "-q"],
                 ["sudo", "dnf", "install", "--assumeyes"],
-                ["sudo", "dnf", "remove", "--assumeyes"]
+                ["sudo", "dnf", "remove", "--assumeyes"],
             )
         case _:
             return StepResult.UNSUPPORTED
