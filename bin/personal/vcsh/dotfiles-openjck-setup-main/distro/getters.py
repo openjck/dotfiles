@@ -1,4 +1,5 @@
 import os
+import platform
 from subprocess import DEVNULL, PIPE, run
 
 from enums import Distro, DistroBase
@@ -23,16 +24,11 @@ def get_distro_base() -> DistroBase:
 
 
 def get_distro() -> Distro:
-    distro = run(
-        ["lsb_release", "--short", "--id"],
-        check=False,
-        stderr=DEVNULL,
-        stdout=PIPE,
-        text=True,
-    ).stdout.strip()
+    os_release = platform.freedesktop_os_release()
+    distro_str = os_release.get("ID")
 
-    match distro:
-        case "Fedora":
+    match distro_str:
+        case "fedora":
             return Distro.FEDORA
         case _:
             return Distro.UNKNOWN
