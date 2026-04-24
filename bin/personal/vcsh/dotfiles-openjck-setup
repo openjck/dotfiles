@@ -114,4 +114,12 @@ fi
 # manually source it now so that the environment variables are set.
 source "$HOME"/.profile
 
+# Additionally, Homebrew _will be_ installed to /home/linuxbrew/.linuxbrew/bin,
+# so add that to the $PATH. If this were not done, "brew" commands would fail
+# later.
+#
+# This is not added to the $PATH in ~/.profile, but rather in "brew.bash", so
+# sourcing ~/.profile, as we did above, is not enough.
+PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
+
 "$HOME"/bin/personal/vcsh/dotfiles-openjck-setup-main/dotfiles-openjck-setup-main.py
