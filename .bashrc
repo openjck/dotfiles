@@ -64,3 +64,5 @@ source_init fzf
 
 # Source private, non-pushed, local configurations, if any.
 __source_if_file_exists "$HOME/.bashrc.local"
+
+unset -f source_init

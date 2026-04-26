@@ -4,4 +4,4 @@ for function in "$XDG_CONFIG_HOME"/bash/init/functions/**/*.bash; do
   source "$function"
 done
 
-unset function
+unset -v function
