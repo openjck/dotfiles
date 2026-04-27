@@ -61,7 +61,7 @@ config: Config = {
                         "gcc",
                         "fpp",
                         "fzf",
-                        "nvim",
+                        "neovim",
                         "topgrade",
                     ],
                     "pipx": [

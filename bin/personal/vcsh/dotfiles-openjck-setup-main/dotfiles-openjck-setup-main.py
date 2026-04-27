@@ -9,6 +9,7 @@
 
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -248,18 +249,17 @@ https://docs.brew.sh/Homebrew-on-Linux
 
         homebrew_was_installed = True
 
-    for homebrew_formula in CONFIG_PACKAGES["homebrew"]:
-        brew_list = run(
-            [
-                homebrew_bin_path,
-                "list",
-                homebrew_formula,
-            ],
-            stderr=DEVNULL,
-            stdout=DEVNULL,
-        )
+    # A string containing a list of installed Homebrew formulae, with each formula on
+    # its own line.
+    brew_list = run(
+        [homebrew_bin_path, "list", "-1"],
+        check=True,
+        stdout=PIPE,
+        text=True,
+    ).stdout
 
-        if brew_list.returncode != 0:
+    for homebrew_formula in CONFIG_PACKAGES["homebrew"]:
+        if not re.search(rf"^{re.escape(homebrew_formula)}", brew_list, re.MULTILINE):
             to_install.append(homebrew_formula)
 
     if len(to_install) == 0:
