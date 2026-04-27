@@ -187,17 +187,20 @@ def set_up_packages_flatpak() -> StepResult:
         stdout=DEVNULL,
     )
 
+    # A string containing a list of installed Flatpak apps, with each app on its own
+    # line.
+    flatpak_list = run(
+        ["flatpak", "list", "--app", "--columns=application"],
+        check=True,
+        stdout=PIPE,
+        text=True,
+    ).stdout
+
     for remote, flatpak_apps in CONFIG_PACKAGES["flatpak"].items():
         to_install: List[str] = []
 
         for flatpak_app in flatpak_apps:
-            flatpak_info = run(
-                ["flatpak", "info", flatpak_app],
-                stderr=DEVNULL,
-                stdout=DEVNULL,
-            )
-
-            if flatpak_info.returncode != 0:
+            if not re.search(rf"^{re.escape(flatpak_app)}", flatpak_list, re.MULTILINE):
                 to_install.append(flatpak_app)
 
         if len(to_install) > 0:
