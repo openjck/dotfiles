@@ -53,6 +53,14 @@ a meaningful bottleneck for me.
 
 Follow these steps to install _all_ of these files:
 
+**NOTE:** These steps work only kinda sorta sometimes. I don't provision new
+machines often, and I know there are quirks and bugs with these setup scripts.
+Some may never be fixed. In truth, these setup scripts are annoying to
+maintain, and I doubt they save me time or energy ultimately. I may get rid of
+them some time. I'm sure I'm the only person who even attempts these steps, but
+if you intend to follow them and something goes wrong, please open a thread on
+the [Discussions](https://github.com/openjck/dotfiles/discussions) page.
+
 1. Ensure `sudo` is installed and your user is able to run `sudo` commands
    successfully.
 2. Download the
