@@ -16,7 +16,7 @@ if vcsh dotfiles-openjck diff --quiet "$TARGET"; then
   rm "$TARGET"
   cp --no-preserve=mode,ownership "$D_WINDOWS_HOME/.ideavimrc" "$TARGET"
 else
-  >&2 fold --spaces <<EOF
+  fold >&2 --spaces <<EOF
 FATAL ERROR: WSL copy of IdeaVim configuration file contains uncommitted
 changes. Commit them before proceeding.
 EOF

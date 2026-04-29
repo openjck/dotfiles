@@ -73,7 +73,7 @@ elif [[ $DISTRO == fedora ]]; then
 fi
 
 if [[ $SUPPORTED == false ]]; then
-  >&2 echo 'FATAL ERROR: This distro is not supported.'
+  echo >&2 'FATAL ERROR: This distro is not supported.'
   exit 1
 fi
 
@@ -82,7 +82,7 @@ fi
 # process, so that they don't need to be prompted for it in the middle of the
 # setup process.
 if ! sudo --validate; then
-  >&2 echo "FATAL ERROR: \"sudo\" must be installed and enabled for \"$USER\"."
+  echo >&2 "FATAL ERROR: \"sudo\" must be installed and enabled for \"$USER\"."
   exit 1
 fi
 

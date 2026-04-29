@@ -1,3 +1,3 @@
 function __print-unsupported-err() {
-  >&2 echo 'Not supported on this system.'
+  echo >&2 'Not supported on this system.'
 }

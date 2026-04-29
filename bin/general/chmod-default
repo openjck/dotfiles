@@ -58,13 +58,13 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
 done
 
 if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
-  >&2 fold --spaces <<EOF
+  fold >&2 --spaces <<EOF
 FATAL ERROR: The following are not installed. You must install them on your \
 own for "$COMMAND_NAME" to function properly.
 
 EOF
   for DEPENDENCY in "${MISSING_DEPENDENCIES[@]}"; do
-    >&2 echo "  - $DEPENDENCY"
+    echo >&2 "  - $DEPENDENCY"
   done
   exit 1
 fi
@@ -93,7 +93,7 @@ if [[ -f ${ARGS[FILE]} ]]; then
 elif [[ -d ${ARGS[FILE]} ]]; then
   chmod '=rwx' "${ARGS[FILE]}"
 else
-  >&2 fold --spaces <<EOF
+  fold >&2 --spaces <<EOF
 FATAL ERROR: ${ARGS[FILE]} does not exist or inode type is not supported.
 EOF
   exit 1

@@ -14,7 +14,7 @@ function cdv-project-directory() {
       cdv "$DESTINATION"
     fi
   else
-    >&2 echo "Error: Current directory is not a project."
+    echo >&2 "Error: Current directory is not a project."
     return 1
   fi
 }

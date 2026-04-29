@@ -59,13 +59,13 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
 done
 
 if ((${#MISSING_DEPENDENCIES[@]} > 0)); then
-  >&2 fold --spaces <<EOF
+  fold >&2 --spaces <<EOF
 FATAL ERROR: The following are not installed. You must install them on your \
 own for "$COMMAND_NAME" to function properly.
 
 EOF
   for DEPENDENCY in "${MISSING_DEPENDENCIES[@]}"; do
-    >&2 echo "  - $DEPENDENCY"
+    echo >&2 "  - $DEPENDENCY"
   done
   exit 1
 fi
@@ -128,7 +128,7 @@ TARGET_WITH_TRAILING_SLASH=$TARGET_WITH_NO_TRAILING_SLASH/
 # clarity, so that the user doesn't wonder if the path that was _checked_ was
 # any different from the path they _provided_.
 if [[ ! -d ${ARGS[TARGET]} ]]; then
-  >&2 fold --spaces \
+  fold >&2 --spaces \
     <<<"FATAL ERROR: \"${ARGS[TARGET]}\" does not exist."
   exit 1
 fi

@@ -50,7 +50,7 @@ function mkcd() {
   # code if a directory already exists, so that case needs to be handled
   # manually.
   if [[ -d $DIRECTORY ]]; then
-    >&2 fold --spaces <<EOF
+    fold >&2 --spaces <<EOF
 Warning: Directory "$DIRECTORY" already exists. Directory has been changed to
 "$DIRECTORY".
 EOF
