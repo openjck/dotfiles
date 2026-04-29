@@ -113,17 +113,5 @@ while true; do
   esac
 done
 
-if ! vcsh clone "$REMOTE" dotfiles-openjck --quiet; then
-  # The dotfiles-openjck repo itself provides this file. We don't care about its
-  # default contents and vcsh will complain about the dotfiles-openjck version
-  # conflicting with this default one, so just remove it now if it exists.
-  rm -f "$HOME"/.config/vcsh/repo.d/dotfiles-openjck.git/info/exclude
-
-  # Git requires that "pull" be run after any file conflicts are addressed, even
-  # though one might expect to have to run "clone" again in that situation.
-  while ! vcsh dotfiles-openjck pull; do
-    prompt_to_fix_conflicts
-  done
-fi
-
-vcsh upgrade dotfiles-openjck
+vcsh clone "$REMOTE" dotfiles-openjck --quiet --bare
+vcsh dotfiles-openjck reset --hard origin/main
