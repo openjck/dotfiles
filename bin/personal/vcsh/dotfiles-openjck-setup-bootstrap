@@ -55,10 +55,6 @@ get_os_id() {
   fi
 }
 
-function prompt_to_fix_conflicts() {
-  read -rp 'Address all file conflicts, then press [Enter] '
-}
-
 DISTRO_BASE=$(get_distro_base)
 DISTRO=$(get_os_id)
 
@@ -113,5 +109,9 @@ while true; do
   esac
 done
 
+# In the past, I attempted to run "clone" and "pull" in this script instead of
+# the following commands. That led to all sorts of problems, though. This
+# approach should be more reliable. It does overwrite any existing file with
+# the same name as a version-controlled file, but that's fine with me.
 vcsh clone "$REMOTE" dotfiles-openjck --quiet --bare
 vcsh dotfiles-openjck reset --hard origin/main
