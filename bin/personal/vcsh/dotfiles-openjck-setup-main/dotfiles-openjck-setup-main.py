@@ -242,12 +242,20 @@ def set_up_packages_homebrew() -> StepResult:
         # As of 2026-04-24, installing Homebrew manually is not working for some unknown
         # reason. In fact, running their suggested installation command automatically
         # seems to corrupt vcsh's "dotfiles-openjck" repo, which is really weird.
+        #
+        # Black wants to make these lines longer, but I'd rather they be printed
+        # hard-wrapped at 80 characters. Hard-wrapping can be achieved with
+        # textwrap.fill(), but preserving the newline in before the link is
+        # surprisingly difficult.
+        #
+        # fmt: off
         print("""
-Homebrew is not installed. In another terminal, install it manually, then install all
-build dependencies documented on the following page:
+Homebrew is not installed. In another terminal, install it manually, then
+install all build dependencies documented on the following page:
 
 https://docs.brew.sh/Homebrew-on-Linux
 """.strip())
+        # fmt: on
         input("Read the above carefully, follow its instructions, then press [Enter] ")
 
         homebrew_was_installed = True
