@@ -100,7 +100,7 @@ EOF
 # Running "git rev-parse" prints an error if we are not in a Git repo. If the
 # command is successful, however, it is silent and we continue.
 if git rev-parse; then
-  if test -n "$(git status --porcelain)"; then
+  if [[ -n "$(git status --porcelain)" ]]; then
     cat >&2 <<'EOF'
 FATAL ERROR: Working directory is dirty. Stash or commit any changes. Then, run
 this command again.
@@ -128,12 +128,15 @@ EOF
   echo 'done.'
 
   echo -n 'Running "npm clean-install"... '
-  npm clean-install
+  npm clean-install >/dev/null
   echo 'done.'
 
   echo -n 'Running "npm audit"... '
 
-  if npm audit >/dev/null; then
+  # When there are vulnerabilities, "audit" prints those error messages to
+  # stderr. I don't need to see them when running this script, so redirect all
+  # output to /dev/null.
+  if npm audit &>/dev/null; then
     echo 'done.'
     echo '"npm audit" reported no issues. There is nothing to do.'
   else
@@ -146,11 +149,15 @@ EOF
 
     echo -n 'Committing fixes... '
     git add -u
-    git commit -m "${ARGS[--message]}"
+    git commit --quiet -m "${ARGS[--message]}"
     echo 'done.'
 
     echo -n 'Pushing commit... '
-    git push --quiet
+    # When there are vulnerabilities, GitHub might print those vulnerabilities
+    # to stderr when the code is pushed up, unaware that the push actually fixes
+    # those vulnerabilities. I don't need to see them when running this script,
+    # so redirect all output to /dev/null.
+    git push &>/dev/null
     echo 'done.'
   fi
 
