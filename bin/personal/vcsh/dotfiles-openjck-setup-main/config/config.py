@@ -44,6 +44,7 @@ config: Config = {
                             "tmux",
                             "toilet",
                             "vcsh",
+                            "xclip",
                         ],
                         "remove": [
                             # The Firefox Flatpak will be installed instead.
@@ -91,6 +92,7 @@ config: Config = {
                             "shfmt",
                             "toilet",
                             "vcsh",
+                            "xclip",
                         ],
                         "remove": [
                             "firefox",
