@@ -3,6 +3,7 @@
 --
 -- Someday, maybe these features will be supported by the Language Server
 -- Protocol.
-MiniDeps.add('ThePrimeagen/refactoring.nvim')
-
-require('refactoring').setup()
+MiniDeps.add({
+  source = 'ThePrimeagen/refactoring.nvim',
+  depends = { 'lewis6991/async.nvim' },
+})
