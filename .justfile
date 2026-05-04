@@ -1,19 +1,10 @@
-home := env('HOME')
-
-# https://github.com/casey/just?tab=readme-ov-file#user-directories1230
-xdg_config_home := if env('XDG_CONFIG_HOME', '') =~ '^/' {
-  env('XDG_CONFIG_HOME')
-} else {
-  home / '.config'
-}
-
 paths := (
-  home / '.bashrc ' +
-  home / 'bin ' +
-  home / '.profile ' +
-  xdg_config_home / 'bash ' +
-  xdg_config_home / 'profile ' +
-  xdg_config_home / 'sh'
+  home_directory() / '.bashrc ' +
+  home_directory() / 'bin ' +
+  home_directory() / '.profile ' +
+  config_directory() / 'bash ' +
+  config_directory() / 'profile ' +
+  config_directory() / 'sh'
 )
 
 lint: shell-lint
