@@ -93,6 +93,7 @@ config: Config = {
                             "pipx",
                             "pwgen",
                             "renameutils",
+                            "ripgrep",
                             "shellcheck",
                             "shfmt",
                             "toilet",
