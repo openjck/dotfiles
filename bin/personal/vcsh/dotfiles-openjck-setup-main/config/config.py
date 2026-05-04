@@ -21,6 +21,11 @@ config: Config = {
     },
     "overrides": {
         "by_distro_base": {
+            # As of 2026-05-04, I'm no longer using any Debian-based Linux
+            # distributions. For that reason, I'm also no longer updating this
+            # configuration. If I use a Debian-based distro in the future, I can update
+            # this configuration based on the configuration that was most recently used
+            # (e.g., the configuration for Fedora).
             DistroBase.DEBIAN: {
                 "packages": {
                     "system": {
@@ -44,7 +49,6 @@ config: Config = {
                             "tmux",
                             "toilet",
                             "vcsh",
-                            "xclip",
                         ],
                         "remove": [
                             # The Firefox Flatpak will be installed instead.
@@ -83,6 +87,7 @@ config: Config = {
                             "fd-find",
                             "git",
                             "gnome-terminal",
+                            "htop",
                             "just",
                             "moreutils",
                             "pipx",
