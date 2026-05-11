@@ -90,6 +90,7 @@ config: Config = {
                             "htop",
                             "just",
                             "moreutils",
+                            "multitail",
                             "pipx",
                             "pwgen",
                             "renameutils",
