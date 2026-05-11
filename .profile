@@ -1,14 +1,21 @@
 # shellcheck shell=sh
 
-# This file sets "$XDG_CONFIG_HOME", so it must be done before
-# "$XDG_CONFIG_HOME" is used below.
+# Explicitly set the XDG environment variables to their default values.
 #
-# The XDG environment variables _could_ be set in "environment-variables.sh",
-# and "environment-variables.sh" could be sourced here, but that creates
-# a catch-22, because "source_utils.sh" uses the XDG environment variables and
-# "environment-variables.sh" may want to use some of the utils sourced by
-# "source_utils.sh".
-. "$HOME/.config/profile/init/xdg.sh"
+# This is not done for the benefit of applications, since applications are
+# supposed to fall back to these values anyway. Rather, this is done so that
+# these environment variables can be used in configuration files, shell
+# scripts, and elsewhere.
+#
+# We could set these in a separate file, like the following:
+#
+#   $XDG_CONFIG_HOME/profile/init/xdg.sh
+#
+# However, that would be a catch-22; how could we source that file if
+# $XDG_CONFIG_HOME were not set!?
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
 
 # Source all POSIX sh utilities so that they can be used in this file and files
 # that are sourced from this file.
