@@ -1,5 +1,4 @@
-# Add environment variables for LGTD directories.
-export D_INBOX=$HOME/LGTD/inboxes/main
+export D_INBOX=$HOME/inbox
 
 # Add environment variables for Bash functions.
 export D_BASH_FUNCTIONS=$XDG_CONFIG_HOME/bash/init/functions

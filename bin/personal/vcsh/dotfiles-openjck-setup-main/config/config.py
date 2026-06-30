@@ -14,7 +14,7 @@ config: Config = {
             DIRECTORY_THIRD_PARTY_EXECUTABLES,
             f"{XDG_CONFIG_HOME}/bash/init/functions/personal/local",
             f"{XDG_DATA_HOME}/fzf",
-            "~/LGTD/inboxes/main",
+            "~/inbox",
             "~/opt/appimage",
             "~/opt/src",
         ],
