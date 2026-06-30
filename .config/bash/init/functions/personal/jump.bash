@@ -16,13 +16,13 @@ function jump() {
   #   - All "D_" paths
   #
   # Errors from "find" are suppressed so that this function works even when the
-  # "$HOME/devel/repos" directory does not exist, which might be the case if
+  # "$HOME/dev/repos" directory does not exist, which might be the case if
   # someone is using this function outside of my broader setup.
   CHOICES=$({
     echo "$HOME"
     {
       env | grep '^D_' | sed 's/^.*=//'
-      find "$HOME/devel/repos" -maxdepth 1 -type d 2>/dev/null
+      find "$HOME/dev/repos" -maxdepth 1 -type d 2>/dev/null
     } | sort --unique
   })
 

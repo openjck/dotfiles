@@ -25,8 +25,8 @@ export D_CONFIG_VCSH_HOOKS_AVAILABLE=$D_CONFIG_VCSH/hooks-available
 export D_CONFIG_VCSH_HOOKS_ENABLED=$D_CONFIG_VCSH/hooks-enabled
 
 # Add environment variables for other directories.
-export D_DEVEL=$HOME/devel
-export D_DEVEL_REPOS=$HOME/devel/repos
+export D_DEVEL=$HOME/dev
+export D_DEVEL_REPOS=$HOME/dev/repos
 
 # Add environment variables for Windows directories if WSL is being used.
 if __in_wsl; then
