@@ -1,3 +1,11 @@
+# Use the latest version of pyright, regardless of the version uv specifies, so
+# that pyright doesn't print a warning encouraging that this be done, and
+# because I prefer to use the latest version anyway.
+#
+# As per just semantics, this environment variable is applied when running the
+# recipes below but it is _not_ exported to the shell that runs "just".
+export PYRIGHT_PYTHON_FORCE_VERSION := "latest"
+
 format:
   uv run isort .
   uv run black .
