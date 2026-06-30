@@ -23,10 +23,10 @@ if __command_exists ruby; then
 fi
 path_prepend "$HOME/.local/bin"
 path_prepend "$HOME/bin/general"
-path_prepend "$HOME/apps/appimage"
+path_prepend "$HOME/opt/appimage"
 path_prepend /var/lib/flatpak/exports/bin
 path_prepend "$HOME/.local/share/flatpak/exports/bin"
-path_prepend "$HOME/bin/personal/local/downloaded"
+path_prepend "$HOME/opt/bin"
 path_prepend "$HOME/bin/personal"
 path_prepend "$HOME/bin/personal/vcsh"
 path_prepend "$HOME/bin/personal/private"

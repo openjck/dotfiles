@@ -1,5 +1,5 @@
 from constants.general import (
-    DIRECTORY_BIN_LOCAL_DOWNLOADED,
+    DIRECTORY_THIRD_PARTY_EXECUTABLES,
     XDG_CONFIG_HOME,
     XDG_DATA_HOME,
 )
@@ -9,14 +9,14 @@ from enums import Distro, DistroBase
 config: Config = {
     "general": {
         "directories": [
-            "~/apps/appimage",
-            "~/apps/repos/git",
             "~/bin/personal/local",
             "~/bin/personal/local/temporary",
-            DIRECTORY_BIN_LOCAL_DOWNLOADED,
+            DIRECTORY_THIRD_PARTY_EXECUTABLES,
             f"{XDG_CONFIG_HOME}/bash/init/functions/personal/local",
             f"{XDG_DATA_HOME}/fzf",
             "~/LGTD/inboxes/main",
+            "~/opt/appimage",
+            "~/opt/src",
         ],
     },
     "overrides": {
