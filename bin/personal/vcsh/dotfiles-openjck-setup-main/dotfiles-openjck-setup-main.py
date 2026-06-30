@@ -28,7 +28,7 @@ from constants.distro import (
     DISTRO_BASE,
 )
 from constants.general import (
-    DIRECTORY_BIN_LOCAL_DOWNLOADED,
+    DIRECTORY_THIRD_PARTY_EXECUTABLES,
     XDG_CONFIG_HOME,
 )
 from data_classes import Step
@@ -344,7 +344,7 @@ def set_up_directories() -> StepResult:
 # does the same thing for shell scripts, and it's used by all of my shell scripts except
 # the bootstrap script.
 def set_up_docopts() -> StepResult:
-    docopts_bin_destination = Path(DIRECTORY_BIN_LOCAL_DOWNLOADED).expanduser()
+    docopts_bin_destination = Path(DIRECTORY_THIRD_PARTY_EXECUTABLES).expanduser()
     docopts_bin_filename = docopts_bin_destination.joinpath("docopts")
 
     if docopts_bin_filename.is_file():
@@ -372,7 +372,9 @@ def set_up_docopts() -> StepResult:
                 shell=True,
             )
 
-            docopts_bin_destination = Path(DIRECTORY_BIN_LOCAL_DOWNLOADED).expanduser()
+            docopts_bin_destination = Path(
+                DIRECTORY_THIRD_PARTY_EXECUTABLES
+            ).expanduser()
             shutil.copy(f"{tmp_dir}/docopts/docopts", docopts_bin_destination)
 
             return StepResult.DONE
