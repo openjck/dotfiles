@@ -1,4 +1,4 @@
-paths := (
+sh-paths := (
   home_directory() / '.bashrc ' +
   home_directory() / 'bin ' +
   home_directory() / '.profile ' +
@@ -7,13 +7,13 @@ paths := (
   config_directory() / 'sh'
 )
 
-lint: shell-lint
+lint: sh-lint
 
-format: shell-format
+format: sh-format
 
-shell-lint:
-  shfmt --list ${SHFMT_FORMATTING_FLAGS} {{paths}}
+sh-lint:
+  shfmt --list ${SHFMT_FORMATTING_FLAGS} {{sh-paths}}
   vcsh-shellcheck
 
-shell-format:
-  shfmt --write --list ${SHFMT_FORMATTING_FLAGS} {{paths}}
+sh-format:
+  shfmt --write --list ${SHFMT_FORMATTING_FLAGS} {{sh-paths}}
