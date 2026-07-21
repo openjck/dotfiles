@@ -84,6 +84,7 @@ config: Config = {
                     "system": {
                         "add": [
                             "bat",
+                            "eza",
                             "fd-find",
                             "git",
                             "gnome-terminal",
@@ -91,6 +92,7 @@ config: Config = {
                             "just",
                             "moreutils",
                             "multitail",
+                            "ncdu",
                             "pipx",
                             "pwgen",
                             "renameutils",
