@@ -420,7 +420,7 @@ def set_up_vcsh() -> StepResult:
 
 
 def set_up_tmux() -> StepResult:
-    tpm_path = Path("~/.tmux/plugins/tpm").expanduser()
+    tpm_path = Path(f"{XDG_CONFIG_HOME}/tmux/plugins/tpm")
     tpm_path_str = tpm_path.absolute().as_posix()
 
     if tpm_path.is_dir():
