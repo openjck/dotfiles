@@ -4,7 +4,6 @@ function eza() {
     --group \
     --group-directories-first \
     --header \
-    --hyperlink \
     --octal-permissions \
     --time-style=long-iso \
     "$@"
