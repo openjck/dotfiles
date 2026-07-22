@@ -84,6 +84,7 @@ config: Config = {
                     "system": {
                         "add": [
                             "bat",
+                            "duf",
                             "eza",
                             "fd-find",
                             "git",
