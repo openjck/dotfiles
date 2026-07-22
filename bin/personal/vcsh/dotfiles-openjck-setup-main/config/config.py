@@ -97,7 +97,7 @@ config: Config = {
                             "pwgen",
                             "renameutils",
                             "ripgrep",
-                            "shellcheck",
+                            "ShellCheck",
                             "shfmt",
                             "toilet",
                             "vcsh",
@@ -120,7 +120,7 @@ config: Config = {
                         "gcc",
                         "fpp",
                         "fzf",
-                        "nvim",
+                        "neovim",
                         "topgrade",
                     ],
                     "pipx": [
