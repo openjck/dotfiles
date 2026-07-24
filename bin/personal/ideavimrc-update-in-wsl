@@ -5,6 +5,10 @@
 # As of 2026-03-26, Neovim incorrectly detects this as an IdeaVim filetype when
 # the above modeline is not present.
 
+case ${DEBUG:-} in
+  1 | true) set -x ;;
+esac
+
 # Replace the WSL copy of the IdeaVim configuration file with the Windows copy
 # of it.
 #

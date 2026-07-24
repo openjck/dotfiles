@@ -39,6 +39,10 @@ set -o nounset
 set -o pipefail
 IFS=$'\n\t'
 
+case ${DEBUG:-} in
+  1 | true) set -x ;;
+esac
+
 COMMAND_NAME=$(basename "$0")
 
 ##########################

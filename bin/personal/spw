@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
+case ${DEBUG:-} in
+  1 | true) set -x ;;
+esac
+
 pwgen --secure --symbols "$@"
