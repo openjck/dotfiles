@@ -86,7 +86,7 @@ a REPL. This script handles those differences so that a REPL can be launched by
 providing a language or runtime name directly.
 
 Usage:
-  $COMMAND_NAME [IDENTIFIER]
+  $COMMAND_NAME IDENTIFIER
   $COMMAND_NAME -h | --help
 
 Examples:
