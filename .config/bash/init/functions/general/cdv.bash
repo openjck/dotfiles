@@ -45,11 +45,11 @@
 # contents of the directory.
 
 function cdv() {
-  if cd "$@"; then
-    # Running "ls" in very large directories can be slow, even when "find" is
-    # fast enough.
-    local MAX_FILES_TO_LIST=100000
+  # Running "ls" in very large directories can be slow, even when "find" is
+  # fast enough.
+  local MAX_FILES_TO_LIST=100000
 
+  if cd "$@"; then
     local NUM_VISIBLE_FILES
     NUM_VISIBLE_FILES=$(
       find . -maxdepth 1 -not -path '\.' -not -path '\./\.*' | wc --lines
