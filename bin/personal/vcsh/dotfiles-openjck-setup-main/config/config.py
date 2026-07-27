@@ -91,6 +91,7 @@ config: Config = {
                             "gnome-terminal",
                             "htop",
                             "just",
+                            "mmv",
                             "moreutils",
                             "multitail",
                             "ncdu",
