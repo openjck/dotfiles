@@ -163,16 +163,17 @@ EOF
     # as a single argument to "npm audit fix".
     #
     # shellcheck disable=SC2086
-    if ! NPM_AUDIT_FIX_OUTPUT=$(npm audit fix $NPM_AUDIT_FIX_FLAGS 2>&1); then
+    if NPM_AUDIT_FIX_OUTPUT=$(npm audit fix $NPM_AUDIT_FIX_FLAGS 2>&1); then
+      echo 'done.'
+    else
       echo >&2
-      echo >&2 '"npm audit fix" failed with the following message:'
+      echo >&2 'FATAL ERROR: "npm audit fix" failed with the following message:'
       echo >&2 "$NPM_AUDIT_FIX_OUTPUT"
 
       git restore package-lock.json
 
       exit 1
     fi
-    echo 'done.'
 
     echo -n 'Committing fixes... '
     git add -u
