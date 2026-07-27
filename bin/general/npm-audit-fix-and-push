@@ -101,6 +101,12 @@ Options:
 EOF
 )"
 
+if [[ -t 1 ]]; then
+  OUTPUT_IS_TERMINAL=true
+else
+  OUTPUT_IS_TERMINAL=false
+fi
+
 # Running "git rev-parse" prints an error if we are not in a Git repo. If the
 # command is successful, however, it is silent and we continue.
 if git rev-parse; then
@@ -148,7 +154,24 @@ EOF
     echo '"npm audit" failed.'
 
     echo -n 'Running "npm audit fix"... '
-    npm audit fix >/dev/null
+
+    if [[ $OUTPUT_IS_TERMINAL == true ]]; then
+      NPM_AUDIT_FIX_FLAGS='--color=always'
+    fi
+
+    # We want word splitting here, so that $NPM_AUDIT_FIX_FLAGS is not treated
+    # as a single argument to "npm audit fix".
+    #
+    # shellcheck disable=SC2086
+    if ! NPM_AUDIT_FIX_OUTPUT=$(npm audit fix $NPM_AUDIT_FIX_FLAGS 2>&1); then
+      echo >&2
+      echo >&2 '"npm audit fix" failed with the following message:'
+      echo >&2 "$NPM_AUDIT_FIX_OUTPUT"
+
+      git restore package-lock.json
+
+      exit 1
+    fi
     echo 'done.'
 
     echo -n 'Committing fixes... '
