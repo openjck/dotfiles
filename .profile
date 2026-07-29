@@ -4,8 +4,8 @@
 #
 # This is not done for the benefit of applications, since applications are
 # supposed to fall back to these values anyway. Rather, this is done so that
-# these environment variables can be used in configuration files, shell
-# scripts, and elsewhere.
+# these environment variables can be used in configuration files, Bash
+# functions, and elsewhere.
 #
 # We could set these in a separate file, like the following:
 #
