@@ -60,7 +60,7 @@ source_init fzf
 # These configurations can be enabled in the future, but are not needed right
 # now.
 #
-# source "$XDG_CONFIG_HOME/bash/init/zellij.bash"
+# source_init zellij
 
 # Source private, non-pushed, local configurations, if any.
 __source_if_file_exists "$HOME/.bashrc.local"
