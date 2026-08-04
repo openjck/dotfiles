@@ -1,3 +1,8 @@
+# When printing the current working directory, specify only the three
+# directories at the very end of the path. That is, print the current
+# directory, its parent directory, and its grandparent directory.
+export PROMPT_DIRTRIM=3
+
 # Set a custom prompt.
 #
 # Use a function so that the environment variables that are used are not made
@@ -10,6 +15,6 @@ FG_COLOR_BLUE="\[$(tput setaf 4)\]"
 BOLD="\[$(tput bold)\]"
 RESET="\[$(tput sgr0)\]"
 
-PS1="\u@\h:${BOLD}\W${FG_COLOR_BLUE}>${RESET} "
+PS1="\u@\h:${BOLD}\w${FG_COLOR_BLUE}>${RESET} "
 
 unset -v FG_COLOR_BLUE BOLD RESET
