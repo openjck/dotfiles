@@ -3,18 +3,33 @@
 # directory, its parent directory, and its grandparent directory.
 export PROMPT_DIRTRIM=3
 
+PROMPT_COMMAND=__prompt_command
+
 # Set a custom prompt.
-#
-# Use a function so that the environment variables that are used are not made
-# available to the interactive shell.
 #
 # https://www.cyberciti.biz/faq/bash-shell-change-the-color-of-my-shell-prompt-under-linux-or-unix/
 # https://wiki.archlinux.org/index.php/Bash/Prompt_customization#Terminfo_escape_sequences
 # https://linux.101hacks.com/ps1-examples/prompt-color-using-tput/
-FG_COLOR_BLUE="\[$(tput setaf 4)\]"
-BOLD="\[$(tput bold)\]"
-RESET="\[$(tput sgr0)\]"
+# https://stackoverflow.com/a/16715681/715866
+function __prompt_command() {
+  local EXIT_CODE=$?
+  PS1=''
 
-PS1="\u@\h:${BOLD}\w${FG_COLOR_BLUE}>${RESET} "
+  local BLUE
+  BLUE="\[$(tput setaf 4)\]"
 
-unset -v FG_COLOR_BLUE BOLD RESET
+  local RED
+  RED="\[$(tput setaf 1)\]"
+
+  local BOLD
+  BOLD="\[$(tput bold)\]"
+
+  local RESET
+  RESET="\[$(tput sgr0)\]"
+
+  if [[ $EXIT_CODE != 0 ]]; then
+    PS1+="${BOLD}${RED}[$EXIT_CODE]${RESET} "
+  fi
+
+  PS1+="\u@\h:${BOLD}\w${BLUE}>${RESET} "
+}
