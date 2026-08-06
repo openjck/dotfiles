@@ -22,10 +22,10 @@ source_init homebrew
 source_init asdf
 source_init bash-completion
 source_init bin-completions
-source_init directories
 source_init files
 source_init gpg
 source_init history
+source_init important-directories
 source_init just
 source_init less
 source_init nvm

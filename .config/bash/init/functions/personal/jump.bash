@@ -1,29 +1,22 @@
-# Use fzf to navigate to the home directory, any repo, or any directory assigned
-# to an environment variable that starts with "D_".
+# Use fzf to navigate to any entry of $IMPORTANT_DIRECTORIES or to $HOME.
 #
 # This cannot be a shell script because shell scripts are executed in subshells
 # and therefore cannot cause the parent shell (the shell that called the shell
 # script) to navigate.
 function jump() {
-  local CHOICES
-
   # Make "$HOME" the first choice so that it can be chosen quickly.
   #
-  # Make the rest of the choices a sorted and unique list built from a _single
-  # set_ that contains:
-  #
-  #   - All repos
-  #   - All "D_" paths
-  #
-  # Errors from "find" are suppressed so that this function works even when the
-  # "$HOME/dev/repos" directory does not exist, which might be the case if
-  # someone is using this function outside of my broader setup.
+  # Make the rest of the choices a sorted and unique collection of important
+  # directories. The "$HOME" directory is excluded from this second category so
+  # that it doesn't appear in the results twice, once as the first result and
+  # once, sorted, among other important directories.
   CHOICES=$({
     echo "$HOME"
-    {
-      env | grep '^D_' | sed 's/^.*=//'
-      find "$HOME/dev/repos" -maxdepth 1 -type d 2>/dev/null
-    } | sort --unique
+    while IFS= read -r DIR; do
+      if [[ $DIR != "$HOME" ]]; then
+        echo "$DIR"
+      fi
+    done <<< "$(sorted-important-directories)"
   })
 
   # Use the "end" tiebreaker because it helps fzf match the desired result much
