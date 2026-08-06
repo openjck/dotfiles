@@ -30,22 +30,22 @@ hipatterns.setup({
     -- this) is a keyword I often use to mark work in progress that should be
     -- modified before a pull request / merge request is opened.
     im_portant = {
-      pattern = unbusted('%f[%w]()IM<busted>PORTANT()%f[%W]'),
+      pattern = unbusted('%f[%w_]()IM<busted>PORTANT()%f[^%w_]'),
       group = 'MiniHipatternsFixme',
     },
 
     fix_me = {
-      pattern = unbusted('%f[%w]()FIX<busted>ME()%f[%W]'),
+      pattern = unbusted('%f[%w_]()FIX<busted>ME()%f[%w_]'),
       group = 'MiniHipatternsFixme',
     },
 
     to_do = {
-      pattern = unbusted('%f[%w]()TO<busted>DO()%f[%W]'),
+      pattern = unbusted('%f[%w_]()TO<busted>DO()%f[%w_]'),
       group = 'MiniHipatternsTodo',
     },
 
     in_prog = {
-      pattern = unbusted('%f[%w]()IN<busted>PROG()%f[%W]'),
+      pattern = unbusted('%f[%w_]()IN<busted>PROG()%f[%w_]'),
       group = 'MiniHipatternsHack',
     },
 
