@@ -13,7 +13,6 @@ PROMPT_COMMAND=__prompt_command
 # https://stackoverflow.com/a/16715681/715866
 function __prompt_command() {
   local EXIT_CODE=$?
-  PS1=''
 
   local BLUE
   BLUE="\[$(tput setaf 4)\]"
@@ -27,9 +26,9 @@ function __prompt_command() {
   local RESET
   RESET="\[$(tput sgr0)\]"
 
-  if [[ $EXIT_CODE != 0 ]]; then
-    PS1+="${BOLD}${RED}[$EXIT_CODE]${RESET} "
+  if [[ $EXIT_CODE == 0 ]]; then
+    PS1="\u@\h:${BOLD}\w${BLUE}>${RESET} "
+  else
+    PS1="\u@\h:${BOLD}\w ${RED}[$EXIT_CODE]${BLUE}>${RESET} "
   fi
-
-  PS1+="\u@\h:${BOLD}\w${BLUE}>${RESET} "
 }
