@@ -1,4 +1,4 @@
-export IMPORTANT_DIRECTORIES=(
+export BOOKMARKED_DIRECTORIES=(
   # Add directories related to shell scripts.
   "$HOME/bin"
   "$HOME/bin/general"
@@ -29,20 +29,23 @@ export IMPORTANT_DIRECTORIES=(
   "$HOME/dev/repos"
 )
 
-# Add each subdirectory of the $HOME/dev/repos directory, ignoring files.
+# Add each subdirectory of the $HOME/dev/repos directory.
 for NODE in "$HOME/dev/repos"/*; do
   if [[ -d "$NODE" ]]; then
-    IMPORTANT_DIRECTORIES+=("$NODE")
+    BOOKMARKED_DIRECTORIES+=("$NODE")
   fi
 done
 
-# Add environment variables for Windows directories if WSL is being used.
+# Add Windows directories if WSL is being used.
+#
+# This assumes that I've manually created a symlink named $HOME/windows-home
+# which points to the files managed by windows.
 if __in_wsl; then
-  IMPORTANT_DIRECTORIES+=("$HOME/windows-home")
-  IMPORTANT_DIRECTORIES+=("$HOME/windows-home/Downloads")
-  IMPORTANT_DIRECTORIES+=("$HOME/windows-home/Desktop")
+  BOOKMARKED_DIRECTORIES+=("$HOME/windows-home")
+  BOOKMARKED_DIRECTORIES+=("$HOME/windows-home/Downloads")
+  BOOKMARKED_DIRECTORIES+=("$HOME/windows-home/Desktop")
 fi
 
 # Source private, non-pushed, local configurations, if any.
 __source_if_file_exists \
-  "$XDG_CONFIG_HOME/bash/init/important-directories.local.bash"
+  "$XDG_CONFIG_HOME/bash/init/directories/bookmarks/directories.local.bash"

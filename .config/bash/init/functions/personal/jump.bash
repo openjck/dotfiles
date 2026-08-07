@@ -1,4 +1,4 @@
-# Use fzf to navigate to any entry of $IMPORTANT_DIRECTORIES or to $HOME.
+# Use fzf to navigate to any bookmarked directory or to $HOME.
 #
 # This cannot be a shell script because shell scripts are executed in subshells
 # and therefore cannot cause the parent shell (the shell that called the shell
