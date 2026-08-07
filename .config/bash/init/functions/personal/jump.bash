@@ -16,7 +16,7 @@ function jump() {
       if [[ $DIR != "$HOME" ]]; then
         echo "$DIR"
       fi
-    done <<< "$(sorted-important-directories)"
+    done <<< "$(sorted-bookmarked-directories)"
   })
 
   # Use the "end" tiebreaker because it helps fzf match the desired result much
