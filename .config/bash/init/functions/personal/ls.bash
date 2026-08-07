@@ -1,3 +1,8 @@
 function ls() {
-  eza "$@"
+  command ls \
+    --color=auto \
+    --group-directories-first \
+    --human-readable \
+    --time-style=long-iso \
+    "$@"
 }
