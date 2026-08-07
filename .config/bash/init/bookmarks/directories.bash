@@ -32,7 +32,7 @@ export BOOKMARKED_DIRECTORIES=(
 
 # Add each subdirectory of the $HOME/dev/repos directory.
 for NODE in "$HOME/dev/repos"/*; do
-  if [[ -d "$NODE" ]]; then
+  if [[ -d $NODE ]]; then
     BOOKMARKED_DIRECTORIES+=("$NODE")
   fi
 done

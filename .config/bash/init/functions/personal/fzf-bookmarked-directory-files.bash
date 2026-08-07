@@ -2,5 +2,5 @@
 function fzf-bookmarked-directory-files() {
   while IFS= read -r DIR; do
     fd . "$DIR"
-  done <<< "$(sorted-important-directories)" | fzf
+  done <<<"$(sorted-important-directories)" | fzf
 }
