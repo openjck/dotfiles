@@ -11,6 +11,7 @@ export BOOKMARKED_DIRECTORIES=(
   # Add directories related to Bash configuration and Bash functions.
   "$XDG_CONFIG_HOME/bash"
   "$XDG_CONFIG_HOME/bash/init"
+  "$XDG_CONFIG_HOME/bash/init/bookmarks"
   "$XDG_CONFIG_HOME/bash/init/functions"
   "$XDG_CONFIG_HOME/bash/init/functions/general"
   "$XDG_CONFIG_HOME/bash/init/functions/personal"
