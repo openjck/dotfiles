@@ -8,7 +8,9 @@ export IMPORTANT_DIRECTORIES=(
   "$HOME/bin/personal/vcsh"
   "$HOME/bin/personal/vcsh/dotfiles-openjck-setup-main"
 
-  # Add directories related to Bash functions.
+  # Add directories related to Bash configuration and Bash functions.
+  "$XDG_CONFIG_HOME/bash"
+  "$XDG_CONFIG_HOME/bash/init"
   "$XDG_CONFIG_HOME/bash/init/functions"
   "$XDG_CONFIG_HOME/bash/init/functions/general"
   "$XDG_CONFIG_HOME/bash/init/functions/personal"
