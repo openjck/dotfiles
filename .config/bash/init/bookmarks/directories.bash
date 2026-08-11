@@ -49,4 +49,4 @@ fi
 
 # Source private, non-pushed, local configurations, if any.
 __source_if_file_exists \
-  "$XDG_CONFIG_HOME/bash/init/directories/bookmarks/directories.local.bash"
+  "$XDG_CONFIG_HOME/bash/init/bookmarks/directories.local.bash"
