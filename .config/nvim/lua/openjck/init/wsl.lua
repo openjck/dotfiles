@@ -1,4 +1,4 @@
-local path_in_wsl = os.getenv('XDG_CONFIG_HOME') .. '/sh/init/utils/__in_wsl.sh'
+local path_in_wsl = os.getenv('XDG_CONFIG_HOME') .. '/sh/utils/__in_wsl.sh'
 local result = os.execute(string.format('. %s && __in_wsl', path_in_wsl))
 
 if result == 0 then
