@@ -120,6 +120,7 @@ config: Config = {
                         # gcc needs to be installed before fzf and perhaps some other
                         # formulae.
                         "gcc",
+                        "deno",
                         "fpp",
                         "fzf",
                         "neovim",
