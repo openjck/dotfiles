@@ -1,3 +1,3 @@
 function ll() {
-  ls --long "$@"
+  ls -l "$@"
 }

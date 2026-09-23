@@ -1,3 +1,3 @@
 function lla() {
-  ls --all --long "$@"
+  ls --all -l "$@"
 }
