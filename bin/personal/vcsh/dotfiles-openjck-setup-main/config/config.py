@@ -102,6 +102,7 @@ config: Config = {
                             "ShellCheck",
                             "shfmt",
                             "toilet",
+                            "trash-cli",
                             "vcsh",
                             "xclip",
                         ],
