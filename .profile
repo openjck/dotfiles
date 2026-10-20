@@ -22,10 +22,13 @@ export XDG_DATA_HOME="$HOME/.local/share"
 . "$XDG_CONFIG_HOME/sh/bootstrap/source_utils.sh"
 
 # Source configurations.
-. "$XDG_CONFIG_HOME/profile/init/editors.sh"
 . "$XDG_CONFIG_HOME/profile/init/environment-variables.sh"
 . "$XDG_CONFIG_HOME/profile/init/nvm.sh"
 . "$XDG_CONFIG_HOME/profile/init/path.sh"
+
+# This must be done after the path set, because the value of the "SUDO_EDITOR"
+# environment variable searches the path.
+. "$XDG_CONFIG_HOME/profile/init/editors.sh"
 
 # Source private, non-pushed, local configurations, if any.
 __source_if_file_exists "$HOME/.profile.local"
