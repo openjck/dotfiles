@@ -26,8 +26,8 @@ export XDG_DATA_HOME="$HOME/.local/share"
 . "$XDG_CONFIG_HOME/profile/init/nvm.sh"
 . "$XDG_CONFIG_HOME/profile/init/path.sh"
 
-# This must be done after the path set, because the value of the "SUDO_EDITOR"
-# environment variable searches the path.
+# This must be done after the path set, because the value of the "EDITOR" and
+# "VISUAL" environment variables depends on the path.
 . "$XDG_CONFIG_HOME/profile/init/editors.sh"
 
 # Source private, non-pushed, local configurations, if any.
