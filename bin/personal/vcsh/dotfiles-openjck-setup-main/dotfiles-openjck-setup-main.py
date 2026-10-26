@@ -240,8 +240,13 @@ def set_up_packages_homebrew() -> StepResult:
         print()
 
         # As of 2026-04-24, installing Homebrew manually is not working for some unknown
-        # reason. In fact, running their suggested installation command automatically
-        # seems to corrupt vcsh's "dotfiles-openjck" repo, which is really weird.
+        # reason. In fact, running their suggested installation command automatically in
+        # this script seems to corrupt vcsh's "dotfiles-openjck" repo, which is really
+        # weird.
+        #
+        # 2026-10-26: FIXME: Today, I realized that Homebrew wasn't actually on my path
+        # until Bash initiated. Now that it's on my path, I could try running it
+        # automatically in this script again.
         #
         # Black wants to make these lines longer, but I'd rather they be printed
         # hard-wrapped at 80 characters. Hard-wrapping can be achieved with

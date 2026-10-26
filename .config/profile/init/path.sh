@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 
-path_prepend() {
+add_higher_priority_path() {
   ADDITION=$1
   PATH="$ADDITION:$PATH"
 }
@@ -19,18 +19,20 @@ path_prepend() {
 # for system-wide Flatpak apps, and the second is for user-installed Flatpak
 # apps. Due to their order, user-installed Flatpak apps take precedence.
 if __command_exists ruby; then
-  path_prepend "$(ruby -e 'puts Gem.user_dir')/bin"
+  add_higher_priority_path "$(ruby -e 'puts Gem.user_dir')/bin"
 fi
-path_prepend "$HOME/.local/bin"
-path_prepend "$HOME/bin/general"
-path_prepend "$HOME/opt/appimage"
-path_prepend /var/lib/flatpak/exports/bin
-path_prepend "$HOME/.local/share/flatpak/exports/bin"
-path_prepend "$HOME/opt/bin"
-path_prepend "$HOME/bin/personal"
-path_prepend "$HOME/bin/personal/vcsh"
-path_prepend "$HOME/bin/personal/private"
-path_prepend "$HOME/bin/personal/local"
-path_prepend "$HOME/bin/personal/local/temporary"
+add_higher_priority_path "$HOME/.local/bin"
+add_higher_priority_path "$HOME/bin/general"
+add_higher_priority_path "$HOME/opt/appimage"
+add_higher_priority_path /var/lib/flatpak/exports/bin
+add_higher_priority_path "$HOME/.local/share/flatpak/exports/bin"
+add_higher_priority_path /home/linuxbrew/.linuxbrew/bin/
+add_higher_priority_path /home/linuxbrew/.linuxbrew/sbin/
+add_higher_priority_path "$HOME/opt/bin"
+add_higher_priority_path "$HOME/bin/personal"
+add_higher_priority_path "$HOME/bin/personal/vcsh"
+add_higher_priority_path "$HOME/bin/personal/private"
+add_higher_priority_path "$HOME/bin/personal/local"
+add_higher_priority_path "$HOME/bin/personal/local/temporary"
 
 export PATH

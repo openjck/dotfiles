@@ -1,4 +1,4 @@
-if [[ -f /home/linuxbrew/.linuxbrew/bin/brew ]]; then
-  # Homebrew's setup script recommends including this line in .bashrc.
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+if __command_exists brew; then
+  # Homebrew's setup script and manual recommend running this in .bashrc.
+  eval "$(brew shellenv bash)"
 fi
