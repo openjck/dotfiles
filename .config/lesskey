@@ -1,0 +1,7 @@
+# Lines beginning with "#" are comments, except for lines beginning with "#" and
+# a special keyword, like "command".
+
+# Wrap forward and backward search.
+#command
+/ forw-search ^W
+? back-search ^W
