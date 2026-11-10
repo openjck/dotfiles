@@ -1,0 +1,9 @@
+# 2026-11-09: The latest version of Helix (25.07.1) tries to clone the GitHub
+# repo "dannylongeuay/tree-sitter-go-template", which no longer exists. Because
+# it no longer exists, an error is raised when updating grammars and the Helix
+# step in topgrade fails. For that reason, for now, do not attempt to clone this
+# repo.
+#
+# The issue is already fixed in the Helix codebase, but that fix has not been
+# released. Once the fix is released, this exclusion can be removed.
+use-grammars = { except = ["gotmpl"] }
